@@ -27,14 +27,24 @@ class ResNetModel(LightningModule):
         return self.backbone(x)
 
     def training_step(self, batch, batch_idx):
-        data, target = batch
+        data, target, _ = batch  # Adjust if your dataset returns additional items
         preds = self(data)
         loss = self.criterium(preds, target)
         self.log("train_loss", loss)
         return loss
 
+    def validation_step(self, batch, batch_idx):
+        data, target, _ = batch
+        preds = self(data)
+        loss = self.criterium(preds, target)
+        self.log("val_loss", loss)
+        return loss
+
     def configure_optimizers(self):
-        return torch.optim.Adam(self.parameters(), lr=self.lr)
+        optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
+        lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
+        return [optimizer], [lr_scheduler]
+
 
 
 if __name__ == "__main__":
