@@ -1,16 +1,29 @@
 # config.yaml
 
-# Parameters and their default values
+# Model-specific configuration
 model:
-  name: resnet50
-  num_layers: 50
-  learning_rate: 0.001
+  num_classes: 1000
 
+# Optimizer configuration
+optimizer:
+  lr: 1e-3
+
+# Trainer configuration
+trainer:
+  max_epochs: 10
+  accelerator: "auto"
+  devices: 1  # Use GPU if available, otherwise CPU
+  precision: 32  # Precision for training (16 for mixed precision)
+
+# Dataset configuration
 dataset:
-  name: CIFAR10
-  path: /data/cifar10
   batch_size: 64
 
+# Training configuration
 training:
   epochs: 20
   seed: 42
+
+# Evaluation configuration
+evaluation:
+  model_checkpoint: checkpoints/best_model.pth

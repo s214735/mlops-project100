@@ -1,23 +1,26 @@
 import torch
-from torch import nn
 from pytorch_lightning import LightningModule
-from torchvision.models import resnet50, resnet18
+from torch import nn
+from torchvision.models import resnet50
 
 
 class ResNetModel(LightningModule):
     """A Lightning Module using ResNet-50 as the backbone."""
 
-    def __init__(self, num_classes=1000) -> None:
+    def __init__(self, num_classes: int, lr: float) -> None:
         super().__init__()
 
         # Load a pretrained ResNet-50 model
-        self.backbone = resnet50(weights='ResNet50_Weights.DEFAULT')
+        self.backbone = resnet50(weights="ResNet50_Weights.DEFAULT")
 
         # Replace the final fully connected layer to match the number of classes
         self.backbone.fc = nn.Linear(self.backbone.fc.in_features, num_classes)
 
         # Loss function
         self.criterium = nn.CrossEntropyLoss()
+        
+        # Hyperparameters
+        self.lr = lr
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass."""
@@ -31,7 +34,7 @@ class ResNetModel(LightningModule):
         return loss
 
     def configure_optimizers(self):
-        return torch.optim.Adam(self.parameters(), lr=1e-3)
+        return torch.optim.Adam(self.parameters(), lr=self.lr)
 
 
 if __name__ == "__main__":
