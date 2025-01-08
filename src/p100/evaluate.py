@@ -8,7 +8,7 @@ from omegaconf import DictConfig
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
 
-def evaluate(model_checkpoint: str) -> None:
+def evaluate(model_checkpoint: str, batch_size: int) -> None:
     """Evaluate a trained model."""
     print("Evaluating like my life depends on it")
     print(f"Loading model from checkpoint: {model_checkpoint}")
@@ -20,7 +20,7 @@ def evaluate(model_checkpoint: str) -> None:
 
     # Load test dataset
     test_set = Dataset(mode="test")
-    test_dataloader = torch.utils.data.DataLoader(test_set, batch_size=32)
+    test_dataloader = torch.utils.data.DataLoader(test_set, batch_size=batch_size)
 
     # Evaluation logic
     correct, total = 0, 0
@@ -36,7 +36,8 @@ def evaluate(model_checkpoint: str) -> None:
 @hydra.main(config_path=".", config_name="config.yaml")
 def main(cfg: DictConfig) -> None:
     model_checkpoint = cfg.evaluation.model_checkpoint
-    evaluate(model_checkpoint)
+    batch_size = cfg.dataset.batch_size  # Fetch batch size from config
+    evaluate(model_checkpoint, batch_size)
 
 if __name__ == "__main__":
     main()
