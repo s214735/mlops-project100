@@ -1,15 +1,20 @@
-from pathlib import Path  # Import Path for easier path handling
-import os  # Import os for file system operations
-#import typer  # Commented out, might be used for command line interface
-from torch.utils.data import Dataset, DataLoader  # Import Dataset and DataLoader for handling data in PyTorch
-from PIL import Image  # Import Image from PIL for image loading and processing
-from torchvision import transforms  # Import transforms for data augmentation and normalization
 
-class Dataset(Dataset):  # Custom dataset class inheriting from PyTorch Dataset class
-    ###Custom dataset###
+import os
+from pathlib import Path
 
-    def __init__(self, processed_data_path: Path = r"data\processed", mode: str = "train", transform = transforms.ToTensor()) -> None:
-        # Define the path to the processed data
+from PIL import Image
+
+#import typer
+from torch.utils.data import DataLoader, Dataset
+from torchvision import transforms
+
+
+class Dataset(Dataset):
+    """My custom dataset."""
+
+    def __init__(self, processed_data_path: Path = r"data\processed", mode: str = "train", transform = None) -> None:
+        # Define the path to the raw data
+
         self.data_path = processed_data_path
         # Define lists to store image paths (data) and corresponding labels (targets)
         self.data = []
@@ -17,6 +22,7 @@ class Dataset(Dataset):  # Custom dataset class inheriting from PyTorch Dataset 
         self.class_names = []  # To store class names for each sample
         self.transform = transform  # Transformation function (e.g., normalization, augmentation)
         # Define the mode (train, test, etc.)
+
         self.mode = mode
         # Define the directory for the current dataset split (e.g., train, val)
         self.split_dir = os.path.join(self.data_path, self.mode)
@@ -24,12 +30,14 @@ class Dataset(Dataset):  # Custom dataset class inheriting from PyTorch Dataset 
         # Traverse the folder structure where images are stored
         for index, class_name in enumerate(os.listdir(self.split_dir)):
             class_path = os.path.join(self.split_dir, class_name)
+
             if os.path.isdir(class_path):  # Check if it is a directory (class folder)
                 for img_name in os.listdir(class_path):  # Iterate through images in the class folder
                     img_path = os.path.join(class_path, img_name)  # Get the image path
                     self.data.append(img_path)  # Add image path to data list
                     self.targets.append(index)  # Add class index to targets list
                     self.class_names.append(class_name)  # Add class name to class_names list
+
 
     def __len__(self) -> int:
         """Return the length of the dataset."""

@@ -1,17 +1,15 @@
 
 import hydra
-from omegaconf import DictConfig
-import torch
-from torch import nn
 import pytorch_lightning as pl
-from torch.utils.data import DataLoader
-from torchvision import datasets, transforms
+import torch
+from omegaconf import DictConfig
+from torch import nn
 from torchvision.models import resnet50
 
 
 class ResNetModel(pl.LightningModule):
     """A Lightning Module using ResNet-50 as the backbone."""
-    
+
     def __init__(self, num_classes: int = 1000, lr: float = 1e-3):
         super().__init__()
 
@@ -46,7 +44,7 @@ class ResNetModel(pl.LightningModule):
 def main(cfg: DictConfig):
     # Initialize the DataModule
     data_module = CustomDataModule(
-        data_path=Path(cfg.dataset.processed_data_path), 
+        data_path=Path(cfg.dataset.processed_data_path),
         batch_size=cfg.dataset.batch_size
     )
 

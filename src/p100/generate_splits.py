@@ -1,6 +1,6 @@
 import os
-import shutil
 import random
+import shutil
 
 # Paths
 base_path = "./data/processed"

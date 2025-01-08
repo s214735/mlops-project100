@@ -1,9 +1,9 @@
+import hydra
 import torch
+from model import ResNetModel  # Custom ResNet model implementation
+from omegaconf import DictConfig
 from torch.utils.data import DataLoader
 from data import Dataset  # Custom dataset implementation
-from model import ResNetModel  # Custom ResNet model implementation
-import hydra
-from omegaconf import DictConfig
 from torchvision import transforms
 
 DEVICE = torch.device(
