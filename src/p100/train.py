@@ -2,11 +2,13 @@ import hydra
 from pathlib import Path
 from omegaconf import DictConfig
 import torch
-from omegaconf import DictConfig
 from torch import nn
 from torchvision.models import resnet50
 from model import ResNetModel
 from data import Dataset
+from torch.utils.data import DataLoader
+from torchvision import transforms
+import pytorch_lightning as pl
 
 
 def collate_fn(batch):
