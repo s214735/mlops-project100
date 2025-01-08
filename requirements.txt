@@ -11,3 +11,4 @@ torchvision>=0.20.1
 typing>=3.7.4.3
 scipy == 1.15.0
 pytorch_lightning>=2.5.0.post0
+wandb>=0.19.2

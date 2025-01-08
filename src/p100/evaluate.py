@@ -1,9 +1,9 @@
 import hydra
 import torch
-from model import ResNetModel  # Custom ResNet model implementation
 from omegaconf import DictConfig
 from torch.utils.data import DataLoader
-from data import Dataset  # Custom dataset implementation
+from data import PokeDataset
+from model import ResNetModel
 from torchvision import transforms
 
 DEVICE = torch.device(
@@ -19,7 +19,7 @@ def evaluate(model_checkpoint: str, batch_size: int) -> None:
     model.load_state_dict(torch.load(model_checkpoint, weights_only=True))  # Load model weights
     model.eval()
 
-    test_set = Dataset(mode="test", transform=transforms.ToTensor())
+    test_set = PokeDataset(mode="test", transform=transforms.ToTensor())
     test_dataloader = DataLoader(test_set, batch_size=batch_size)
 
     correct, total = 0, 0

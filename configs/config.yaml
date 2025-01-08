@@ -1,29 +1,14 @@
 # config.yaml
+data:
+  processed_path: "data/processed"
 
-# Model-specific configuration
+train:
+  batch_size: 32
+  num_workers: 4
+  lr: 0.001
+  epochs: 1
+  devices: 1  # Set to -1 for all available GPUs, or a specific number of GPUs
+  log_every_n_steps: 10
+
 model:
   num_classes: 1000
-
-# Optimizer configuration
-optimizer:
-  lr: 1e-3
-
-# Trainer configuration
-trainer:
-  max_epochs: 10
-  accelerator: "auto"
-  devices: 1  # Use GPU if available, otherwise CPU
-  precision: 32  # Precision for training (16 for mixed precision)
-
-# Dataset configuration
-dataset:
-  batch_size: 64
-
-# Training configuration
-training:
-  epochs: 20
-  seed: 42
-
-# Evaluation configuration
-evaluation:
-  model_checkpoint: checkpoints/best_model.pth

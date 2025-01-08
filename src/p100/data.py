@@ -5,7 +5,7 @@ from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 from torchvision import transforms
 
-class Dataset(Dataset):
+class PokeDataset(Dataset):
     """My custom dataset."""
 
     def __init__(self, processed_data_path: Path = "data/processed", mode: str = "train", transform = transforms.ToTensor()) -> None:
