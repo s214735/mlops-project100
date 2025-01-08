@@ -1,50 +1,62 @@
-
 import hydra
-import pytorch_lightning as pl
+from pathlib import Path
+from omegaconf import DictConfig
 import torch
 from omegaconf import DictConfig
 from torch import nn
 from torchvision.models import resnet50
+from model import ResNetModel
+from data import Dataset
 
 
-class ResNetModel(pl.LightningModule):
-    """A Lightning Module using ResNet-50 as the backbone."""
+def collate_fn(batch):
+    """Custom collate function to return only the first two outputs (data, target)."""
+    data, target, _ = zip(*batch)  # Unzip the batch and ignore class_name
+    return torch.stack(data), torch.tensor(target)  # Stack data and convert target to tensor
 
-    def __init__(self, num_classes: int = 1000, lr: float = 1e-3):
+class CustomDataModule(pl.LightningDataModule):
+    """PyTorch Lightning DataModule for loading the custom dataset."""
+
+    def __init__(self, data_path: Path, batch_size: int, num_workers: int = 4):
         super().__init__()
+        self.data_path = data_path
+        self.batch_size = batch_size
+        self.num_workers = num_workers
 
-        # Load a pretrained ResNet-50 model
-        self.backbone = resnet50(weights='ResNet50_Weights.DEFAULT')
+    def setup(self, stage=None):
+        transform = transforms.Compose([
+            transforms.Resize((128, 128)),  # Resize if necessary
+            transforms.ToTensor(),
+        ])
+        self.train_dataset = Dataset(self.data_path, mode="train", transform=transform)
+        self.val_dataset = Dataset(self.data_path, mode="val", transform=transform)
 
-        # Replace the final fully connected layer to match the number of classes
-        self.backbone.fc = nn.Linear(self.backbone.fc.in_features, num_classes)
+    def train_dataloader(self):
+        return DataLoader(
+            self.train_dataset,
+            batch_size=self.batch_size,
+            shuffle=True,
+            num_workers=self.num_workers,
+            collate_fn=collate_fn  # Use custom collate_fn to only return (data, target)
+        )
 
-        # Loss function
-        self.criterium = nn.CrossEntropyLoss()
-
-        # Hyperparameters
-        self.lr = lr
-
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """Forward pass."""
-        return self.backbone(x)
-
-    def training_step(self, batch, batch_idx):
-        data, target = batch
-        preds = self(data)
-        loss = self.criterium(preds, target)
-        self.log("train_loss", loss)
-        return loss
-
-    def configure_optimizers(self):
-        return torch.optim.Adam(self.parameters(), lr=self.lr)
+    def val_dataloader(self):
+        return DataLoader(
+            self.val_dataset,
+            batch_size=self.batch_size,
+            shuffle=False,
+            num_workers=self.num_workers,
+            collate_fn=collate_fn  # Use custom collate_fn here too
+        )
 
 
-@hydra.main(config_path="configs", config_name="config")
+
+
+@hydra.main(config_path="../../configs", config_name="config.yaml", version_base=None)
 def main(cfg: DictConfig):
     # Initialize the DataModule
     data_module = CustomDataModule(
-        data_path=Path(cfg.dataset.processed_data_path),
+        data_path=Path("data/processed"), 
         batch_size=cfg.dataset.batch_size
     )
 

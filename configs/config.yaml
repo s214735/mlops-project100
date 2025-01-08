@@ -1,20 +1,29 @@
 # config.yaml
-defaults:
-  - optimizer: adam
-  - trainer: default
 
 # Model-specific configuration
 model:
   num_classes: 1000
 
+# Optimizer configuration
+optimizer:
+  lr: 1e-3
+
+# Trainer configuration
+trainer:
+  max_epochs: 10
+  accelerator: "auto"
+  devices: 1  # Use GPU if available, otherwise CPU
+  precision: 32  # Precision for training (16 for mixed precision)
+
+# Dataset configuration
 dataset:
-  name: Pokemon
-  path: data/processed
   batch_size: 64
 
+# Training configuration
 training:
   epochs: 20
   seed: 42
 
+# Evaluation configuration
 evaluation:
   model_checkpoint: checkpoints/best_model.pth
