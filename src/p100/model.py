@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 from pytorch_lightning import LightningModule
-from torchvision.models import resnet50
+from torchvision.models import resnet50, resnet18
 
 
 class ResNetModel(LightningModule):
