@@ -1,6 +1,6 @@
 # p100
 
-An interesting MLOps project on an exciting data set
+A virtual PokéDex that recognizes Pokémon you meet on your way as well as their type, and recommends you a type that would do well in combat.
 
 ## Project structure
 
