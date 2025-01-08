@@ -1,9 +1,12 @@
-from pathlib import Path
 import os
-#import typer
-from torch.utils.data import Dataset, DataLoader
+from pathlib import Path
+
 from PIL import Image
+
+#import typer
+from torch.utils.data import DataLoader, Dataset
 from torchvision import transforms
+
 
 class Dataset(Dataset):
     """My custom dataset."""
@@ -15,7 +18,7 @@ class Dataset(Dataset):
         self.data = []
         self.targets = []
         self.class_names = []
-        self.transform = transform        
+        self.transform = transform
         # Define the mode of the dataset
         self.mode = mode
         # Define the path to the split data
@@ -30,7 +33,7 @@ class Dataset(Dataset):
                     self.data.append(img_path)
                     self.targets.append(index)
                     self.class_names.append(class_name)
-        
+
     def __len__(self) -> int:
         """Return the length of the dataset."""
         return len(self.data)

@@ -1,9 +1,10 @@
-import torch
-from torch.utils.data import DataLoader
-from data import Dataset  # Custom dataset implementation
-from model import ResNetModel  # Custom ResNet model implementation
 import hydra
+import torch
+from model import ResNetModel  # Custom ResNet model implementation
 from omegaconf import DictConfig
+from torch.utils.data import DataLoader
+
+from data import Dataset  # Custom dataset implementation
 
 DEVICE = torch.device(
     "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
