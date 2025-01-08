@@ -1,6 +1,5 @@
 # config.yaml
 
-# Parameters and their default values
 model:
   name: resnet50
   num_layers: 50
@@ -14,3 +13,6 @@ dataset:
 training:
   epochs: 20
   seed: 42
+
+evaluation:
+  model_checkpoint: checkpoints/best_model.pth
