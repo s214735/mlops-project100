@@ -1,9 +1,9 @@
 import os
-import shutil
 import random
+import shutil
 
 # Paths
-base_path = "."
+base_path = "./data/processed"
 dataset_path = os.path.join(base_path, "dataset")
 train_path = os.path.join(base_path, "train")
 val_path = os.path.join(base_path, "val")

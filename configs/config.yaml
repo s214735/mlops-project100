@@ -1,16 +1,20 @@
 # config.yaml
+defaults:
+  - optimizer: adam
+  - trainer: default
 
-# Parameters and their default values
+# Model-specific configuration
 model:
-  name: resnet50
-  num_layers: 50
-  learning_rate: 0.001
+  num_classes: 1000
 
 dataset:
-  name: CIFAR10
-  path: /data/cifar10
+  name: Pokemon
+  path: data/processed
   batch_size: 64
 
 training:
   epochs: 20
   seed: 42
+
+evaluation:
+  model_checkpoint: checkpoints/best_model.pth

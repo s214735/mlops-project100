@@ -1,36 +1,44 @@
+import hydra
 import torch
-import typer
-from torch import nn
-from torch import optim
-from data import corrupt_mnist
-from model import ResNetModel
+from model import ResNetModel  # Custom ResNet model implementation
+from omegaconf import DictConfig
+from torch.utils.data import DataLoader
+from data import Dataset  # Custom dataset implementation
+from torchvision import transforms
 
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
+DEVICE = torch.device(
+    "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
+)
 
-
-def evaluate(model_checkpoint: str) -> None:
-    """Evaluate a trained model."""
-    print("Evaluating like my life depends on it")
+def evaluate(model_checkpoint: str, batch_size: int) -> None:
+    """Evaluate a trained model on the test dataset."""
+    print("Starting evaluation...")
     print(f"Loading model from checkpoint: {model_checkpoint}")
 
-    # Load the trained model
     model = ResNetModel().to(DEVICE)
-    model.load_state_dict(torch.load(model_checkpoint, weights_only=True))
-    model.eval()  # Set the model to evaluation mode
-
-    _, test_set = corrupt_mnist()
-    test_dataloader = torch.utils.data.DataLoader(test_set, batch_size=32)
-
-    # Disable gradient calculations for evaluation  
+    model.load_state_dict(torch.load(model_checkpoint, weights_only=True))  # Load model weights
     model.eval()
-    correct, total = 0, 0
-    for img, target in test_dataloader:
-        img, target = img.to(DEVICE), target.to(DEVICE)
-        y_pred = model(img)
-        correct += (y_pred.argmax(dim=1) == target).float().sum().item()
-        total += target.size(0)
-    print(f"Test accuracy: {correct / total}")
 
+    test_set = Dataset(mode="test", transform=transforms.ToTensor())
+    test_dataloader = DataLoader(test_set, batch_size=batch_size)
+
+    correct, total = 0, 0
+    with torch.no_grad():
+        for images, targets, _ in test_dataloader:
+            images, targets = images.to(DEVICE), targets.to(DEVICE)
+            outputs = model(images)
+            predictions = outputs.argmax(dim=1)
+            correct += (predictions == targets).sum().item()
+            total += targets.size(0)
+
+    accuracy = correct / total
+    print(f"Test accuracy: {accuracy:.2%}")
+
+@hydra.main(config_path="../../configs", config_name="config.yaml", version_base=None)
+def main(cfg: DictConfig) -> None:
+    model_checkpoint = cfg.evaluation.model_checkpoint
+    batch_size = cfg.dataset.batch_size
+    evaluate(model_checkpoint, batch_size)
 
 if __name__ == "__main__":
-    typer.run(evaluate)
+    main()
