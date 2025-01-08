@@ -26,7 +26,7 @@ def train(cfg: DictConfig):
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
 
-    train_dataset = Dataset(
+    train_dataset = PokeDataset(
         processed_data_path=Path(cfg.data.processed_path),
         mode="train",
         transform=transform
@@ -35,7 +35,7 @@ def train(cfg: DictConfig):
         train_dataset, batch_size=cfg.train.batch_size, shuffle=True, num_workers=cfg.train.num_workers
     )
 
-    val_dataset = Dataset(
+    val_dataset = PokeDataset(
         processed_data_path=Path(cfg.data.processed_path),
         mode="val",
         transform=transform
