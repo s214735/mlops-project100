@@ -11,7 +11,7 @@ class ResNetModel(LightningModule):
         super().__init__()
 
         # Load a pretrained ResNet-50 model
-        self.backbone = resnet50(weights='ResNet50_Weights.DEFAULT')
+        self.backbone = resnet50(weights='ResNet50_Weights.DEFAULT') 
 
         # Replace the final fully connected layer to match the number of classes
         self.backbone.fc = nn.Linear(self.backbone.fc.in_features, num_classes)
