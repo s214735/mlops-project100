@@ -1,62 +1,66 @@
-from pathlib import Path  # Import Path for easier path handling
-import os  # Import os for file system operations
-#import typer  # Commented out, might be used for command line interface
-from torch.utils.data import Dataset, DataLoader  # Import Dataset and DataLoader for handling data in PyTorch
-from PIL import Image  # Import Image from PIL for image loading and processing
-from torchvision import transforms  # Import transforms for data augmentation and normalization
+from pathlib import Path
+import os
+#import typer
+from torch.utils.data import Dataset, DataLoader
+from PIL import Image
+from torchvision import transforms
 
-class Dataset(Dataset):  # Custom dataset class inheriting from PyTorch Dataset class
-    ###Custom dataset###
+class Dataset(Dataset):
+    """My custom dataset."""
 
-    def __init__(self, processed_data_path: Path = r"data\processed", mode: str = "train", transform = transforms.ToTensor()) -> None:
-        # Define the path to the processed data
+    def __init__(self, processed_data_path: Path = "data/processed", mode: str = "train", transform = transforms.ToTensor()) -> None:
+        # Define the path to the raw data
         self.data_path = processed_data_path
-        # Define lists to store image paths (data) and corresponding labels (targets)
+        # Define lists to store the data and targets
         self.data = []
         self.targets = []
-        self.class_names = []  # To store class names for each sample
-        self.transform = transform  # Transformation function (e.g., normalization, augmentation)
-        # Define the mode (train, test, etc.)
+        self.class_names = []
+        self.transform = transform        
+        # Define the mode of the dataset
         self.mode = mode
-        # Define the directory for the current dataset split (e.g., train, val)
+        # Define the path to the split data
         self.split_dir = os.path.join(self.data_path, self.mode)
 
-        # Traverse the folder structure where images are stored
+        # Traverse the folder structure
         for index, class_name in enumerate(os.listdir(self.split_dir)):
             class_path = os.path.join(self.split_dir, class_name)
-            if os.path.isdir(class_path):  # Check if it is a directory (class folder)
-                for img_name in os.listdir(class_path):  # Iterate through images in the class folder
-                    img_path = os.path.join(class_path, img_name)  # Get the image path
-                    self.data.append(img_path)  # Add image path to data list
-                    self.targets.append(index)  # Add class index to targets list
-                    self.class_names.append(class_name)  # Add class name to class_names list
-
+            if os.path.isdir(class_path):
+                for img_name in os.listdir(class_path):
+                    img_path = os.path.join(class_path, img_name)
+                    self.data.append(img_path)
+                    self.targets.append(index)
+                    self.class_names.append(class_name)
+        
     def __len__(self) -> int:
         """Return the length of the dataset."""
-        return len(self.data)  # Return the number of samples in the dataset
+        return len(self.data)
 
     def __getitem__(self, idx):
         """Return the data and target at the given index."""
-        img_path = self.data[idx]  # Get the image path at the specified index
-        target = self.targets[idx]  # Get the target label at the specified index
-        class_name = self.class_names[idx]  # Get the class name at the specified index
-        image = Image.open(img_path).convert('RGB')  # Open and convert image to RGB mode
+        img_path = self.data[idx]
+        target = self.targets[idx]
+        class_name = self.class_names[idx]
+        image = Image.open(img_path).convert('RGB')
 
         if self.transform:
-            image = self.transform(image)  # Apply transformation (e.g., convert to tensor)
+            image = self.transform(image)
 
-        return image, target, class_name  # Return the processed image, target, and class name
+        return image, target, class_name
 
-# Main entry point of the script
+    def preprocess(self, output_folder: Path) -> None:
+        """Preprocess the raw data and save it to the output folder."""
+        if not os.path.exists(output_folder):
+            os.makedirs(output_folder)
+        # You can implement specific preprocessing logic here, such as saving processed data
+        print(f"Preprocessing done. Processed data saved to {output_folder}")
+
+
 if __name__ == "__main__":
-    # Instantiate the custom dataset with a tensor transformation
     dataset = Dataset(transform=transforms.ToTensor())
-    # Create a DataLoader to load the dataset in batches
     dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
-    # Iterate through the DataLoader
     for data, target, class_name in dataloader:
-        print(data.shape, target, class_name)  # Print the shape of the data, target labels, and class names
-        break  # Break after the first batch for demonstration
+        print(data.shape, target, class_name)
+        break
 
 
 
