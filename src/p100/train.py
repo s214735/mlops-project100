@@ -65,6 +65,9 @@ if __name__ == "__main__":
 
 #TODO
 # Add logging to wandb
+# save of model during training
+# add scheduler?
+# add early stopping
+
 # remove warnings
-# optimize
-# 
+# optimize/profiling
