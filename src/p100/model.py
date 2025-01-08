@@ -2,7 +2,7 @@ import torch
 from pytorch_lightning import LightningModule
 from torch import nn
 from torchvision.models import resnet50
-
+from torchmetrics.classification import Accuracy
 
 class ResNetModel(LightningModule):
     """A Lightning Module using ResNet-50 as the backbone."""
@@ -22,6 +22,10 @@ class ResNetModel(LightningModule):
         # Hyperparameters
         self.lr = lr
 
+        # Accuracies
+        self.train_accuracy = Accuracy(task="multiclass", num_classes=num_classes)
+        self.val_accuracy = Accuracy(task="multiclass", num_classes=num_classes)
+
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass."""
         return self.backbone(x)
@@ -30,14 +34,20 @@ class ResNetModel(LightningModule):
         data, target, _ = batch  # Adjust if your dataset returns additional items
         preds = self(data)
         loss = self.criterium(preds, target)
+
+        acc = self.train_accuracy(preds, target)
         self.log("train_loss", loss)
+        self.log("train_acc", acc, on_step=True, on_epoch=True)
         return loss
 
     def validation_step(self, batch, batch_idx):
         data, target, _ = batch
         preds = self(data)
         loss = self.criterium(preds, target)
+
+        acc = self.val_accuracy(preds, target)
         self.log("val_loss", loss)
+        self.log("val_acc", acc, on_epoch=True)
         return loss
 
     def configure_optimizers(self):

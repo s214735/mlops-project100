@@ -11,6 +11,10 @@ import pytorch_lightning as pl
 from model import ResNetModel
 from data import PokeDataset
 
+from pytorch_lightning.loggers import WandbLogger
+from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
+import wandb
+
 @hydra.main(config_path="../../configs", config_name="config.yaml", version_base=None)
 def train(cfg: DictConfig):
     """
@@ -19,6 +23,21 @@ def train(cfg: DictConfig):
     Args:
         cfg (DictConfig): Configuration loaded from Hydra.
     """
+    # Initialize wandb
+    wandb.init(
+        project="corrupt_mnist",
+        config={"lr": cfg.train.lr, "batch_size": cfg.train.batch_size, "epochs": cfg.train.epochs},
+    )
+    wandb_logger = WandbLogger(
+        project="pokemon_classifier",
+        name="add this to the config",  # Optional: Name the specific run
+    )
+    wandb_logger.experiment.config.update({
+        "lr": cfg.train.lr, 
+        "batch_size": cfg.train.batch_size, 
+        "epochs": cfg.train.epochs
+    })
+
     # Initialize dataset and dataloaders
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
@@ -47,12 +66,22 @@ def train(cfg: DictConfig):
     # Initialize model
     model = ResNetModel(num_classes=cfg.model.num_classes, lr=cfg.train.lr)
 
+    checkpoint_callback = ModelCheckpoint(
+        dirpath="./models", monitor="val_loss", mode="min"
+    )
+
+    early_stopping_callback = EarlyStopping(
+        monitor="val_loss", patience=3, verbose=True, mode="min"
+    )
+    
     # Initialize PyTorch Lightning Trainer
     trainer = pl.Trainer(
         max_epochs=cfg.train.epochs,
         accelerator="gpu" if torch.cuda.is_available() else "cpu",
         devices=cfg.train.devices,
-        log_every_n_steps=cfg.train.log_every_n_steps
+        log_every_n_steps=cfg.train.log_every_n_steps,
+        logger=wandb_logger,
+        callbacks=[checkpoint_callback, early_stopping_callback]
     )
 
     # Train the model
@@ -64,10 +93,12 @@ if __name__ == "__main__":
 
 
 #TODO
-# Add logging to wandb
-# save of model during training
+# Add logging to wandb (maybe done - need testing)
+# save of model during training (maybe done)
+# add early stopping (maybe done)
 # add scheduler?
-# add early stopping
+# add logging instead of printing
+# dvc
 
 # remove warnings
 # optimize/profiling
