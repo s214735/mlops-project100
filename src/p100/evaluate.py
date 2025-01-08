@@ -3,8 +3,8 @@ import torch
 from model import ResNetModel  # Custom ResNet model implementation
 from omegaconf import DictConfig
 from torch.utils.data import DataLoader
-
 from data import Dataset  # Custom dataset implementation
+from torchvision import transforms
 
 DEVICE = torch.device(
     "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
@@ -16,15 +16,15 @@ def evaluate(model_checkpoint: str, batch_size: int) -> None:
     print(f"Loading model from checkpoint: {model_checkpoint}")
 
     model = ResNetModel().to(DEVICE)
-    model.load_state_dict(torch.load(model_checkpoint))  # Load model weights
+    model.load_state_dict(torch.load(model_checkpoint, weights_only=True))  # Load model weights
     model.eval()
 
-    test_set = Dataset(mode="test")
+    test_set = Dataset(mode="test", transform=transforms.ToTensor())
     test_dataloader = DataLoader(test_set, batch_size=batch_size)
 
     correct, total = 0, 0
     with torch.no_grad():
-        for images, targets in test_dataloader:
+        for images, targets, _ in test_dataloader:
             images, targets = images.to(DEVICE), targets.to(DEVICE)
             outputs = model(images)
             predictions = outputs.argmax(dim=1)

@@ -1,0 +1,4 @@
+dataset:
+  batch_size: 64
+evaluation:
+  model_checkpoint: checkpoints/best_model.pth
