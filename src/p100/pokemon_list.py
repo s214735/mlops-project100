@@ -1,5 +1,9 @@
+
+
 import os
+
 import typer
+
 
 def write_folder_names_to_file(path: str, output_file: str):
     """

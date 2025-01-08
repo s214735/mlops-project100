@@ -1,12 +1,9 @@
-
 import hydra
 from pathlib import Path
 from omegaconf import DictConfig
 import torch
+from omegaconf import DictConfig
 from torch import nn
-import pytorch_lightning as pl
-from torch.utils.data import DataLoader
-from torchvision import datasets, transforms
 from torchvision.models import resnet50
 from model import ResNetModel
 from data import Dataset

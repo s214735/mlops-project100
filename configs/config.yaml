@@ -15,7 +15,6 @@ trainer:
   devices: 1  # Use GPU if available, otherwise CPU
   precision: 32  # Precision for training (16 for mixed precision)
 
-
 # Dataset configuration
 dataset:
   batch_size: 64

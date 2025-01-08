@@ -8,15 +8,18 @@ from torchvision import transforms
 class Dataset(Dataset):
     """My custom dataset."""
 
-    def __init__(self, processed_data_path: Path = r"data\processed", mode: str = "train", transform = None) -> None:
+    def __init__(self, processed_data_path: Path = "data/processed", mode: str = "train", transform = transforms.ToTensor()) -> None:
         # Define the path to the raw data
+
         self.data_path = processed_data_path
         # Define lists to store the data and targets
         self.data = []
         self.targets = []
-        self.class_names = []
-        self.transform = transform        
-        # Define the mode of the dataset
+
+        self.class_names = []  # To store class names for each sample
+        self.transform = transform  # Transformation function (e.g., normalization, augmentation)
+        # Define the mode (train, test, etc.)
+
         self.mode = mode
         # Define the path to the split data
         self.split_dir = os.path.join(self.data_path, self.mode)
@@ -24,13 +27,14 @@ class Dataset(Dataset):
         # Traverse the folder structure
         for index, class_name in enumerate(os.listdir(self.split_dir)):
             class_path = os.path.join(self.split_dir, class_name)
-            if os.path.isdir(class_path):
-                for img_name in os.listdir(class_path):
-                    img_path = os.path.join(class_path, img_name)
-                    self.data.append(img_path)
-                    self.targets.append(index)
-                    self.class_names.append(class_name)
-        
+
+            if os.path.isdir(class_path):  # Check if it is a directory (class folder)
+                for img_name in os.listdir(class_path):  # Iterate through images in the class folder
+                    img_path = os.path.join(class_path, img_name)  # Get the image path
+                    self.data.append(img_path)  # Add image path to data list
+                    self.targets.append(index)  # Add class index to targets list
+                    self.class_names.append(class_name)  # Add class name to class_names list
+
     def __len__(self) -> int:
         """Return the length of the dataset."""
         return len(self.data)
