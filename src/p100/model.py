@@ -7,7 +7,7 @@ from torchvision.models import resnet50
 class ResNetModel(LightningModule):
     """A Lightning Module using ResNet-50 as the backbone."""
 
-    def __init__(self, num_classes=10) -> None:
+    def __init__(self, num_classes=1000) -> None:
         super().__init__()
 
         # Load a pretrained ResNet-50 model
@@ -35,6 +35,6 @@ class ResNetModel(LightningModule):
 
 
 if __name__ == "__main__":
-    model = ResNetModel(num_classes=10)
+    model = ResNetModel(num_classes=1000)
     print(f"Model architecture: {model}")
     print(f"Number of parameters: {sum(p.numel() for p in model.parameters())}")
