@@ -1,13 +1,21 @@
 import torch
+import hydra
 from pytorch_lightning import LightningModule
 from torch import nn
 from torchvision.models import resnet50
 from torchmetrics.classification import Accuracy
+from omegaconf import DictConfig
+
+@hydra.main(config_path="../../configs", config_name="config.yaml", version_base=None)
+def main(cfg: DictConfig) -> None:
+    model_checkpoint = cfg.evaluation.model_checkpoint
+    batch_size = cfg.dataset.batch_size
+    ResNetModel(model_checkpoint, batch_size)
 
 class ResNetModel(LightningModule):
     """A Lightning Module using ResNet-50 as the backbone."""
 
-    def __init__(self, num_classes: int, lr: float) -> None:
+    def __init__(self, num_classes: int = 1000, lr: float = 0.001) -> None:
         super().__init__()
 
         # Load a pretrained ResNet-50 model
