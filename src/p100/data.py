@@ -9,6 +9,8 @@ import torch
 import typer
 from collections import Counter
 
+import numpy as np
+
 class PokeDataset(Dataset):
     """My custom dataset."""
 
@@ -64,8 +66,40 @@ class PokeDataset(Dataset):
 
 
 if __name__ == "__main__":
-    dataset = Dataset(transform=transforms.ToTensor())
+    dataset = PokeDataset(transform=transforms.ToTensor())
     dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
+
+    train_dataset = PokeDataset("data/processed", mode="train", transform=transforms.ToTensor())
+    test_dataset = PokeDataset("data/processed", mode="test", transform=transforms.ToTensor())
+    val_dataset = PokeDataset("data/processed", mode="val", transform=transforms.ToTensor())
+
+    # Compute statistics
+    train_count = len(train_dataset)
+    train_shape = train_dataset[0][0].shape
+    val_count = len(val_dataset)
+    val_shape = val_dataset[0][0].shape
+    test_count = len(test_dataset)
+    test_shape = test_dataset[0][0].shape
+
+    # Print dataset info
+    print(f"-----Train dataset-----")
+    print(f"Number of images: {len(train_dataset)}")
+    print(f"Image shape: {train_dataset[0][0].shape}")
+    print(f"Number of classes: {len(np.unique(train_dataset.targets))}")
+    print(f"Min label: {min(train_dataset.targets)}. Max label: {max(train_dataset.targets)}")
+    print("\n")
+    print(f"-----Test dataset-----")
+    print(f"Number of images: {len(test_dataset)}")
+    print(f"Image shape: {test_dataset[0][0].shape}")
+    print(f"Number of classes: {len(np.unique(test_dataset.targets))}")
+    print(f"Min label: {min(test_dataset.targets)}. Max label: {max(test_dataset.targets)}")
+    print("\n")
+    print(f"-----Val dataset-----")
+    print(f"Number of images: {len(val_dataset)}")
+    print(f"Image shape: {val_dataset[0][0].shape}")
+    print(f"Number of classes: {len(np.unique(val_dataset.targets))}")
+    print(f"Min label: {min(val_dataset.targets)}. Max label: {max(val_dataset.targets)}")
+    
     for data, target, class_name in dataloader:
         print(data.shape, target, class_name)
         break
