@@ -10,7 +10,12 @@ on:
 
 jobs:
   run_data_checker:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest", "windows-latest", "macos-latest"]
+        python-version: ["3.11", "3.12"]
 
     steps:
     - name: Checkout code
@@ -30,4 +35,4 @@ jobs:
 
     - name: Check data statistics
       run: |
-        python scripts/dataset_statistics.py
+        python src/p100/dataset_statistics.py
