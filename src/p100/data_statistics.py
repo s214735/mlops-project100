@@ -80,19 +80,19 @@ def generate_image_grid_with_random_classes(dataset, output_file, num_images=10)
         if len(selected_classes) >= num_images:
             break  # Stop once we have enough images
 
-        img, label = dataset[idx][:2]  # Unpack image and label (assuming first two items)
+        img, label, class_name = dataset[idx][:3]  # Unpack image, label, and class_name
 
         # Add one image per class
-        if label not in selected_classes:
-            selected_classes[label] = img
+        if class_name not in selected_classes:
+            selected_classes[class_name] = img
 
     # Plot the selected images
-    for i, (label, img) in enumerate(selected_classes.items()):
+    for i, (class_name, img) in enumerate(selected_classes.items()):
         if isinstance(img, torch.Tensor):
             img = transforms.ToPILImage()(img)  # Convert tensor to PIL image if necessary
         
         axes[i].imshow(img)
-        axes[i].set_title(f"Label: {label}", fontsize=10)
+        axes[i].set_title(f"{class_name}", fontsize=10)  # Use class_name as the title
         axes[i].axis("off")  # Remove axes for a cleaner look
 
     # Hide unused axes
