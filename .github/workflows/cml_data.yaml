@@ -1,7 +1,7 @@
 name: Local Data Workflow
 
 on:
-  commit:
+  push:
     branches:
       - main
     paths:
