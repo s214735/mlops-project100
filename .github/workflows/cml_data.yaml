@@ -1,0 +1,8 @@
+name: Data Workflow
+
+on:
+  pull_request:
+    branches:
+    - main
+    paths:
+    - '**/*.png' 
