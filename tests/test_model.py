@@ -17,7 +17,7 @@ def test_model2():
     model = ResNetModel()
     x = torch.randn(1,3,128, 128)
     y = model(x)
-    assert y.shape == (1,1000)
+    assert y.shape == (1,1000)  # Check if the output shape is as expected (batch size 1, 1000 classes)
 
 if __name__ == "__main__":
     test_model()
