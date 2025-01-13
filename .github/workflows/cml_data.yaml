@@ -34,11 +34,11 @@ jobs:
 
     - name: Check data statistics
       run: |
-        python src/p100/dataset_statistics.py
+        python src/p100/data_statistics.py
 
     - name: Generate and add report
       run: |
-        python src/p100/dataset_statistics.py
+        python src/p100/data_statistics.py
         echo '![](./combined_train_images.png "Sample Images from Random Classes")' >> data_statistics.md
         echo '![](./class_distribution.png "Class Distribution")' >> data_statistics.md
 
