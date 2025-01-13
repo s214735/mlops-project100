@@ -65,6 +65,3 @@ if __name__ == "__main__":
     for data, target, class_name in dataloader:
         print(data.shape, target, class_name)
         break
-
-
-
