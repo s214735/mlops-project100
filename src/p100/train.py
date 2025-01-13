@@ -33,8 +33,8 @@ def train(cfg: DictConfig):
         name="add this to the config",  # Optional: Name the specific run
     )
     wandb_logger.experiment.config.update({
-        "lr": cfg.train.lr, 
-        "batch_size": cfg.train.batch_size, 
+        "lr": cfg.train.lr,
+        "batch_size": cfg.train.batch_size,
         "epochs": cfg.train.epochs
     })
 
@@ -73,7 +73,7 @@ def train(cfg: DictConfig):
     early_stopping_callback = EarlyStopping(
         monitor="val_loss", patience=3, verbose=True, mode="min"
     )
-    
+
     # Initialize PyTorch Lightning Trainer
     trainer = pl.Trainer(
         max_epochs=cfg.train.epochs,

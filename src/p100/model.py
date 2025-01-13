@@ -26,7 +26,7 @@ class ResNetModel(LightningModule):
 
         # Loss function
         self.criterium = nn.CrossEntropyLoss()
-        
+
         # Hyperparameters
         self.lr = lr
 

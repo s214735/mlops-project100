@@ -4,6 +4,10 @@ import os
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 from torchvision import transforms
+import matplotlib.pyplot as plt
+import torch
+import typer
+from collections import Counter
 
 class PokeDataset(Dataset):
     """My custom dataset."""
@@ -65,3 +69,4 @@ if __name__ == "__main__":
     for data, target, class_name in dataloader:
         print(data.shape, target, class_name)
         break
+    
