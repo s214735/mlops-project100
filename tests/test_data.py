@@ -23,15 +23,15 @@ def test_my_dataset():
 
     # Check data class
     assert isinstance(dataset_train, Dataset)
-    
+
     # Check data shape
     assert img_train.shape == (1, 3, 128, 128)
 
     # Check length of dataset
     assert len(train_dataloader) + len(val_dataloader) + len(test_dataloader) == 26539
-    
+
     # Check if all classes are represented
     assert len(np.unique(train_dataloader.dataset.targets)) == 1000
-    
+
 if __name__ == "__main__":
     test_my_dataset()
