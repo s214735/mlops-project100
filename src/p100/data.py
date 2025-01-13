@@ -9,7 +9,6 @@ import torch
 import typer
 from collections import Counter
 
-
 class PokeDataset(Dataset):
     """My custom dataset."""
 
