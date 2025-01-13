@@ -28,6 +28,14 @@ The class distribution for the train, validation, and test datasets is shown in 
 
 The plot provides a visual representation of the frequency of each class in the respective datasets.
 
+## Sample Images from Random Classes
+
+Below is a grid of sample images randomly selected from different classes in the train dataset. Each image is labeled with its corresponding class name.
+
+![Sample Images from Random Classes](combined_image.png)
+
+This visualization provides insight into the variety of classes and their visual representation within the dataset.
+
 ## Conclusion
 
-This report summarizes the key statistics of the PokeDataset, including the number of images, image shapes, and class distributions. The class distribution plot helps in understanding the balance of classes across the datasets.
+This report summarizes the key statistics of the PokeDataset, including the number of images, image shapes, class distributions, and sample images from random classes. The class distribution plot and sample grid help in understanding the dataset's structure and balance.
