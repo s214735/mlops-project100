@@ -1,9 +1,8 @@
 from collections import Counter
 from torchvision import transforms
-import typer
 
 import matplotlib.pyplot as plt
-from data import PokeDataset  # Assuming PokeDataset is defined in poke_dataset.py
+from data import PokeDataset  
 
 def dataset_statistics(datadir: str = "data/processed") -> None:
     """Compute dataset statistics and save class distribution plots."""
@@ -57,4 +56,4 @@ def dataset_statistics(datadir: str = "data/processed") -> None:
 
 
 if __name__ == "__main__":
-    typer.run(dataset_statistics)
+    dataset_statistics()
