@@ -20,7 +20,7 @@ This report provides an overview of the dataset statistics for the PokeDataset. 
 
 The class distribution for the train, validation, and test datasets is shown in the plot below:
 
-![Class Distribution](class_distribution.png)
+![Class Distribution](../../class_distribution.png)
 
 - **Blue bars:** Train Dataset
 - **Green bars:** Validation Dataset
@@ -32,7 +32,7 @@ The plot provides a visual representation of the frequency of each class in the 
 
 Below is a grid of sample images randomly selected from different classes in the train dataset. Each image is labeled with its corresponding class name.
 
-![Sample Images from Random Classes](combined_train_images.png)
+![Sample Images from Random Classes](../../combined_train_images.png)
 
 This visualization provides insight into the variety of classes and their visual representation within the dataset.
 
