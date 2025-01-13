@@ -10,5 +10,9 @@ train:
   devices: 1  # Set to -1 for all available GPUs, or a specific number of GPUs
   log_every_n_steps: 10
 
+evaluate:
+  batch_size: 64
+  model_checkpoint: "models/testmodel.pth"
+
 model:
   num_classes: 1000

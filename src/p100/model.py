@@ -1,17 +1,17 @@
 import torch
 from pytorch_lightning import LightningModule
 from torch import nn
-from torchvision.models import resnet50
+from torchvision.models import resnet50, resnet18
 from torchmetrics.classification import Accuracy
 
 class ResNetModel(LightningModule):
-    """A Lightning Module using ResNet-50 as the backbone."""
+    """A Lightning Module using ResNet-18 as the backbone."""
 
     def __init__(self, num_classes: int, lr: float) -> None:
         super().__init__()
 
-        # Load a pretrained ResNet-50 model
-        self.backbone = resnet50(weights="ResNet50_Weights.DEFAULT")
+        # Load a pretrained ResNet-18 model
+        self.backbone = resnet18(weights="ResNet18_Weights.DEFAULT")
 
         # Replace the final fully connected layer to match the number of classes
         self.backbone.fc = nn.Linear(self.backbone.fc.in_features, num_classes)
