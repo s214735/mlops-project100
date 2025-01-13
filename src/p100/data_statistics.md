@@ -5,16 +5,16 @@ This report provides an overview of the dataset statistics for the PokeDataset. 
 ## Dataset Information
 
 ### Train Dataset
-- **Number of images:** [Number of images in train dataset]
-- **Image shape:** [Shape of images in train dataset]
+- **Number of images:** 20921
+- **Image shape:** torch.Size([3, 128, 128])
 
 ### Validation Dataset
-- **Number of images:** [Number of images in validation dataset]
-- **Image shape:** [Shape of images in validation dataset]
+- **Number of images:** 2379
+- **Image shape:** torch.Size([3, 128, 128])
 
 ### Test Dataset
-- **Number of images:** [Number of images in test dataset]
-- **Image shape:** [Shape of images in test dataset]
+- **Number of images:** 3239
+- **Image shape:** torch.Size([3, 128, 128])
 
 ## Class Distribution
 
