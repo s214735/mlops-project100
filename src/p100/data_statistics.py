@@ -4,6 +4,7 @@ from torchvision import transforms
 import matplotlib.pyplot as plt
 import torch
 from data import PokeDataset  # Replace with your dataset import
+import numpy as np
 
 
 def update_markdown_file(markdown_path, replacements):
@@ -81,19 +82,6 @@ def dataset_statistics(datadir: str = "data/processed", markdown_path: str = "sr
     test_dataset = PokeDataset(datadir, mode="test", transform=transforms.ToTensor())
     val_dataset = PokeDataset(datadir, mode="val", transform=transforms.ToTensor())
 
-    # Print dataset info
-    print(f"-----Train dataset-----")
-    print(f"Number of images: {len(train_dataset)}")
-    print(f"Image shape: {train_dataset[0][0].shape}")
-    print("\n")
-    print(f"-----Test dataset-----")
-    print(f"Number of images: {len(test_dataset)}")
-    print(f"Image shape: {test_dataset[0][0].shape}")
-    print("\n")
-    print(f"-----Val dataset-----")
-    print(f"Number of images: {len(val_dataset)}")
-    print(f"Image shape: {val_dataset[0][0].shape}")
-
     # Compute statistics
     train_count = len(train_dataset)
     train_shape = train_dataset[0][0].shape
@@ -101,6 +89,22 @@ def dataset_statistics(datadir: str = "data/processed", markdown_path: str = "sr
     val_shape = val_dataset[0][0].shape
     test_count = len(test_dataset)
     test_shape = test_dataset[0][0].shape
+
+    # Print dataset info
+    print(f"-----Train dataset-----")
+    print(f"Number of images: {len(train_dataset)}")
+    print(f"Image shape: {train_dataset[0][0].shape}")
+    print(f"Number of classes: {len(np.unique(train_dataset.targets))}")
+    print("\n")
+    print(f"-----Test dataset-----")
+    print(f"Number of images: {len(test_dataset)}")
+    print(f"Image shape: {test_dataset[0][0].shape}")
+    print(f"Number of classes: {len(np.unique(test_dataset.targets))}")
+    print("\n")
+    print(f"-----Val dataset-----")
+    print(f"Number of images: {len(val_dataset)}")
+    print(f"Image shape: {val_dataset[0][0].shape}")
+    print(f"Number of classes: {len(np.unique(val_dataset.targets))}")
 
     # Generate plots
     class_distribution_plot(train_dataset, val_dataset, test_dataset, "class_distribution.png")
