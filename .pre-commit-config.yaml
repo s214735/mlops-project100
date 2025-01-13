@@ -13,3 +13,6 @@ yaml repos:
     - id: ruff args: ["--fix"] # perform formatting updates 
     - id: ruff-format # validate if all is fine with preview mode 
     - id: ruff
+
+# Sometimes you are in a hurry, so make sure that you also can do commits without running pre-commit e.g.
+# git commit -m "your message" --no-verify
