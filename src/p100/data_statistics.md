@@ -32,7 +32,7 @@ The plot provides a visual representation of the frequency of each class in the 
 
 Below is a grid of sample images randomly selected from different classes in the train dataset. Each image is labeled with its corresponding class name.
 
-![Sample Images from Random Classes](combined_image.png)
+![Sample Images from Random Classes](combined_train_images.png)
 
 This visualization provides insight into the variety of classes and their visual representation within the dataset.
 
