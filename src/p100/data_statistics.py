@@ -1,8 +1,11 @@
 from collections import Counter
 from torchvision import transforms
-
 import matplotlib.pyplot as plt
-from data import PokeDataset  
+from PIL import Image
+from data import PokeDataset 
+import torch 
+import random
+
 
 def dataset_statistics(datadir: str = "data/processed") -> None:
     """Compute dataset statistics and save class distribution plots."""
@@ -32,7 +35,7 @@ def dataset_statistics(datadir: str = "data/processed") -> None:
     test_counts = Counter(test_labels)
     val_counts = Counter(val_labels)
 
-    # Generate plots
+    # Generate plots for class distribution
     fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
 
     axes[0].bar(train_counts.keys(), train_counts.values(), color='blue')
@@ -54,6 +57,51 @@ def dataset_statistics(datadir: str = "data/processed") -> None:
     fig.savefig("class_distribution.png")
     print("Class distribution plot saved as 'class_distribution.png'")
 
+    # Generate and save a grid of sample images with labels
+    generate_image_grid_with_random_classes(train_dataset, "combined_train_images.png", num_images=10)
+    print("Combined image grid saved as 'combined_train_images.png'")
+
+def generate_image_grid_with_random_classes(dataset, output_file, num_images=10):
+    """Generate a grid of images from random classes and save as a single image."""
+    cols = 5
+    rows = (num_images + cols - 1) // cols  # Determine number of rows
+    fig, axes = plt.subplots(rows, cols, figsize=(10, 2 * rows))
+    axes = axes.flatten()  # Flatten the 2D array of axes for easy indexing
+
+    # Shuffle dataset indices for randomness
+    indices = list(range(len(dataset)))
+    random.shuffle(indices)
+
+    # Dictionary to track selected images for unique classes
+    selected_classes = {}
+
+    # Iterate through shuffled dataset
+    for idx in indices:
+        if len(selected_classes) >= num_images:
+            break  # Stop once we have enough images
+
+        img, label = dataset[idx][:2]  # Unpack image and label (assuming first two items)
+
+        # Add one image per class
+        if label not in selected_classes:
+            selected_classes[label] = img
+
+    # Plot the selected images
+    for i, (label, img) in enumerate(selected_classes.items()):
+        if isinstance(img, torch.Tensor):
+            img = transforms.ToPILImage()(img)  # Convert tensor to PIL image if necessary
+        
+        axes[i].imshow(img)
+        axes[i].set_title(f"Label: {label}", fontsize=10)
+        axes[i].axis("off")  # Remove axes for a cleaner look
+
+    # Hide unused axes
+    for idx in range(len(selected_classes), len(axes)):
+        axes[idx].axis("off")
+
+    plt.tight_layout()
+    plt.savefig(output_file)
+    plt.close()
 
 if __name__ == "__main__":
     dataset_statistics()
