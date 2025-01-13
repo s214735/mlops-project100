@@ -181,3 +181,6 @@ outputs/
 
 #Lightning logs
 lightning_logs/
+
+# Wandb
+wandb/

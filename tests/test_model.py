@@ -10,7 +10,7 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.ba
 
 def test_model():
     path = "models/testmodel.pth"
-    model = ResNetModel().to(DEVICE)
+    model = ResNetModel(num_classes=1000, lr=3e-4).to(DEVICE)
     torch.save(model.state_dict(), path)
     print("Saved dummy model")
 

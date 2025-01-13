@@ -67,7 +67,7 @@ def train(cfg: DictConfig):
     model = ResNetModel(num_classes=cfg.model.num_classes, lr=cfg.train.lr)
 
     checkpoint_callback = ModelCheckpoint(
-        dirpath="./models", monitor="val_loss", mode="min"
+        dirpath="./models", monitor="val_loss", mode="min", filename="m{cfg.train.epochs:02d}-{val_loss:.2f}"
     )
 
     early_stopping_callback = EarlyStopping(
