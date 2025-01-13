@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - '**/*.png'
-      - 'scripts/**'
 
 jobs:
   run_data_checker:
