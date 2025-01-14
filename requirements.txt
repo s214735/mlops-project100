@@ -17,4 +17,4 @@ cryptography
 pyasn1
 cachetools
 pytest_asyncio
-dotenv
+python-dotenv
