@@ -1,8 +1,14 @@
-import wandb
 import os
+import sys
 import time
+
 import torch
-from src.p100.model import ResNetModel
+
+import wandb
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src/")))
+from p100.model import ResNetModel
+
 
 def load_model(artifact):
     logdir = "../../models"
@@ -16,7 +22,8 @@ def load_model(artifact):
     file_name = artifact.files()[0].name
     return ResNetModel.load_from_checkpoint(f"{logdir}/{file_name}")
 
-def test_model_speed(max_time=1): 
+
+def test_model_speed(max_time=1):
     model = load_model(os.getenv("MODEL_NAME"))
     start = time.time()
     for _ in range(100):
