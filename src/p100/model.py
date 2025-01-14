@@ -1,16 +1,18 @@
-import torch
 import hydra
+import torch
+from omegaconf import DictConfig
 from pytorch_lightning import LightningModule
 from torch import nn
-from torchvision.models import resnet50, resnet18
 from torchmetrics.classification import Accuracy
-from omegaconf import DictConfig
+from torchvision.models import resnet18
+
 
 @hydra.main(config_path="../../configs", config_name="config.yaml", version_base=None)
 def main(cfg: DictConfig) -> None:
     num_classes = cfg.model.num_classes
     lr = cfg.data.lr
     ResNetModel(num_classes, lr)
+
 
 class ResNetModel(LightningModule):
     """A Lightning Module using ResNet-18 as the backbone."""
@@ -44,8 +46,8 @@ class ResNetModel(LightningModule):
         loss = self.criterium(preds, target)
 
         acc = self.train_accuracy(preds, target)
-        self.log("train_loss", loss)
-        self.log("train_acc", acc, on_step=True, on_epoch=True)
+        self.log("train_loss", loss, on_epoch=True, batch_size=data.size(0))
+        self.log("train_acc", acc, on_epoch=True, batch_size=data.size(0))
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -54,15 +56,14 @@ class ResNetModel(LightningModule):
         loss = self.criterium(preds, target)
 
         acc = self.val_accuracy(preds, target)
-        self.log("val_loss", loss)
-        self.log("val_acc", acc, on_epoch=True)
+        self.log("val_loss", loss, on_epoch=True, batch_size=data.size(0))
+        self.log("val_acc", acc, on_epoch=True, batch_size=data.size(0))
         return loss
 
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
         lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
         return [optimizer], [lr_scheduler]
-
 
 
 if __name__ == "__main__":

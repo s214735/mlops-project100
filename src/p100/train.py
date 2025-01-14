@@ -1,19 +1,18 @@
-import os
 from pathlib import Path
 
 import hydra
-from omegaconf import DictConfig
+import pytorch_lightning as pl
 import torch
+from model import ResNetModel
+from omegaconf import DictConfig
+from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
+from pytorch_lightning.loggers import WandbLogger
 from torch.utils.data import DataLoader
 from torchvision import transforms
-import pytorch_lightning as pl
 
-from model import ResNetModel
+import wandb
 from data import PokeDataset
 
-from pytorch_lightning.loggers import WandbLogger
-from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
-import wandb
 
 @hydra.main(config_path="../../configs", config_name="config.yaml", version_base=None)
 def train(cfg: DictConfig):
@@ -24,43 +23,58 @@ def train(cfg: DictConfig):
         cfg (DictConfig): Configuration loaded from Hydra.
     """
     # Initialize wandb
-    wandb.init(
-        project="corrupt_mnist",
-        config={"lr": cfg.train.lr, "batch_size": cfg.train.batch_size, "epochs": cfg.train.epochs},
-    )
+    wandb.finish()
     wandb_logger = WandbLogger(
         project="pokemon_classifier",
-        name="add this to the config",  # Optional: Name the specific run
     )
-    wandb_logger.experiment.config.update({
-        "lr": cfg.train.lr,
-        "batch_size": cfg.train.batch_size,
-        "epochs": cfg.train.epochs
-    })
+    wandb_logger.experiment.config.update(
+        {
+            "lr": cfg.train.lr,
+            "batch_size": cfg.train.batch_size,
+            "epochs": cfg.train.epochs,
+            "model": "ResNet18",
+        }
+    )
 
     # Initialize dataset and dataloaders
-    transform = transforms.Compose([
-        transforms.Resize((224, 224)),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-    ])
+    transform_train = transforms.Compose(
+        [
+            transforms.Resize((128, 128)),
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomRotation(20),
+            transforms.Grayscale(num_output_channels=3),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ]
+    )
+
+    transforms_test = transforms.Compose(
+        [
+            transforms.Resize((128, 128)),
+            transforms.Grayscale(num_output_channels=3),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ]
+    )
 
     train_dataset = PokeDataset(
-        processed_data_path=Path(cfg.data.processed_path),
-        mode="train",
-        transform=transform
+        processed_data_path=Path(cfg.data.processed_path), mode="test", transform=transform_train
     )
     train_loader = DataLoader(
-        train_dataset, batch_size=cfg.train.batch_size, shuffle=True, num_workers=cfg.train.num_workers
+        train_dataset,
+        batch_size=cfg.train.batch_size,
+        shuffle=True,
+        num_workers=cfg.train.num_workers,
+        persistent_workers=True,
     )
 
-    val_dataset = PokeDataset(
-        processed_data_path=Path(cfg.data.processed_path),
-        mode="val",
-        transform=transform
-    )
+    val_dataset = PokeDataset(processed_data_path=Path(cfg.data.processed_path), mode="val", transform=transforms_test)
     val_loader = DataLoader(
-        val_dataset, batch_size=cfg.train.batch_size, shuffle=False, num_workers=cfg.train.num_workers
+        val_dataset,
+        batch_size=cfg.train.batch_size,
+        shuffle=False,
+        num_workers=cfg.train.num_workers,
+        persistent_workers=True,
     )
 
     # Initialize model
@@ -70,9 +84,7 @@ def train(cfg: DictConfig):
         dirpath="./models", monitor="val_loss", mode="min", filename="m{cfg.train.epochs:02d}-{val_loss:.2f}"
     )
 
-    early_stopping_callback = EarlyStopping(
-        monitor="val_loss", patience=3, verbose=True, mode="min"
-    )
+    early_stopping_callback = EarlyStopping(monitor="val_loss", patience=5, verbose=True, mode="min")
 
     # Initialize PyTorch Lightning Trainer
     trainer = pl.Trainer(
@@ -81,7 +93,7 @@ def train(cfg: DictConfig):
         devices=cfg.train.devices,
         log_every_n_steps=cfg.train.log_every_n_steps,
         logger=wandb_logger,
-        callbacks=[checkpoint_callback, early_stopping_callback]
+        callbacks=[checkpoint_callback, early_stopping_callback],
     )
 
     # Train the model
@@ -90,15 +102,3 @@ def train(cfg: DictConfig):
 
 if __name__ == "__main__":
     train()
-
-
-#TODO
-# Add logging to wandb (maybe done - need testing)
-# save of model during training (maybe done)
-# add early stopping (maybe done)
-# add scheduler?
-# add logging instead of printing
-# dvc
-
-# remove warnings
-# optimize/profiling
