@@ -69,6 +69,7 @@ def train(cfg: DictConfig):
     )
 
     val_dataset = PokeDataset(processed_data_path=Path(cfg.data.processed_path), mode="val", transform=transforms_test)
+
     val_loader = DataLoader(
         val_dataset,
         batch_size=cfg.train.batch_size,
@@ -98,6 +99,12 @@ def train(cfg: DictConfig):
 
     # Train the model
     trainer.fit(model, train_loader, val_loader)
+
+    # Create and log artifact
+    artifact = wandb.Artifact("pokemon_classifier_model", type="model")
+    artifact.add_dir("./models")
+    wandb_logger.experiment.log_artifact(artifact)
+    wandb.finish()
 
 
 if __name__ == "__main__":
