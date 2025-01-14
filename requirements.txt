@@ -16,3 +16,4 @@ matplotlib>=3.4.3
 cryptography
 pyasn1
 cachetools
+pytest_asyncio
