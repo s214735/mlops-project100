@@ -6,7 +6,12 @@ on:
 
 jobs:
   identify_event:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest", "windows-latest", "macos-latest"]
+        python-version: ["3.11", "3.12"]
     outputs:
       model_name: ${{ steps.set_output.outputs.model_name }}
     steps:
