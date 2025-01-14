@@ -59,4 +59,4 @@ jobs:
 
     - name: Test model
       run: |
-        pytest tests/performancetests/test_model.py
+        pytest src/p100/test_model.py
