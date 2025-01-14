@@ -24,6 +24,7 @@ jobs:
         id: set_output
         run: |
           echo "model_name=${{ github.event.client_payload.artifact_version_string }}" >> $GITHUB_OUTPUT
+  
   test_model:
     runs-on: ${{ matrix.os }}
     strategy:
