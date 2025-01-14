@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
+
 def load_model(artifact_name, entity, project):
     """
     Load a model checkpoint directly from a W&B artifact.
