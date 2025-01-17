@@ -1,7 +1,7 @@
 import os
 import torch
 import wandb
-from model import ResNetModel  # Ensure this matches your model definition
+from .model import ResNetModel  # Ensure this matches your model definition
 import time
 from dotenv import load_dotenv
 
