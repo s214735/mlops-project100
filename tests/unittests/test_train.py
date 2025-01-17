@@ -4,9 +4,9 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src/p100")))
 
 import torch
-from model import ResNetModel
+from p100.model import ResNetModel
+from p100.train import train
 from torch.utils.data import DataLoader
-from train import train
 
 
 def test_my_train():

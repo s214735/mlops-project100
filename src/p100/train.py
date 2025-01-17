@@ -3,7 +3,6 @@ from pathlib import Path
 import hydra
 import pytorch_lightning as pl
 import torch
-from model import ResNetModel
 from omegaconf import DictConfig
 from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
 from pytorch_lightning.loggers import WandbLogger
@@ -11,7 +10,9 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 
 import wandb
-from data import PokeDataset
+
+from .data import PokeDataset
+from .model import ResNetModel
 
 
 @hydra.main(config_path="../../configs", config_name="config.yaml", version_base=None)
