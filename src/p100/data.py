@@ -14,7 +14,7 @@ import numpy as np
 class PokeDataset(Dataset):
     """My custom dataset."""
 
-    def __init__(self, processed_data_path: Path = "data/processed", mode: str = "train", transform = transforms.ToTensor()) -> None:
+    def __init__(self, processed_data_path: Path = '/gcs/mlops_bucket100/data/processed', mode: str = "train", transform = transforms.ToTensor()) -> None:
         # Define the path to the raw data
 
         self.data_path = processed_data_path
