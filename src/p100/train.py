@@ -22,6 +22,8 @@ def train(cfg: DictConfig):
     Args:
         cfg (DictConfig): Configuration loaded from Hydra.
     """
+    key= cfg.env.WANDB_API_KEY
+    wandb.login(key="your_api_key")
     # Initialize wandb
     wandb.finish()
     wandb_logger = WandbLogger(
