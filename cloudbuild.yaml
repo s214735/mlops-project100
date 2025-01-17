@@ -15,4 +15,7 @@ steps:
     'push',
     'europe-west1-docker.pkg.dev/level-oxygen-447714-d3/my-docker-registry/image1'
   ]
+options:
+  logging: CLOUD_LOGGING_ONLY
+  default_logs_bucket_behavior: REGIONAL_USER_OWNED_BUCKET
 
