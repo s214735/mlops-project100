@@ -17,4 +17,7 @@ cryptography
 pyasn1
 cachetools
 pytest_asyncio
-dotenv
+python-dotenv
+requests
+fastapi==0.115.6
+uvicorn==0.34.0
