@@ -440,7 +440,7 @@ We did not perform extensive profiling of our code, as our focus was on function
 >
 > Answer:
 
---- question 17 fill here ---
+Generally we have tried to use all of the GCP services provided to us in the course material. In the end we used the virtual machines, which allows us the create instances that would induce the ability to train on remote GPUs. We also used the cloud build services, particularly setting a trigger so that it runs a cloudbuild workflow each time code is pushed to main. Another great service we used was the cloud storage, specifically the buckets which allows us to store data remotely.
 
 ### Question 18
 
@@ -455,7 +455,7 @@ We did not perform extensive profiling of our code, as our focus was on function
 >
 > Answer:
 
---- question 18 fill here ---
+
 
 ### Question 19
 
