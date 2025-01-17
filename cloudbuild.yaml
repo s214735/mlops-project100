@@ -15,3 +15,4 @@ steps:
     'push',
     'europe-west1-docker.pkg.dev/level-oxygen-447714-d3/my-docker-registry/image1'
   ]
+

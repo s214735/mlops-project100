@@ -13,3 +13,11 @@ scipy == 1.15.0
 pytorch_lightning>=2.5.0.post0
 wandb>=0.19.2
 matplotlib>=3.4.3
+cryptography
+pyasn1
+cachetools
+pytest_asyncio
+python-dotenv
+requests
+httpx
+locust

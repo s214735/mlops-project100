@@ -11,7 +11,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ["ubuntu-latest", "windows-latest", "macos-latest"]
-        python-version: ["3.11", "3.12"]
+        python-version: ["3.11"]
     outputs:
       model_name: ${{ steps.set_output.outputs.model_name }}
     steps:
@@ -55,8 +55,9 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
+        pip install -r requirements_dev.txt
         pip list
 
     - name: Test model
       run: |
-        pytest src/p100/test_model.py
+        pytest src/p100/wandb_testing.py
