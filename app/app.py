@@ -9,7 +9,7 @@ from fastapi import FastAPI
 # from p100.data import default_img_transform
 # from p100.model import load_from_checkpoint
 # from p100.utils import HydraRichLogger
-from .hello import helloWorld
+from src.p100.hello import helloWorld
 
 load_dotenv()
 
