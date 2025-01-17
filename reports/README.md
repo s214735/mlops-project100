@@ -143,7 +143,11 @@ s214735, s214742, s214739, s214733, s214731
 >
 > Answer:
 
---- question 3 fill here ---
+In our project, we used two third-party frameworks, pandas and UMAP, which were essential for our tasks. We employed pandas to load and manage Pokémon metadata from a Kaggle dataset. This framework provided data operations like sorting and filtering, which were necessary for preparing our data.
+
+Additionally, we integrated umap for visualizing the vector space of our model. umap helped in reducing the dimensionality of our data, allowing us to visually inspect how different Pokémon characteristics clustered together. This visualization aided in assessing the effectiveness of our data modeling approach.
+
+Using pandas and umap allowed us to efficiently process and analyze our data, providing clear insights into the model. 
 
 ## Coding environment
 
@@ -163,7 +167,19 @@ s214735, s214742, s214739, s214733, s214731
 >
 > Answer:
 
---- question 4 fill here ---
+In our project, we managed our dependencies using two key files: `requirements.txt` and `requirements_dev.txt`. The `requirements.txt` file contains all the essential libraries needed to run the project, ensuring that any core functionality works seamlessly across different setups. On the other hand, `requirements_dev.txt` includes additional packages that are necessary for development purposes, such as testing and debugging tools.
+
+For a new team member to set up an exact copy of our environment, they would need to follow these steps:
+
+1. Clone the project repository from our version control system to their local machine.
+2. Ensure that Python is installed on their system.
+3. Create a virtual environment (venv) to isolate and manage project-specific dependencies. This can be done by running `python -m venv env` in the project's root directory.
+4. Activate the virtual environment using `source env/bin/activate` on Unix or macOS, or `env\Scripts\activate` on Windows.
+5. Run `pip install -r requirements.txt` to install all the required libraries listed in the `requirements.txt` file.
+6. Optionally, if they are involved in development, they should also run `pip install -r requirements_dev.txt` to install the additional development dependencies.
+
+By following these steps, a new team member can quickly set up the project environment, ensuring they have all the necessary dependencies to start working on the project immediately.
+
 
 ### Question 5
 
@@ -179,7 +195,18 @@ s214735, s214742, s214739, s214733, s214731
 >
 > Answer:
 
---- question 5 fill here ---
+We initialized our project using the cookiecutter template and adapted it to fit our specific needs. The primary directories we filled out and utilized are:
+
+- **`config` folder**: This directory holds all configuration files that manage settings and parameters used across different parts of our project, ensuring consistency and ease of adjustments.
+- **`data` folder**: Used for storing raw and processed data sets. This organization helps in managing the data lifecycle within our project.
+- **`dockerfiles` folder**: Contains Dockerfiles which are crucial for creating Docker containers that ensure our environment is consistent across all development and production systems.
+- **`model` folder**: This is where we store model definitions and training scripts, centralizing all machine learning algorithms and models.
+- **`src` folder**: The source code for our application is kept here, including all the primary Python scripts and modules.
+- **`tests` folder**: Dedicated to housing test cases and scripts, which are vital for ensuring the robustness and reliability of our code through continuous integration practices.
+
+Additionally, we maintained a structured approach to version control using Git, which included setting up `.gitignore` files to exclude unnecessary files from being tracked and `workflows` for automating tasks such as testing, building, and deploying using GitHub Actions.
+
+By carefully organizing these folders and incorporating essential development practices, we created a project structure that is both scalable and easy to navigate for any new team members or stakeholders.
 
 ### Question 6
 
@@ -194,7 +221,11 @@ s214735, s214742, s214739, s214733, s214731
 >
 > Answer:
 
---- question 6 fill here ---
+In our project, we used `ruff` to lint our code before commits, ensuring it was error-free and maintained a consistent style. We documented each function with docstrings that explained its purpose, inputs, and outputs, and we included comments to clarify complex code sections.
+
+We also employed type annotations throughout our code to specify expected input and output types, helping to prevent type-related errors and making the code clearer for other developers.
+
+These practices are crucial in larger projects as they improve code quality, enhance readability, and simplify maintenance. They also facilitate collaboration among developers by making the codebase easier to understand and navigate, which is vital as projects grow and evolve.
 
 ## Version control
 
@@ -213,7 +244,14 @@ s214735, s214742, s214739, s214733, s214731
 >
 > Answer:
 
---- question 7 fill here ---
+In our project, we implemented a suite of tests, organized into four main files: `test_api.py`, `test_data.py`, `test_model.py`, and `test_train.py`. These tests are automated through GitHub workflows and executed within GitHub Actions to ensure continuous integration and consistent code quality.
+
+- **`test_api.py`**: Tests the API to make sure all endpoints respond correctly.
+- **`test_data.py`**: Checks that data loads and processes correctly, preserving format and accuracy.
+- **`test_model.py`**: Ensures our models are predicting the correct format 
+- **`test_train.py`**: Confirms that our dataloader is correctly loading data and that our model is training as expected.
+
+These automated tests help us catch issues early, keeping our application reliable as we continuously update it.
 
 ### Question 8
 
@@ -228,7 +266,7 @@ s214735, s214742, s214739, s214733, s214731
 >
 > Answer:
 
---- question 8 fill here ---
+In our project, we currently have a code coverage of approximately 60-70%. Achieving 100% code coverage is often viewed as ideal, but it's important to recognize that even this level does not guarantee an error-free application. Code coverage only measures the extent of code executed during tests, not the effectiveness or comprehensiveness of the testing itself. While a high code coverage can give a false sense of security, especially if not all use cases and edge cases are tested, we did not think achieving 100% coverage was worth the time. Instead, we focused on covering 60-70% of the code, prioritizing the most crucial aspects to detect bugs and errors early when making changes to the code and model. This approach allowed us to efficiently balance resource allocation with the need for effective error detection in key areas of our application.
 
 ### Question 9
 
@@ -243,7 +281,11 @@ s214735, s214742, s214739, s214733, s214731
 >
 > Answer:
 
---- question 9 fill here ---
+In our project, we used Git for version control, which was a new experience for many of us. We organized our work by creating specific branches for different features, allowing team members to work independently or in small groups on separate parts of the project. This approach helped keep the main code stable as we developed new features.
+
+For merging these features into the main code, we used pull requests. This process allowed everyone on the team to review and discuss the changes before they were added to the main branch, ensuring the code was both high-quality and compatible with existing features.
+
+Sometimes, we made urgent fixes directly on the main branch when immediate changes were needed that affected the whole project. Overall, using branches and pull requests made it easier to manage our project and keep our code reliable.
 
 ### Question 10
 
@@ -258,7 +300,9 @@ s214735, s214742, s214739, s214733, s214731
 >
 > Answer:
 
---- question 10 fill here ---
+In our project, we didn’t use DVC for data management due to issues with Google’s policies for integrating it with Google Drive. Instead, we used Google Cloud for storing our data and accessing their GPUs for training. For version control, we relied on Git, but only for managing our code, not our data.
+
+Version control for data would have been beneficial in cases where datasets are updated or modified frequently. For example, if new data is added or existing data is cleaned, a version control system would allow us to track changes, revert to previous versions, and ensure reproducibility. While Git helped us manage our code effectively, having a similar system for data would have made managing updates and collaborations more efficient and organized.
 
 ### Question 11
 
@@ -275,7 +319,18 @@ s214735, s214742, s214739, s214733, s214731
 >
 > Answer:
 
---- question 11 fill here ---
+In our project, we set up workflows to ensure our code and models worked correctly. These workflows checked that our data was in the correct format, verified that our model could initialize properly, and ensured that prediction speeds did not slow down over time.
+
+We also created a testing matrix in our workflows to test across multiple operating systems and Python versions. Specifically, we tested on the following:
+
+- Operating systems: `ubuntu-latest`, `windows-latest`, `macos-latest`
+- Python version: `3.11`
+
+To optimize workflow runtimes, we implemented caching for dependencies. This allowed GitHub to reuse previously installed requirements and only install new ones when necessary, significantly speeding up our runs and avoid installing the same dependencies multiple times.
+
+Additionally, we tried to create a model testing stage that would be triggered by Weights & Biases (wandb) when adding a model to the registry. This stage was meant to validate new models before integrating them. However, we encountered many issues with this setup and spent a lot of time trying to fix it. In the end, we decided to remove it because we couldn’t get it to work as intended.
+
+Overall, these workflows helped us identify issues early, maintain stable performance across platforms, and improve efficiency with caching, ensuring our project development was smooth and reliable.
 
 ## Running code and tracking experiments
 

@@ -2,13 +2,13 @@ import hydra
 import torch
 from omegaconf import DictConfig
 from torch.utils.data import DataLoader
-from data import PokeDataset
-from model import ResNetModel
 from torchvision import transforms
 
-DEVICE = torch.device(
-    "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
-)
+from .data import PokeDataset
+from .model import ResNetModel
+
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
+
 
 def load_model(model: torch.nn.Module, checkpoint_path: str) -> torch.nn.Module:
     """Load model weights from a .ckpt or .pth file."""
@@ -21,6 +21,7 @@ def load_model(model: torch.nn.Module, checkpoint_path: str) -> torch.nn.Module:
         model.load_state_dict(checkpoint)
 
     return model
+
 
 def evaluate(model_checkpoint: str, batch_size: int) -> None:
     """Evaluate a trained model on the test dataset."""
@@ -49,11 +50,13 @@ def evaluate(model_checkpoint: str, batch_size: int) -> None:
     accuracy = correct / total
     print(f"Test accuracy: {accuracy:.2%}")
 
+
 @hydra.main(config_path="../../configs", config_name="config.yaml", version_base=None)
 def main(cfg: DictConfig) -> None:
     model_checkpoint = cfg.evaluate.model_checkpoint
     batch_size = cfg.evaluate.batch_size
     evaluate(model_checkpoint, batch_size)
+
 
 if __name__ == "__main__":
     main()

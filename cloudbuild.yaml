@@ -13,5 +13,6 @@ steps:
   id: 'Push container image'
   args: [
     'push',
-    'europe-west1-docker.pkg.dev/level-oxygen-447714-d3CT_ID/my-docker-registry/image1'
+    'europe-west1-docker.pkg.dev/level-oxygen-447714-d3/my-docker-registry/image1'
   ]
+
