@@ -19,5 +19,5 @@ cachetools
 pytest_asyncio
 python-dotenv
 requests
-fastapi==0.115.6
-uvicorn==0.34.0
+httpx
+locust
