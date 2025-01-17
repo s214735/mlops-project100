@@ -11,8 +11,8 @@ from torchvision import transforms
 
 import wandb
 
-from .data import PokeDataset
-from .model import ResNetModel
+from src.p100.data import PokeDataset
+from src.p100.model import ResNetModel
 
 
 @hydra.main(config_path="../../configs", config_name="config.yaml", version_base=None)
