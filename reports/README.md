@@ -349,7 +349,11 @@ Overall, these workflows helped us identify issues early, maintain stable perfor
 >
 > Answer:
 
---- question 12 fill here ---
+We used config files and Hydra to manage and run our experiments. Hydra made it simple to change settings without altering the main code. For example, to run an experiment with a specific batch size, we used the following command:
+
+`python src/p100/train.py train.batch_size=64`
+
+This allowed us to quickly test different configurations by changing parameters directly in the command line, making our experiments more flexible and organized.
 
 ### Question 13
 
@@ -364,7 +368,11 @@ Overall, these workflows helped us identify issues early, maintain stable perfor
 >
 > Answer:
 
---- question 13 fill here ---
+We ensured the reproducibility of our experiments by using Weights & Biases to log as many training parameters as possible. This included hyperparameters, model architecture details, training progress, and results. By logging these parameters, we could easily review the settings and outcomes of any experiment, making it straightforward to reproduce the training process when needed.
+
+In addition to wandb, we used configuration files to define default settings for our experiments. These config files contained all the key parameters, such as learning rates, batch sizes, and data paths, ensuring that experiments could be run with consistent baseline settings. Any modifications to these defaults were logged in wandb, so changes were fully traceable.
+
+To reproduce an experiment, we simply looked up the parameters in Weights & Biases and used the same parameters to run the experiment again. By logging the perfomance we could also compare the results of the new experiment with the original one, ensuring that the results were consistent.
 
 ### Question 14
 
@@ -411,7 +419,11 @@ Overall, these workflows helped us identify issues early, maintain stable perfor
 >
 > Answer:
 
---- question 16 fill here ---
+We primarily used the Visual Studio Code (VSC) debugger to troubleshoot issues in our code. While the debugger was useful for identifying errors in the local codebase, we often found it less helpful when dealing with bugs related to server connections. Many of the challenges we faced involved integrating different services and ensuring communication between servers, which required a different approach to debugging.
+
+For server-related issues, we relied heavily on logging and inspecting error messages to understand what was going wrong. This approach helped us identify the root cause of many problems and find solutions more effectively.
+
+We did not perform extensive profiling of our code, as our focus was on functionality rather than optimization at this stage. However, we acknowledge that profiling could help us improve the performance of our code in future iterations.
 
 ## Working in the cloud
 
@@ -428,7 +440,7 @@ Overall, these workflows helped us identify issues early, maintain stable perfor
 >
 > Answer:
 
---- question 17 fill here ---
+Generally we have tried to use all of the GCP services provided to us in the course material. In the end we used the virtual machines, which allows us the create instances that would induce the ability to train on remote GPUs. We also used the cloud build services, particularly setting a trigger so that it runs a cloudbuild workflow each time code is pushed to main. Another great service we used was the cloud storage, specifically the buckets which allows us to store data remotely.
 
 ### Question 18
 
@@ -443,7 +455,7 @@ Overall, these workflows helped us identify issues early, maintain stable perfor
 >
 > Answer:
 
---- question 18 fill here ---
+
 
 ### Question 19
 
