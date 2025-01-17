@@ -326,11 +326,11 @@ We also created a testing matrix in our workflows to test across multiple operat
 - Operating systems: `ubuntu-latest`, `windows-latest`, `macos-latest`
 - Python version: `3.11`
 
-To optimize workflow runtimes, we implemented caching for dependencies. This allowed GitHub to reuse previously installed requirements and only install new ones when necessary, significantly speeding up our runs.
+To optimize workflow runtimes, we implemented caching for dependencies. This allowed GitHub to reuse previously installed requirements and only install new ones when necessary, significantly speeding up our runs and avoid installing the same dependencies multiple times.
 
 Additionally, we tried to create a model testing stage that would be triggered by Weights & Biases (wandb) when adding a model to the registry. This stage was meant to validate new models before integrating them. However, we encountered many issues with this setup and spent a lot of time trying to fix it. In the end, we decided to remove it because we couldn’t get it to work as intended.
 
-Overall, these workflows helped us identify issues early, maintain stable performance across platforms, and improve efficiency with caching.
+Overall, these workflows helped us identify issues early, maintain stable performance across platforms, and improve efficiency with caching, ensuring our project development was smooth and reliable.
 
 ## Running code and tracking experiments
 
