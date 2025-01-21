@@ -3,6 +3,7 @@ from pathlib import Path
 import hydra
 import pytorch_lightning as pl
 import torch
+from google.cloud import secretmanager
 from omegaconf import DictConfig
 from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
 from pytorch_lightning.loggers import WandbLogger
@@ -11,8 +12,26 @@ from torchvision import transforms
 
 import wandb
 
-from data import PokeDataset
-from model import ResNetModel
+from .data import PokeDataset
+from .model import ResNetModel
+
+
+def get_wandb_api_key() -> str:
+    """
+    Retrieve the W&B API key from Google Secret Manager.
+    """
+    client = secretmanager.SecretManagerServiceClient()
+
+    # Construct the secret name
+    secret_name = "wandb-api-key"
+    project_id = "level-oxygen-447714-d3"  # Replace with your GCP project ID
+    secret_path = f"projects/{project_id}/secrets/{secret_name}/versions/latest"
+
+    # Access the secret value
+    response = client.access_secret_version(name=secret_path)
+    api_key = response.payload.data.decode("UTF-8")
+
+    return api_key
 
 
 @hydra.main(config_path="../../configs", config_name="config.yaml", version_base=None)
@@ -23,8 +42,10 @@ def train(cfg: DictConfig):
     Args:
         cfg (DictConfig): Configuration loaded from Hydra.
     """
-    my_key= cfg.env.WANDB_API_KEY
-    wandb.login(key=my_key)
+    # Fetch the W&B API key from Google Secret Manager
+    wandb_api_key = get_wandb_api_key()
+    wandb.login(key=wandb_api_key)
+
     # Initialize wandb
     wandb.finish()
     wandb_logger = WandbLogger(
