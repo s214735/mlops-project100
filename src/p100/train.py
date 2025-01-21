@@ -14,6 +14,31 @@ import wandb
 from data import PokeDataset
 from model import ResNetModel
 
+import json
+from google.cloud import secretmanager
+
+BUCKET_NAME = "mlops_bucket100"
+
+def get_wandb_api_key() -> str:
+    """
+    Retrieve the W&B API key from Google Secret Manager.
+    """
+    client = secretmanager.SecretManagerServiceClient()
+
+    # Construct the secret name
+    secret_name = "wandb-api-key"
+    project_id = "level-oxygen-447714-d3"  # Replace with your GCP project ID
+    secret_path = f"projects/{project_id}/secrets/{secret_name}/versions/latest"
+
+    # Access the secret value
+    response = client.access_secret_version(name=secret_path)
+    secret_payload = response.payload.data.decode("UTF-8")
+
+    # Parse the JSON and extract the key
+    secret_dict = json.loads(secret_payload)
+    api_key = secret_dict.get("wandb-api-key")  # Adjust the key if it has a different name
+
+    return api_key
 
 @hydra.main(config_path="../../configs", config_name="config.yaml", version_base=None)
 def train(cfg: DictConfig):
@@ -23,7 +48,7 @@ def train(cfg: DictConfig):
     Args:
         cfg (DictConfig): Configuration loaded from Hydra.
     """
-    my_key= cfg.env.WANDB_API_KEY
+    my_key= get_wandb_api_key()
     wandb.login(key=my_key)
     # Initialize wandb
     wandb.finish()
@@ -61,7 +86,7 @@ def train(cfg: DictConfig):
     )
 
     train_dataset = PokeDataset(
-        processed_data_path=Path(cfg.data.processed_path), mode="test", transform=transform_train
+        BUCKET_NAME, mode="test", transform=transform_train
     )
     train_loader = DataLoader(
         train_dataset,
@@ -71,7 +96,7 @@ def train(cfg: DictConfig):
         persistent_workers=True,
     )
 
-    val_dataset = PokeDataset(processed_data_path=Path(cfg.data.processed_path), mode="val", transform=transforms_test)
+    val_dataset = PokeDataset(BUCKET_NAME, mode="val", transform=transforms_test)
 
     val_loader = DataLoader(
         val_dataset,
