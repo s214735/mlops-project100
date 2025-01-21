@@ -36,18 +36,22 @@ class ResNetModel(LightningModule):
         self.val_accuracy = Accuracy(task="multiclass", num_classes=num_classes)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """Forward pass."""
+        """Forward pass with shape debugging."""
         # Pass through the backbone
-        x = self.backbone(x)  # Output shape: (batch_size, 2048, H, W)
+        x = self.backbone(x)
+        print("Shape after backbone:", x.shape)
 
         # Apply global pooling
-        x = self.global_pool(x)  # Output shape: (batch_size, 2048, 1, 1)
+        x = self.global_pool(x)
+        print("Shape after global pooling:", x.shape)
 
         # Flatten the tensor
-        x = x.view(x.size(0), -1)  # Output shape: (batch_size, 2048)
+        x = x.view(x.size(0), -1)
+        print("Shape after flattening:", x.shape)
 
         # Pass through the custom classification layer
-        x = self.fc(x)  # Output shape: (batch_size, num_classes)
+        x = self.fc(x)
+        print("Shape after fully connected layer:", x.shape)
         return x
 
     def training_step(self, batch, batch_idx):
