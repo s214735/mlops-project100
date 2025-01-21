@@ -84,19 +84,23 @@ class PokeDataset(Dataset):
 
     def __getitem__(self, idx):
         """Fetch the image, target, and class name by index."""
-        # Load image from local cache
         image_path = self.data[idx]
         target = self.targets[idx]
         class_name = self.class_names[idx]
 
-        # Open the image
-        image = Image.open(image_path).convert('RGB')
+        try:
+            # Open the image
+            image = Image.open(image_path).convert('RGB')
+        except (IOError, Image.UnidentifiedImageError):
+            print(f"Skipping corrupted image: {image_path}")
+            return self.__getitem__((idx + 1) % len(self))  # Load the next image instead
 
         # Apply transformations
         if self.transform:
             image = self.transform(image)
 
         return image, target, class_name
+
 
 
 
