@@ -1,11 +1,19 @@
 import json
+import os
 from contextlib import asynccontextmanager
 
 import anyio
+import numpy as np
 import torch
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from PIL import Image
 from torchvision import models, transforms
+
+from data import PokeDataset
+
+BUCKET_NAME = "mlops_bucket100"
+PREFIX = "data/processed/"
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 @asynccontextmanager
@@ -24,7 +32,7 @@ async def lifespan(app: FastAPI):
         ],
     )
 
-    async with await anyio.open_file("src/p100/imagenet-simple-labels.json") as f:
+    async with await anyio.open_file("imagenet-simple-labels.json") as f:
         file_content = await f.read()
         imagenet_classes = json.loads(file_content)
 
@@ -55,14 +63,11 @@ async def root():
     return {"message": "Hello from the backend!"}
 
 
-# FastAPI endpoint for image classification
 @app.post("/classify/")
 async def classify_image(file: UploadFile = File(...)):
     """Classify image endpoint."""
     try:
         # Ensure the 'temp' directory exists
-        import os
-
         os.makedirs("temp", exist_ok=True)
 
         # Save the file temporarily
@@ -78,8 +83,49 @@ async def classify_image(file: UploadFile = File(...)):
         return {
             "filename": file.filename,
             "prediction": prediction,
-            # "probabilities": probabilities.tolist(),
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
+
+
+@app.post("/data/")
+async def show_data():
+    """
+    Return dataset information instead of printing.
+    """
+    try:
+        # Initialize datasets
+        train_dataset = PokeDataset(BUCKET_NAME, mode="train", transform=transforms.ToTensor())
+        test_dataset = PokeDataset(BUCKET_NAME, mode="test", transform=transforms.ToTensor())
+        val_dataset = PokeDataset(BUCKET_NAME, mode="val", transform=transforms.ToTensor())
+
+        # Compute statistics
+        def dataset_stats(dataset):
+            return {
+                "num_images": len(dataset),
+                "image_shape": list(dataset[0][0].shape) if len(dataset) > 0 else None,
+                "num_classes": len(np.unique(dataset.targets)),
+                "min_label": min(dataset.targets),
+                "max_label": max(dataset.targets),
+            }
+
+        train_stats = dataset_stats(train_dataset)
+        test_stats = dataset_stats(test_dataset)
+        val_stats = dataset_stats(val_dataset)
+
+        # Return as JSON
+        return {
+            "train": train_stats,
+            "test": test_stats,
+            "val": val_stats,
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e)) from e
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    port = int(os.environ.get("PORT", 8080))  # Use the PORT env variable or default to 8080
+    uvicorn.run(app, host="0.0.0.0", port=port)
