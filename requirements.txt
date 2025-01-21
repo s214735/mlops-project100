@@ -21,3 +21,7 @@ python-dotenv
 requests
 httpx
 locust
+onnx
+onnxruntime
+onnxscript
+bentoml
