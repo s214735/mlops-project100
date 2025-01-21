@@ -44,7 +44,6 @@ class ResNetModel(nn.Module):
 # Training function
 def train_one_epoch(model, dataloader, optimizer, criterion, epoch, log_every):
     model.train()
-    print(1)
     running_loss = 0.0
     correct = 0
     total = 0
@@ -56,15 +55,10 @@ def train_one_epoch(model, dataloader, optimizer, criterion, epoch, log_every):
         print("Training on CPU")
 
     for batch_idx, (data, target, _) in enumerate(dataloader):
-        print(1)
         data, target = data.to(device), target.to(device)
-        print(2)
-        torch.cuda.synchronize()
 
         optimizer.zero_grad()
-
         outputs = model(data)
-        torch.cuda.synchronize()
 
         loss = criterion(outputs, target)
         loss.backward()
@@ -73,10 +67,9 @@ def train_one_epoch(model, dataloader, optimizer, criterion, epoch, log_every):
         _, predicted = outputs.max(1)
         total += target.size(0)
         correct += predicted.eq(target).sum().item()
-        print(3)
+
         if batch_idx % log_every == 0:
             print(f"Epoch: {epoch}, Batch: {batch_idx}, Loss: {loss.item()}, Correct: {correct}, Total: {total}")
-        print(4)
 
     epoch_loss = running_loss / total
     epoch_accuracy = 100.0 * correct / total
@@ -171,6 +164,7 @@ def main():
         num_workers=num_workers,
         pin_memory=True,
         prefetch_factor=2,
+        persistent_workers=True,
     )
     val_loader = DataLoader(
         val_dataset,
@@ -179,6 +173,7 @@ def main():
         num_workers=num_workers,
         pin_memory=True,
         prefetch_factor=2,
+        persistent_workers=True,
     )
 
     # Model, criterion, optimizer
