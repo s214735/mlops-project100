@@ -1,0 +1,20 @@
+docker build -t frontend:latest -f app/frontend.dockerfile .
+docker build -t backend:latest -f app/backend.dockerfile .
+
+docker run --rm -p 8080:8080 -e "PORT=8080" backend
+docker run --rm -p 8081:8081 -e "PORT=8081" frontend
+
+docker tag frontend:latest europe-west1-docker.pkg.dev/level-oxygen-447714-d3/frontend-backend/frontend:latest
+docker tag backend:latest europe-west1-docker.pkg.dev/level-oxygen-447714-d3/frontend-backend/backend:latest
+
+docker push europe-west1-docker.pkg.dev/level-oxygen-447714-d3/frontend-backend/frontend:latest
+docker push europe-west1-docker.pkg.dev/level-oxygen-447714-d3/frontend-backend/backend:latest
+
+gcloud run deploy backend --image=europe-west1-docker.pkg.dev/level-oxygen-447714-d3/frontend-backend/backend:latest --region=europe-west1 --platform=managed --allow-unauthenticated --memory=2Gi
+gcloud run deploy frontend --image=europe-west1-docker.pkg.dev/level-oxygen-447714-d3/frontend-backend/frontend:latest --region=europe-west1 --platform=managed --allow-unauthenticated
+
+--------------
+gcloud run services list
+
+gcloud run services delete frontend --region=europe-west1
+gcloud run services delete backend --region=europe-west1
