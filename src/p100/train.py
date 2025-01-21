@@ -59,7 +59,7 @@ def train(cfg: DictConfig):
             "lr": cfg.train.lr,
             "batch_size": cfg.train.batch_size,
             "epochs": cfg.train.epochs,
-            "model": "ResNet18",
+            "model": "ResNet50",
         }
     )
 
