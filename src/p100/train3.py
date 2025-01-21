@@ -47,6 +47,7 @@ def train_one_epoch(model, dataloader, optimizer, criterion, epoch, log_every):
     running_loss = 0.0
     correct = 0
     total = 0
+    batch_idx = 0
     if torch.cuda.is_available():
         device = torch.device("cuda")
         print("Training on GPU")
@@ -54,7 +55,7 @@ def train_one_epoch(model, dataloader, optimizer, criterion, epoch, log_every):
         device = torch.device("cpu")
         print("Training on CPU")
 
-    for batch_idx, (data, target, _) in enumerate(dataloader):
+    for data, target, _ in dataloader:
         data, target = data.to(device, non_blocking=True), target.to(device, non_blocking=True)
 
         optimizer.zero_grad()
@@ -69,6 +70,7 @@ def train_one_epoch(model, dataloader, optimizer, criterion, epoch, log_every):
         total += target.size(0)
         correct += predicted.eq(target).sum().item()
 
+        batch_idx += 1
         if batch_idx % log_every == 0:
             print(f"Epoch: {epoch}, Batch: {batch_idx}, Loss: {loss.item()}, Correct: {correct}, Total: {total}")
 
