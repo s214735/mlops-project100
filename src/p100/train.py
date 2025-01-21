@@ -1,8 +1,12 @@
 import json
 
+# Ignore warnings
+import warnings
+
 import hydra
 import pytorch_lightning as pl
 import torch
+from data2 import PokeDataset
 from google.cloud import secretmanager
 from model import ResNetModel
 from omegaconf import DictConfig
@@ -12,13 +16,11 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 
 import wandb
-from data import PokeDataset
 
-# Ignore warnings
-import warnings
 warnings.filterwarnings("ignore")
 
 BUCKET_NAME = "mlops_bucket100"
+
 
 def get_wandb_api_key() -> str:
     """
