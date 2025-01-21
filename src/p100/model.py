@@ -46,7 +46,7 @@ class ResNetModel(LightningModule):
     def training_step(self, batch, batch_idx):
         data, target, _ = batch  # Adjust if your dataset returns additional items
         preds = self(data)
-        loss = self.criterium(preds, target)
+        loss = self.criterion(preds, target)
 
         acc = self.train_accuracy(preds, target)
         self.log("train_loss", loss, on_epoch=True, batch_size=data.size(0))
