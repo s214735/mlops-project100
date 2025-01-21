@@ -59,7 +59,7 @@ def train_one_epoch(model, dataloader, optimizer, criterion, epoch, log_every):
         data, target = data.to(device, non_blocking=True), target.to(device, non_blocking=True)
 
         optimizer.zero_grad()
-        with torch.cuda.amp.autocast():
+        with torch.amp.autocast("cuda"):
             outputs = model(data)
             loss = criterion(outputs, target)
 
@@ -133,21 +133,21 @@ def main():
     # Data transforms
     transform_train = transforms.Compose(
         [
-            transforms.Resize((128, 128)),
-            transforms.RandomHorizontalFlip(),
-            transforms.RandomRotation(20),
-            transforms.Grayscale(num_output_channels=3),
+            # transforms.Resize((128, 128)),
+            # transforms.RandomHorizontalFlip(),
+            # transforms.RandomRotation(20),
+            # transforms.Grayscale(num_output_channels=3),
             transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+            # transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ]
     )
 
     transform_test = transforms.Compose(
         [
-            transforms.Resize((128, 128)),
-            transforms.Grayscale(num_output_channels=3),
+            # transforms.Resize((128, 128)),
+            # transforms.Grayscale(num_output_channels=3),
             transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+            # transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ]
     )
 
