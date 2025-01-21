@@ -55,12 +55,13 @@ def train_one_epoch(model, dataloader, optimizer, criterion, epoch, log_every):
         print("Training on CPU")
 
     for batch_idx, (data, target, _) in enumerate(dataloader):
-        data, target = data.to(device), target.to(device)
+        data, target = data.to(device, non_blocking=True), target.to(device, non_blocking=True)
 
         optimizer.zero_grad()
-        outputs = model(data)
+        with torch.cuda.amp.autocast():
+            outputs = model(data)
+            loss = criterion(outputs, target)
 
-        loss = criterion(outputs, target)
         loss.backward()
         optimizer.step()
         running_loss += loss.item() * data.size(0)
@@ -153,7 +154,7 @@ def main():
     val_dataset = PokeDataset(BUCKET_NAME, mode="val", transform=transform_test)
 
     if torch.cuda.is_available():
-        num_workers = 4
+        num_workers = 6
     else:
         num_workers = 4
 
