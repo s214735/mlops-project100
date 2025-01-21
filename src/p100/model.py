@@ -58,7 +58,7 @@ class ResNetModel(LightningModule):
 
         with torch.no_grad():
             preds = self(data)
-        loss = self.criterium(preds, target)
+        loss = self.criterion(preds, target)
 
         acc = self.val_accuracy(preds, target)
         self.log("val_loss", loss, on_epoch=True, batch_size=data.size(0))
