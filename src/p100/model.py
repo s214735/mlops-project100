@@ -41,11 +41,11 @@ class ResNetModel(LightningModule):
         x = self.backbone(x)
 
         # Apply global pooling
-        x = self.global_pool(x)
-        x = x.view(x.size(0), -1)  # Flatten the tensor
+        x = self.global_pool(x)  # Shape: (batch_size, 2048, 1, 1)
+        x = torch.flatten(x, 1)  # Shape: (batch_size, 2048)
 
         # Pass through the custom classification layer
-        x = self.fc(x)
+        x = self.fc(x)  # Shape: (batch_size, num_classes)
         return x
 
     def training_step(self, batch, batch_idx):
