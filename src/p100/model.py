@@ -16,10 +16,13 @@ class ResNetModel(LightningModule):
         # Load a pretrained ResNet-50 model
         self.backbone = resnet50(weights="ResNet50_Weights.DEFAULT")
 
-        # Remove the final fully connected layer and replace with custom layers
-        self.backbone.fc = nn.Identity()  # Remove the original fully connected layer
+        # Get the number of features in the original fc layer
+        in_features = self.backbone.fc.in_features
+
+        # Remove the original fully connected layer and add custom layers
+        self.backbone.fc = nn.Identity()  # Remove the default classification head
         self.global_pool = nn.AdaptiveAvgPool2d(1)  # Global average pooling
-        self.fc = nn.Linear(self.backbone.fc.in_features, num_classes)  # Custom classifier
+        self.fc = nn.Linear(in_features, num_classes)  # Custom classifier
 
         # Loss function
         self.criterion = nn.CrossEntropyLoss()
