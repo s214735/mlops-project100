@@ -120,12 +120,12 @@ def main():
 
     # Configuration
     cfg = {
-        "lr": 0.00001,
-        "batch_size": 16,
+        "lr": 0.0001,
+        "batch_size": 32,
         "epochs": 10,
         "num_classes": 1000,
         "device": "cuda" if torch.cuda.is_available() else "cpu",
-        "weight_decay": 1e-4,
+        "weight_decay": 0,
     }
     wandb.config.update(cfg)
 
@@ -155,7 +155,7 @@ def main():
     val_dataset = PokeDataset(BUCKET_NAME, mode="val", transform=transform_test)
 
     if torch.cuda.is_available():
-        num_workers = 6
+        num_workers = 8
     else:
         num_workers = 4
 
