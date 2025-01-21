@@ -6,6 +6,7 @@ from torch import nn
 from torchmetrics.classification import Accuracy
 from torchvision.models import resnet18
 
+
 class ResNetModel(LightningModule):
     """A Lightning Module using ResNet-18 as the backbone."""
 
@@ -44,7 +45,9 @@ class ResNetModel(LightningModule):
 
     def validation_step(self, batch, batch_idx):
         data, target, _ = batch
-        preds = self(data)
+
+        with torch.no_grad():
+            preds = self(data)
         loss = self.criterium(preds, target)
 
         acc = self.val_accuracy(preds, target)
@@ -75,11 +78,12 @@ def main(cfg: DictConfig) -> None:
         input_names=["input"],
         output_names=["output"],
         dynamic_axes={"input": {0: "batch_size"}, "output": {0: "batch_size"}},
-        export_params=True  # Ensure weights are exported
+        export_params=True,  # Ensure weights are exported
     )
 
     print(f"Model architecture: {model}")
     print(f"Number of parameters: {sum(p.numel() for p in model.parameters())}")
+
 
 if __name__ == "__main__":
     main()

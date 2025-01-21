@@ -25,7 +25,7 @@ def get_wandb_api_key() -> str:
 
     # Construct the secret name
     secret_name = "wandb-api-key"
-    project_id = "level-oxygen-447714-d3"  # Replace with your GCP project ID
+    project_id = "level-oxygen-447714-d3"
     secret_path = f"projects/{project_id}/secrets/{secret_name}/versions/latest"
 
     # Access the secret value
@@ -34,7 +34,7 @@ def get_wandb_api_key() -> str:
 
     # Parse the JSON and extract the key
     secret_dict = json.loads(secret_payload)
-    api_key = secret_dict.get("wandb-api-key")  # Adjust the key if it has a different name
+    api_key = secret_dict.get("wandb-api-key")
 
     return api_key
 
@@ -94,7 +94,6 @@ def train(cfg: DictConfig):
     )
 
     val_dataset = PokeDataset(BUCKET_NAME, mode="val", transform=transforms_test)
-
     val_loader = DataLoader(
         val_dataset,
         batch_size=cfg.train.batch_size,
@@ -107,7 +106,7 @@ def train(cfg: DictConfig):
     model = ResNetModel(num_classes=cfg.model.num_classes, lr=cfg.train.lr)
 
     checkpoint_callback = ModelCheckpoint(
-        dirpath="./models", monitor="val_loss", mode="min", filename="m{cfg.train.epochs:02d}-{val_loss:.2f}"
+        dirpath="./models", monitor="val_loss", mode="min", filename="m{val_loss:.2f}"
     )
 
     # early_stopping_callback = EarlyStopping(monitor="val_loss", patience=5, verbose=True, mode="min")
