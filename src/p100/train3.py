@@ -44,6 +44,7 @@ class ResNetModel(nn.Module):
 # Training function
 def train_one_epoch(model, dataloader, optimizer, criterion, epoch, log_every):
     model.train()
+    print(1)
     running_loss = 0.0
     correct = 0
     total = 0
@@ -53,24 +54,36 @@ def train_one_epoch(model, dataloader, optimizer, criterion, epoch, log_every):
     else:
         device = torch.device("cpu")
         print("Training on CPU")
-
+    print(2)
     for batch_idx, (data, target, _) in enumerate(dataloader):
         data, target = data.to(device), target.to(device)
+        print(3)
         optimizer.zero_grad()
+        print(4)
         outputs = model(data)
+        print(5)
         loss = criterion(outputs, target)
+        print(6)
         loss.backward()
+        print(7)
         optimizer.step()
+        print(8)
 
         running_loss += loss.item() * data.size(0)
+        print(9)
         _, predicted = outputs.max(1)
+        print(10)
         total += target.size(0)
+        print(11)
         correct += predicted.eq(target).sum().item()
+        print(12)
         if batch_idx % log_every == 0:
             print(f"Epoch: {epoch}, Batch: {batch_idx}, Loss: {loss.item()}, Correct: {correct}, Total: {total}")
-
+    print(13)
     epoch_loss = running_loss / total
+    print(14)
     epoch_accuracy = 100.0 * correct / total
+    print(15)
     return epoch_loss, epoch_accuracy
 
 
@@ -155,8 +168,12 @@ def main():
     else:
         num_workers = 4
 
-    train_loader = DataLoader(train_dataset, batch_size=cfg["batch_size"], shuffle=True, num_workers=num_workers)
-    val_loader = DataLoader(val_dataset, batch_size=cfg["batch_size"], shuffle=False, num_workers=num_workers)
+    train_loader = DataLoader(
+        train_dataset, batch_size=cfg["batch_size"], shuffle=True, num_workers=num_workers, pin_memory=True
+    )
+    val_loader = DataLoader(
+        val_dataset, batch_size=cfg["batch_size"], shuffle=False, num_workers=num_workers, pin_memory=True
+    )
 
     # Model, criterion, optimizer
     model = ResNetModel(num_classes=cfg["num_classes"]).to(cfg["device"])
