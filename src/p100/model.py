@@ -6,14 +6,6 @@ from torch import nn
 from torchmetrics.classification import Accuracy
 from torchvision.models import resnet18
 
-
-@hydra.main(config_path="../../configs", config_name="config.yaml", version_base=None)
-def main(cfg: DictConfig) -> None:
-    num_classes = cfg.model.num_classes
-    lr = cfg.data.lr
-    ResNetModel(num_classes, lr)
-
-
 class ResNetModel(LightningModule):
     """A Lightning Module using ResNet-18 as the backbone."""
 
@@ -66,7 +58,28 @@ class ResNetModel(LightningModule):
         return [optimizer], [lr_scheduler]
 
 
-if __name__ == "__main__":
-    model = ResNetModel(num_classes=1000)
+@hydra.main(config_path="../../configs", config_name="config.yaml", version_base=None)
+def main(cfg: DictConfig) -> None:
+    num_classes = cfg.model.num_classes
+    lr = cfg.train.lr
+
+    # Instantiate the model
+    model = ResNetModel(num_classes, lr)
+
+    # Save the model as ONNX
+    dummy_input = torch.randn(1, 3, 224, 224)  # Example input tensor
+
+    model.to_onnx(
+        file_path="resnet18.onnx",
+        input_sample=dummy_input,
+        input_names=["input"],
+        output_names=["output"],
+        dynamic_axes={"input": {0: "batch_size"}, "output": {0: "batch_size"}},
+        export_params=True  # Ensure weights are exported
+    )
+
     print(f"Model architecture: {model}")
     print(f"Number of parameters: {sum(p.numel() for p in model.parameters())}")
+
+if __name__ == "__main__":
+    main()
