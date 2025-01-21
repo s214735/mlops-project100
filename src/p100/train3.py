@@ -160,15 +160,25 @@ def main():
     val_dataset = PokeDataset(BUCKET_NAME, mode="val", transform=transform_test)
 
     if torch.cuda.is_available():
-        num_workers = 8
+        num_workers = 4
     else:
         num_workers = 4
 
     train_loader = DataLoader(
-        train_dataset, batch_size=cfg["batch_size"], shuffle=True, num_workers=num_workers, pin_memory=True
+        train_dataset,
+        batch_size=cfg["batch_size"],
+        shuffle=True,
+        num_workers=num_workers,
+        pin_memory=True,
+        prefetch_factor=2,
     )
     val_loader = DataLoader(
-        val_dataset, batch_size=cfg["batch_size"], shuffle=False, num_workers=num_workers, pin_memory=True
+        val_dataset,
+        batch_size=cfg["batch_size"],
+        shuffle=False,
+        num_workers=num_workers,
+        pin_memory=True,
+        prefetch_factor=2,
     )
 
     # Model, criterion, optimizer
