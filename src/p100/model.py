@@ -8,31 +8,42 @@ from torchvision.models import resnet50
 
 
 class ResNetModel(LightningModule):
-    """A Lightning Module using ResNet-18 as the backbone."""
+    """A Lightning Module using ResNet-50 as the backbone."""
 
     def __init__(self, num_classes: int = 1000, lr: float = 0.001) -> None:
         super().__init__()
 
-        # Load a pretrained ResNet-18 model
-        # self.backbone = resnet18(weights="ResNet18_Weights.DEFAULT")
+        # Load a pretrained ResNet-50 model
         self.backbone = resnet50(weights="ResNet50_Weights.DEFAULT")
 
-        # Replace the final fully connected layer to match the number of classes
-        self.backbone.fc = nn.Linear(self.backbone.fc.in_features, num_classes)
+        # Remove the final fully connected layer and replace with custom layers
+        self.backbone.fc = nn.Identity()  # Remove the original fully connected layer
+        self.global_pool = nn.AdaptiveAvgPool2d(1)  # Global average pooling
+        self.fc = nn.Linear(self.backbone.fc.in_features, num_classes)  # Custom classifier
 
         # Loss function
-        self.criterium = nn.CrossEntropyLoss()
+        self.criterion = nn.CrossEntropyLoss()
 
         # Hyperparameters
+        self.save_hyperparameters({"num_classes": num_classes, "lr": lr})
         self.lr = lr
 
-        # Accuracies
+        # Metrics
         self.train_accuracy = Accuracy(task="multiclass", num_classes=num_classes)
         self.val_accuracy = Accuracy(task="multiclass", num_classes=num_classes)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass."""
-        return self.backbone(x)
+        # Pass through the backbone
+        x = self.backbone(x)
+
+        # Apply global pooling
+        x = self.global_pool(x)
+        x = x.view(x.size(0), -1)  # Flatten the tensor
+
+        # Pass through the custom classification layer
+        x = self.fc(x)
+        return x
 
     def training_step(self, batch, batch_idx):
         data, target, _ = batch  # Adjust if your dataset returns additional items
