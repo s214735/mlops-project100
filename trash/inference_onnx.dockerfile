@@ -10,3 +10,5 @@ RUN echo "CUDA is set to: ${CUDA}" && \
     else \
         pip install onnxruntime; \
     fi
+
+COPY resnet18.onnx /Users/agb/Desktop/MLOps/MLOps-project100/resnet18.onnx
