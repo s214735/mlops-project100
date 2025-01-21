@@ -8,6 +8,10 @@ from google.cloud import secretmanager
 import wandb
 from data import PokeDataset
 
+# Ignore warnings
+import warnings
+warnings.filterwarnings("ignore")
+
 BUCKET_NAME = "mlops_bucket100"
 
 # Function to get W&B API key from Google Secret Manager
@@ -32,13 +36,19 @@ class ResNetModel(nn.Module):
         return self.backbone(x)
 
 # Training function
-def train_one_epoch(model, dataloader, optimizer, criterion, device):
+def train_one_epoch(model, dataloader, optimizer, criterion, epoch, log_every):
     model.train()
     running_loss = 0.0
     correct = 0
     total = 0
+    if torch.cuda.is_available():
+        device = torch.device("cuda")
+        print("Training on GPU")
+    else: 
+        device = torch.device("cpu")
+        print("Training on CPU")
 
-    for data, target, _ in dataloader:
+    for batch_idx, (data, target, _) in enumerate(dataloader):
         data, target = data.to(device), target.to(device)
         optimizer.zero_grad()
         outputs = model(data)
@@ -50,20 +60,28 @@ def train_one_epoch(model, dataloader, optimizer, criterion, device):
         _, predicted = outputs.max(1)
         total += target.size(0)
         correct += predicted.eq(target).sum().item()
+        if batch_idx % log_every == 0:
+            print(f"Epoch: {epoch}, Batch: {batch_idx}, Loss: {loss.item()}, Correct: {correct}, Total: {total}")
+
 
     epoch_loss = running_loss / total
     epoch_accuracy = 100.0 * correct / total
     return epoch_loss, epoch_accuracy
 
 # Validation function
-def validate(model, dataloader, criterion, device):
+def validate(model, dataloader, criterion, epoch, log_every):
     model.eval()
     running_loss = 0.0
     correct = 0
     total = 0
 
+    if torch.cuda.is_available():
+        device = torch.device("cuda")
+    else:
+        device = torch.device("cpu")
+
     with torch.no_grad():
-        for data, target, _ in dataloader:
+        for batch_idx, (data, target, _) in enumerate(dataloader):
             data, target = data.to(device), target.to(device)
             outputs = model(data)
             loss = criterion(outputs, target)
@@ -72,6 +90,9 @@ def validate(model, dataloader, criterion, device):
             _, predicted = outputs.max(1)
             total += target.size(0)
             correct += predicted.eq(target).sum().item()
+            if batch_idx % log_every == 0:
+                print(f"Epoch: {epoch}, Batch: {batch_idx}, Validation Loss: {loss.item()}, Correct: {correct}, Total: {total}")
+            
 
     epoch_loss = running_loss / total
     epoch_accuracy = 100.0 * correct / total
@@ -86,11 +107,12 @@ def main():
 
     # Configuration
     cfg = {
-        "lr": 0.001,
-        "batch_size": 32,
+        "lr": 0.0001,
+        "batch_size": 128,
         "epochs": 10,
-        "num_classes": 10,
+        "num_classes": 1000,
         "device": "cuda" if torch.cuda.is_available() else "cpu",
+        "weight_decay": 1e-4  # Add weight decay to the configuration
     }
     wandb.config.update(cfg)
 
@@ -121,12 +143,13 @@ def main():
     # Model, criterion, optimizer
     model = ResNetModel(num_classes=cfg["num_classes"]).to(cfg["device"])
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=cfg["lr"])
+    optimizer = optim.Adam(model.parameters(), lr=cfg["lr"], weight_decay=cfg["weight_decay"])  # Add weight decay to the optimizer
 
     # Training loop
+    print("Starting training...")
     for epoch in range(cfg["epochs"]):
-        train_loss, train_acc = train_one_epoch(model, train_loader, optimizer, criterion, cfg["device"])
-        val_loss, val_acc = validate(model, val_loader, criterion, cfg["device"])
+        train_loss, train_acc = train_one_epoch(model, train_loader, optimizer, criterion, epoch, log_every=10)
+        val_loss, val_acc = validate(model, val_loader, criterion, epoch, log_every=10)
 
         print(f"Epoch {epoch+1}/{cfg['epochs']}\n"
               f"Train Loss: {train_loss:.4f}, Train Accuracy: {train_acc:.2f}%\n"
@@ -142,4 +165,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

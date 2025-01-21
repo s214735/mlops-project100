@@ -26,20 +26,25 @@ class PokeDataset(Dataset):
         self.targets = []  # Stores class indices
         self.class_names = []  # Stores class names
 
-        # Initialize GCS client
-        self.client = storage.Client()
-        self.bucket = self.client.bucket(self.bucket_name)
+        # Use a dictionary to track class indices
+        self.class_to_index = {}
 
         # Load dataset file paths and targets
         self._load_dataset()
 
+    def _initialize_client(self):
+        """Initialize GCS client and bucket."""
+        client = storage.Client()
+        bucket = client.bucket(self.bucket_name)
+        return bucket
+
     def _load_dataset(self):
         """Load the dataset structure from the GCS bucket."""
+        client = storage.Client()
+        bucket = client.bucket(self.bucket_name)
         prefix = f"{self.data_path}/{self.mode}/"
-        blobs = self.bucket.list_blobs(prefix=prefix)
+        blobs = bucket.list_blobs(prefix=prefix)
 
-        # Use a dictionary to track class indices
-        class_to_index = {}
         for blob in blobs:
             # Skip directories (GCS directories are implied by paths ending in '/')
             if blob.name.endswith('/'):
@@ -50,12 +55,12 @@ class PokeDataset(Dataset):
             class_name = parts[-2]  # Assume class name is the second-to-last folder
 
             # Assign a class index if it's new
-            if class_name not in class_to_index:
-                class_to_index[class_name] = len(class_to_index)
+            if class_name not in self.class_to_index:
+                self.class_to_index[class_name] = len(self.class_to_index)
 
             # Append to dataset lists
             self.data.append(blob.name)  # Full GCS path
-            self.targets.append(class_to_index[class_name])
+            self.targets.append(self.class_to_index[class_name])
             self.class_names.append(class_name)
 
     def __len__(self) -> int:
@@ -64,13 +69,16 @@ class PokeDataset(Dataset):
 
     def __getitem__(self, idx):
         """Fetch the image and target by index."""
+        # Lazily initialize the GCS bucket
+        bucket = self._initialize_client()
+
         # Get the blob name and target
         blob_name = self.data[idx]
         target = self.targets[idx]
         class_name = self.class_names[idx]
 
         # Fetch the image blob from GCS
-        blob = self.bucket.blob(blob_name)
+        blob = bucket.blob(blob_name)
         image_bytes = blob.download_as_bytes()
 
         # Open the image
