@@ -93,8 +93,8 @@ def train(cfg: DictConfig):
         batch_size=cfg.train.batch_size,
         shuffle=True,
         num_workers=cfg.train.num_workers,
-        persistent_workers=True,
         pin_memory=True,
+        persistent_workers=True,  # Keep workers alive across epochs
     )
 
     val_dataset = PokeDataset(BUCKET_NAME, mode="val", transform=transforms_test)
