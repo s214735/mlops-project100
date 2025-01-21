@@ -14,8 +14,11 @@ from torchvision import transforms
 import wandb
 from data import PokeDataset
 
-BUCKET_NAME = "mlops_bucket100"
+# Ignore warnings
+import warnings
+warnings.filterwarnings("ignore")
 
+BUCKET_NAME = "mlops_bucket100"
 
 def get_wandb_api_key() -> str:
     """
@@ -63,16 +66,17 @@ def train(cfg: DictConfig):
         }
     )
 
-    transform_train = transforms.Compose([
-        transforms.Resize((128, 128)),
-        transforms.RandomCrop(120),  # Randomly crop to 120x120
-        transforms.RandomHorizontalFlip(),
-        transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),
-        transforms.RandomRotation(20),
-        transforms.Grayscale(num_output_channels=3),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-    ])
+    # Initialize dataset and dataloaders
+    transform_train = transforms.Compose(
+        [
+            transforms.Resize((128, 128)),
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomRotation(20),
+            transforms.Grayscale(num_output_channels=3),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ]
+    )
 
     transforms_test = transforms.Compose(
         [
