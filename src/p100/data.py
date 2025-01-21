@@ -1,77 +1,94 @@
-from pathlib import Path
-import os
-#import typer
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 from torchvision import transforms
-import matplotlib.pyplot as plt
-import torch
-import typer
-from collections import Counter
-
+import io
 import numpy as np
+from google.cloud import storage
+
+BUCKET_NAME = "mlops_bucket100"
 
 class PokeDataset(Dataset):
-    """My custom dataset."""
+    """Custom dataset to load data from a Google Cloud Storage bucket."""
 
-    def __init__(self, processed_data_path: Path = '/gcs/mlops_bucket100/data/processed', mode: str = "train", transform = transforms.ToTensor()) -> None:
-        # Define the path to the raw data
-
+    def __init__(self, bucket_name: str, processed_data_path: str = "data/processed", mode: str = "train", transform=None):
+        """
+        :param bucket_name: Name of the GCS bucket.
+        :param processed_data_path: Path to the processed data within the bucket.
+        :param mode: Dataset mode (e.g., 'train', 'test').
+        :param transform: Transformations to apply to the images.
+        """
+        self.bucket_name = bucket_name
         self.data_path = processed_data_path
-        # Define lists to store the data and targets
-        self.data = []
-        self.targets = []
-
-        self.class_names = []  # To store class names for each sample
-        self.transform = transform  # Transformation function (e.g., normalization, augmentation)
-        # Define the mode (train, test, etc.)
-
         self.mode = mode
-        # Define the path to the split data
-        self.split_dir = os.path.join(self.data_path, self.mode)
+        self.transform = transform or transforms.ToTensor()
 
-        # Traverse the folder structure
-        for index, class_name in enumerate(os.listdir(self.split_dir)):
-            class_path = os.path.join(self.split_dir, class_name)
+        self.data = []  # Stores image paths in the bucket
+        self.targets = []  # Stores class indices
+        self.class_names = []  # Stores class names
 
-            if os.path.isdir(class_path):  # Check if it is a directory (class folder)
-                for img_name in os.listdir(class_path):  # Iterate through images in the class folder
-                    img_path = os.path.join(class_path, img_name)  # Get the image path
-                    self.data.append(img_path)  # Add image path to data list
-                    self.targets.append(index)  # Add class index to targets list
-                    self.class_names.append(class_name)  # Add class name to class_names list
+        # Initialize GCS client
+        self.client = storage.Client()
+        self.bucket = self.client.bucket(self.bucket_name)
+
+        # Load dataset file paths and targets
+        self._load_dataset()
+
+    def _load_dataset(self):
+        """Load the dataset structure from the GCS bucket."""
+        prefix = f"{self.data_path}/{self.mode}/"
+        blobs = self.bucket.list_blobs(prefix=prefix)
+
+        # Use a dictionary to track class indices
+        class_to_index = {}
+        for blob in blobs:
+            # Skip directories (GCS directories are implied by paths ending in '/')
+            if blob.name.endswith('/'):
+                continue
+
+            # Parse the class name from the file path
+            parts = blob.name.split('/')
+            class_name = parts[-2]  # Assume class name is the second-to-last folder
+
+            # Assign a class index if it's new
+            if class_name not in class_to_index:
+                class_to_index[class_name] = len(class_to_index)
+
+            # Append to dataset lists
+            self.data.append(blob.name)  # Full GCS path
+            self.targets.append(class_to_index[class_name])
+            self.class_names.append(class_name)
 
     def __len__(self) -> int:
         """Return the length of the dataset."""
         return len(self.data)
 
     def __getitem__(self, idx):
-        """Return the data and target at the given index."""
-        img_path = self.data[idx]
+        """Fetch the image and target by index."""
+        # Get the blob name and target
+        blob_name = self.data[idx]
         target = self.targets[idx]
         class_name = self.class_names[idx]
-        image = Image.open(img_path).convert('RGB')
 
+        # Fetch the image blob from GCS
+        blob = self.bucket.blob(blob_name)
+        image_bytes = blob.download_as_bytes()
+
+        # Open the image
+        image = Image.open(io.BytesIO(image_bytes)).convert('RGB')
+
+        # Apply transformations
         if self.transform:
             image = self.transform(image)
 
         return image, target, class_name
 
-    def preprocess(self, output_folder: Path) -> None:
-        """Preprocess the raw data and save it to the output folder."""
-        if not os.path.exists(output_folder):
-            os.makedirs(output_folder)
-        # You can implement specific preprocessing logic here, such as saving processed data
-        print(f"Preprocessing done. Processed data saved to {output_folder}")
-
 
 if __name__ == "__main__":
-    dataset = PokeDataset(transform=transforms.ToTensor())
-    dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
+    train_dataset = PokeDataset(BUCKET_NAME, mode="train", transform=transforms.ToTensor())
+    test_dataset = PokeDataset(BUCKET_NAME, mode="test", transform=transforms.ToTensor())
+    val_dataset = PokeDataset(BUCKET_NAME, mode="val", transform=transforms.ToTensor())
 
-    train_dataset = PokeDataset("data/processed", mode="train", transform=transforms.ToTensor())
-    test_dataset = PokeDataset("data/processed", mode="test", transform=transforms.ToTensor())
-    val_dataset = PokeDataset("data/processed", mode="val", transform=transforms.ToTensor())
+    dataloader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 
     # Compute statistics
     train_count = len(train_dataset)
@@ -103,4 +120,3 @@ if __name__ == "__main__":
     for data, target, class_name in dataloader:
         print(data.shape, target, class_name)
         break
-    
