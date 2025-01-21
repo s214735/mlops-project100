@@ -137,8 +137,13 @@ def main():
     train_dataset = PokeDataset(BUCKET_NAME, mode="train", transform=transform_train)
     val_dataset = PokeDataset(BUCKET_NAME, mode="val", transform=transform_test)
 
-    train_loader = DataLoader(train_dataset, batch_size=cfg["batch_size"], shuffle=True, num_workers=4)
-    val_loader = DataLoader(val_dataset, batch_size=cfg["batch_size"], shuffle=False, num_workers=4)
+    if torch.cuda.is_available():
+        num_workers = 8
+    else: 
+        num_workers = 4
+
+    train_loader = DataLoader(train_dataset, batch_size=cfg["batch_size"], shuffle=True, num_workers=num_workers)
+    val_loader = DataLoader(val_dataset, batch_size=cfg["batch_size"], shuffle=False, num_workers=num_workers)
 
     # Model, criterion, optimizer
     model = ResNetModel(num_classes=cfg["num_classes"]).to(cfg["device"])
