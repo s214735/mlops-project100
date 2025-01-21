@@ -123,6 +123,7 @@ def train(cfg: DictConfig):
         log_every_n_steps=cfg.train.log_every_n_steps,
         logger=wandb_logger,
         callbacks=[checkpoint_callback, early_stopping_callback],
+        accelerator="gpu" if torch.cuda.is_available() else "cpu"
     )
 
     # Train the model
