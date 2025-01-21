@@ -5,7 +5,17 @@ import io
 import numpy as np
 from google.cloud import storage
 
+import os
+from torch.utils.data import Dataset
+from PIL import Image
+from torchvision import transforms
+import io
+import numpy as np
+from google.cloud import storage
+
 BUCKET_NAME = "mlops_bucket100"
+CACHE_DIR = "data_cache"  # Directory to cache images locally
+
 
 class PokeDataset(Dataset):
     """Custom dataset to load data from a Google Cloud Storage bucket."""
@@ -22,44 +32,49 @@ class PokeDataset(Dataset):
         self.mode = mode
         self.transform = transform or transforms.ToTensor()
 
-        self.data = []  # Stores image paths in the bucket
+        self.data = []  # Stores local file paths
         self.targets = []  # Stores class indices
         self.class_names = []  # Stores class names
 
         # Use a dictionary to track class indices
         self.class_to_index = {}
 
-        # Load dataset file paths and targets
-        self._load_dataset()
+        # Cache dataset locally
+        self._cache_dataset()
 
     def _initialize_client(self):
-        """Initialize GCS client and bucket."""
-        client = storage.Client()
-        bucket = client.bucket(self.bucket_name)
-        return bucket
+        """Initialize GCS client."""
+        if not hasattr(self, '_client'):
+            self._client = storage.Client()  # Lazy initialization
+        return self._client
 
-    def _load_dataset(self):
-        """Load the dataset structure from the GCS bucket."""
-        client = storage.Client()
+    def _cache_dataset(self):
+        """Download and cache dataset locally."""
+        os.makedirs(CACHE_DIR, exist_ok=True)
+        client = self._initialize_client()
         bucket = client.bucket(self.bucket_name)
         prefix = f"{self.data_path}/{self.mode}/"
         blobs = bucket.list_blobs(prefix=prefix)
 
         for blob in blobs:
-            # Skip directories (GCS directories are implied by paths ending in '/')
             if blob.name.endswith('/'):
                 continue
 
             # Parse the class name from the file path
             parts = blob.name.split('/')
-            class_name = parts[-2]  # Assume class name is the second-to-last folder
+            class_name = parts[-2]
 
             # Assign a class index if it's new
             if class_name not in self.class_to_index:
                 self.class_to_index[class_name] = len(self.class_to_index)
 
+            # Define local file path
+            local_path = os.path.join(CACHE_DIR, os.path.basename(blob.name))
+            if not os.path.exists(local_path):
+                blob.download_to_filename(local_path)  # Download if not cached
+
             # Append to dataset lists
-            self.data.append(blob.name)  # Full GCS path
+            self.data.append(local_path)  # Use local path
             self.targets.append(self.class_to_index[class_name])
             self.class_names.append(class_name)
 
@@ -68,27 +83,21 @@ class PokeDataset(Dataset):
         return len(self.data)
 
     def __getitem__(self, idx):
-        """Fetch the image and target by index."""
-        # Lazily initialize the GCS bucket
-        bucket = self._initialize_client()
-
-        # Get the blob name and target
-        blob_name = self.data[idx]
+        """Fetch the image, target, and class name by index."""
+        # Load image from local cache
+        image_path = self.data[idx]
         target = self.targets[idx]
         class_name = self.class_names[idx]
 
-        # Fetch the image blob from GCS
-        blob = bucket.blob(blob_name)
-        image_bytes = blob.download_as_bytes()
-
         # Open the image
-        image = Image.open(io.BytesIO(image_bytes)).convert('RGB')
+        image = Image.open(image_path).convert('RGB')
 
         # Apply transformations
         if self.transform:
             image = self.transform(image)
 
         return image, target, class_name
+
 
 
 if __name__ == "__main__":
