@@ -38,14 +38,16 @@ class ResNetModel(LightningModule):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass."""
         # Pass through the backbone
-        x = self.backbone(x)
+        x = self.backbone(x)  # Output shape: (batch_size, 2048, H, W)
 
         # Apply global pooling
-        x = self.global_pool(x)  # Shape: (batch_size, 2048, 1, 1)
-        x = torch.flatten(x, 1)  # Shape: (batch_size, 2048)
+        x = self.global_pool(x)  # Output shape: (batch_size, 2048, 1, 1)
+
+        # Flatten the tensor
+        x = x.view(x.size(0), -1)  # Output shape: (batch_size, 2048)
 
         # Pass through the custom classification layer
-        x = self.fc(x)  # Shape: (batch_size, num_classes)
+        x = self.fc(x)  # Output shape: (batch_size, num_classes)
         return x
 
     def training_step(self, batch, batch_idx):
