@@ -89,4 +89,10 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    from torchvision import datasets
+
+    DATA_DIR = "/gcs/mlops_bucket100/data/processed/test/abra"
+    dataset = datasets.ImageFolder(DATA_DIR)
+    dataloader = torch.utils.data.DataLoader(dataset, batch_size=32, shuffle=True)
+    for images, labels in dataloader:
+        print(images.shape, labels)
