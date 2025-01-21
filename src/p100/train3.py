@@ -47,7 +47,7 @@ def train_one_epoch(model, dataloader, optimizer, criterion, epoch, log_every):
     running_loss = 0.0
     correct = 0
     total = 0
-    batch_idx = 0
+
     if torch.cuda.is_available():
         device = torch.device("cuda")
         print("Training on GPU")
@@ -55,7 +55,7 @@ def train_one_epoch(model, dataloader, optimizer, criterion, epoch, log_every):
         device = torch.device("cpu")
         print("Training on CPU")
 
-    for data, target, _ in dataloader:
+    for batch_idx, (data, target, _) in enumerate(dataloader):
         data, target = data.to(device, non_blocking=True), target.to(device, non_blocking=True)
 
         optimizer.zero_grad()
@@ -70,7 +70,6 @@ def train_one_epoch(model, dataloader, optimizer, criterion, epoch, log_every):
         total += target.size(0)
         correct += predicted.eq(target).sum().item()
 
-        batch_idx += 1
         if batch_idx % log_every == 0:
             print(f"Epoch: {epoch}, Batch: {batch_idx}, Loss: {loss.item()}, Correct: {correct}, Total: {total}")
 
@@ -133,21 +132,21 @@ def main():
     # Data transforms
     transform_train = transforms.Compose(
         [
-            # transforms.Resize((128, 128)),
-            # transforms.RandomHorizontalFlip(),
-            # transforms.RandomRotation(20),
-            # transforms.Grayscale(num_output_channels=3),
+            transforms.Resize((128, 128)),
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomRotation(20),
+            transforms.Grayscale(num_output_channels=3),
             transforms.ToTensor(),
-            # transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ]
     )
 
     transform_test = transforms.Compose(
         [
-            # transforms.Resize((128, 128)),
-            # transforms.Grayscale(num_output_channels=3),
+            transforms.Resize((128, 128)),
+            transforms.Grayscale(num_output_channels=3),
             transforms.ToTensor(),
-            # transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ]
     )
 
