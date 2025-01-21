@@ -5,7 +5,8 @@ import numpy as np
 from onnxruntime import InferenceSession
 
 
-@bentoml.service
+@bentoml.service(resources={"cpu": "1"}, traffic={"timeout": 10})
+
 class ImageClassifierService:
     """Image classifier service using ONNX model."""
 
@@ -21,3 +22,4 @@ class ImageClassifierService:
 
 # Create an instance of the service and assign it to `svc`
 svc = ImageClassifierService()
+
