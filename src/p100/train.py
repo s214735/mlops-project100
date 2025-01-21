@@ -14,8 +14,11 @@ from torchvision import transforms
 import wandb
 from data import PokeDataset
 
-BUCKET_NAME = "mlops_bucket100"
+# Ignore warnings
+import warnings
+warnings.filterwarnings("ignore")
 
+BUCKET_NAME = "mlops_bucket100"
 
 def get_wandb_api_key() -> str:
     """
