@@ -4,7 +4,7 @@ data:
 
 train:
   batch_size: 16
-  num_workers: 16
+  num_workers: 8
   lr: 0.00001
   epochs: 10
   devices: 1  # Set to -1 for all available GPUs, or a specific number of GPUs
