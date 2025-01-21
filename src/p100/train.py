@@ -63,17 +63,16 @@ def train(cfg: DictConfig):
         }
     )
 
-    # Initialize dataset and dataloaders
-    transform_train = transforms.Compose(
-        [
-            transforms.Resize((128, 128)),
-            transforms.RandomHorizontalFlip(),
-            transforms.RandomRotation(20),
-            transforms.Grayscale(num_output_channels=3),
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        ]
-    )
+    transform_train = transforms.Compose([
+        transforms.Resize((128, 128)),
+        transforms.RandomCrop(120),  # Randomly crop to 120x120
+        transforms.RandomHorizontalFlip(),
+        transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),
+        transforms.RandomRotation(20),
+        transforms.Grayscale(num_output_channels=3),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ])
 
     transforms_test = transforms.Compose(
         [
