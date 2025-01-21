@@ -6,12 +6,12 @@ import warnings
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from data3 import PokeDataset
 from google.cloud import secretmanager
 from torch.utils.data import DataLoader
 from torchvision import models, transforms
 
 import wandb
-from data import PokeDataset
 
 warnings.filterwarnings("ignore")
 
