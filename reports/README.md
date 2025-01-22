@@ -494,7 +494,11 @@ We use N1-standard-8 instances paired with a 1x NVIDIA T4 GPU for machine learni
 >
 > Answer:
 
---- question 22 fill here ---
+We first tried building an image which could run our training script on the compute engine in a virtual machine. This, however,
+did not work out for us as we couldn´t get the image to build succesfully which also meant that even though we could set up a trigger
+it was practically useless. We did however manage to set up a connection between our local terminal and our virtual machine on the
+compute engine and then clone our repository to the virtual machine. This proved to be fruitful as it allowed us then run code, and 
+subsequently train our model on the virtual machine.
 
 ## Deployment
 
