@@ -542,7 +542,7 @@ We managed to write an API for our model using FastAPI. The kind of API we used 
 >
 > Answer:
 
---- question 25 fill here ---
+We implemented both unit testing and load testing to check the API's functionality and performance. For unit testing, we used FastAPI's TestClient. A simple test script verifies that the root endpoint (/) responds with a 200 status code and returns the expected JSON message: {"message": "Hello from the backend!"}. This basic test ensures us that the endpoint is up to functionality. It could be extended to cover more comprehensive test cases, such as edge cases and error handling. For load testing, we utilized Locust to simulate multiple users accessing the API. We created tasks for both the root endpoint and a dynamic endpoint (/items/{item_id}), where random item IDs were used to simulate real-world API usage patterns. For example, we ran the load test with 1000 users spawning at a rate of 50 users per second for 1 minute. This helped evaluate the API's response times and throughput under moderate load. Results showed that the API could handle these requests without errors or crashes, but additional testing under higher loads or longer durations could provide deeper insights.
 
 ### Question 26
 
