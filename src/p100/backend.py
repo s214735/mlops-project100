@@ -9,7 +9,7 @@ from fastapi import FastAPI, File, HTTPException, UploadFile
 from PIL import Image
 from torchvision import models, transforms
 
-from data import PokeDataset
+from p100.data import PokeDataset
 
 BUCKET_NAME = "mlops_bucket100"
 PREFIX = "data/processed/"

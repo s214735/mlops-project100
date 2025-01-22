@@ -9,7 +9,7 @@ RUN mkdir /app
 WORKDIR /app
 
 COPY requirements_backend.txt /app/requirements_backend.txt
-COPY src/p100/backend.py /app/backend.py
+COPY src/p100/backend.py /app/p100/backend.py
 COPY utils/imagenet-simple-labels.json /app/imagenet-simple-labels.json
 COPY src/p100/data.py /app/data.py
 
