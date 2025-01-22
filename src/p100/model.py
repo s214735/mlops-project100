@@ -10,10 +10,10 @@ from torchvision.models import resnet18
 class ResNetModel(LightningModule):
     """A Lightning Module using ResNet-50 as the backbone."""
 
-    def __init__(self, num_classes: int = 18, lr: float = 0.001) -> None:
+    def __init__(self, num_classes: int = 18, lr: float = 0.001, dropout_rate: float = 0.5) -> None:
         super().__init__()
 
-        # Load a pretrained ResNet-50 model
+        # Load a pretrained ResNet-18 model
         self.backbone = resnet18(weights="ResNet18_Weights.DEFAULT")
 
         # Get the number of features in the original fc layer
@@ -21,13 +21,16 @@ class ResNetModel(LightningModule):
 
         # Remove the original fully connected layer and add a custom classifier
         self.backbone.fc = nn.Identity()  # Remove the default classification head
+
+        # Add a dropout layer before the custom classifier
+        self.dropout = nn.Dropout(p=dropout_rate)
         self.fc = nn.Linear(in_features, num_classes)  # Custom classifier
 
         # Loss function
         self.criterion = nn.CrossEntropyLoss()
 
         # Hyperparameters
-        self.save_hyperparameters({"num_classes": num_classes, "lr": lr})
+        self.save_hyperparameters({"num_classes": num_classes, "lr": lr, "dropout_rate": dropout_rate})
         self.lr = lr
 
         # Metrics
@@ -37,10 +40,9 @@ class ResNetModel(LightningModule):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass."""
         # Pass through the backbone
-        x = self.backbone(x)  # Output shape: (batch_size, 2048)
-
-        # Pass directly through the custom classification layer
-        x = self.fc(x)  # Output shape: (batch_size, num_classes)
+        x = self.backbone(x)
+        x = self.dropout(x)
+        x = self.fc(x)
         return x
 
     def training_step(self, batch, batch_idx):
