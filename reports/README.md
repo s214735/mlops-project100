@@ -483,7 +483,7 @@ We use N1-standard-8 instances paired with a 1x NVIDIA T4 GPU for machine learni
 >
 > Answer:
 
---- question 21 fill here ---
+![artefact](figures/cloud_build.png)
 
 ### Question 22
 
@@ -588,7 +588,7 @@ If we had implemented monitoring, we could’ve used Prometheus to expose metric
 >
 > Answer:
 
-We ended up spending XXX credits during the project, only on a single account. The credits were spent on data storage and running virtual machines. Especially the last part spent most of the credits, but not anything special compared to how many we had available. Working in the cloud was super useful, when it was actually set up correctly. Setting it up was quite a pain, and took a lot of hours and help, but when we actually got it up and running it helped with a lot of previous problems we had encountered. Generally, it is something that we will definitely take with us and use again, of course, especially now that we are hopefully faster in setting up the service.
+We ended up spending 15.92 credits during the project, only on a single account. The credits were spent on data storage and running virtual machines. Especially the last part spent most of the credits, but not anything special compared to how many we had available. Working in the cloud was super useful, when it was actually set up correctly. Setting it up was quite a pain, and took a lot of hours and help, but when we actually got it up and running it helped with a lot of previous problems we had encountered. Generally, it is something that we will definitely take with us and use again, of course, especially now that we are hopefully faster in setting up the service.
 
 ### Question 28
 
