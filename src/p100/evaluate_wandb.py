@@ -4,20 +4,27 @@ from omegaconf import DictConfig
 from torch.utils.data import DataLoader
 from torchvision import transforms
 import wandb
+import warnings
 
-from data import PokeDataset
-from model import ResNetModel
+from p100.data import PokeDataset
+from p100.model import ResNetModel
+from p100.utils import get_wandb_api_key
+
+warnings.filterwarnings("ignore")
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
 PROJECT_PATH = "p100-org/wandb-registry-Pokemon"  # Specify your W&B project path
+MODEL_ALIAS = "Model:latest"  # Use the alias for the latest model version
 
-def get_latest_model_path(project_path: str) -> str:
+def get_latest_model_path(project_path: str, alias: str) -> str:
     """Retrieve the path to the latest model from W&B."""
+    my_key = get_wandb_api_key()
+    wandb.login(key=my_key)
+
     api = wandb.Api()
-    model_registry = api.model(f"{project_path}/Model")
-    latest_version = model_registry.version("latest")
-    model_artifact = latest_version.use()
+    model_artifact = api.artifact(f"{project_path}/{alias}")
     downloaded_path = model_artifact.download()
+    print(f"Model downloaded to: {downloaded_path}")
     return downloaded_path
 
 def load_model(model: torch.nn.Module, model_path: str) -> torch.nn.Module:
@@ -37,6 +44,7 @@ def evaluate(model_checkpoint: str, batch_size: int, device=DEVICE) -> None:
     # Load the model weights
     model = load_model(model, model_checkpoint)
     model.eval()
+
 
     # Prepare the dataset and dataloader
     test_set = PokeDataset(mode="test", transform=transforms.ToTensor())
@@ -58,7 +66,7 @@ def evaluate(model_checkpoint: str, batch_size: int, device=DEVICE) -> None:
 @hydra.main(config_path="../../configs", config_name="config.yaml", version_base=None)
 def main(cfg: DictConfig) -> None:
     # Fetch the latest model path
-    model_checkpoint = get_latest_model_path(PROJECT_PATH)
+    model_checkpoint = get_latest_model_path(PROJECT_PATH, MODEL_ALIAS)
     batch_size = cfg.evaluate.batch_size
     evaluate(model_checkpoint, batch_size)
 
