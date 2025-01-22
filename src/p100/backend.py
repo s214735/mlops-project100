@@ -10,29 +10,38 @@ from PIL import Image
 from torchvision import models, transforms
 
 from p100.data import PokeDataset
+from p100.model import ResNetModel
+from p100.evaluate import get_latest_model_path, load_model
 
 BUCKET_NAME = "mlops_bucket100"
 PREFIX = "data/processed/"
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+PROJECT_PATH = "p100-org/wandb-registry-Pokemon"  
+MODEL_ALIAS = "Model:latest"  
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Context manager to start and stop the lifespan events of the FastAPI application."""
     global model, transform, imagenet_classes
     # Load model
-    model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V2)
+    model = ResNetModel(num_classes=18, lr=1).to(device)
+    model_checkpoint = get_latest_model_path(PROJECT_PATH, MODEL_ALIAS)
+
+    # Load the model weights
+    model = load_model(model, model_checkpoint) 
+    # model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V2)
     model.eval()
 
     transform = transforms.Compose(
         [
-            transforms.Resize((224, 224)),
+            transforms.Resize((128, 128)),
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-        ],
+        ]
     )
 
-    async with await anyio.open_file("app/imagenet-simple-labels.json") as f:
+    async with await anyio.open_file("app/pokemnon_class_to_index.json") as f:
         file_content = await f.read()
         imagenet_classes = json.loads(file_content)
 
