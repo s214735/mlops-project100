@@ -527,6 +527,8 @@ We managed to write an API for our model using FastAPI. The kind of API we used 
 >
 > Answer:
 
+Yes, we deployed our API both locally and in the cloud. We did this using both streamlit and fastapi to have both a frontend and a backend. The backend was configured with url's for POST and GET requests, while the frontend added a nice layout. First we build a docker image of both the backend and frontend, and ran that locally. The docker images were built with `docker build -t backend:latest -f dockerfiles/backend.dockerfile .`. They were then tagged followed by a push to gcloud with `docker push <image>`. Lastly they were deployed with `gcloud run deploy backend <kwargs>`. We primarily used the frontend interface to interact with the API, but it could also be invoked by `curl -X POST -F "file=@path/to/file.jpg" localhost:8080/classify/` (when deployed locally).
+
 --- question 24 fill here ---
 
 ### Question 25

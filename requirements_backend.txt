@@ -6,3 +6,4 @@ python-multipart
 google-cloud-storage
 google-cloud-secret-manager
 numpy==1.26.0
+pandas
