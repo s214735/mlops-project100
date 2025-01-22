@@ -240,7 +240,7 @@ These practices are crucial in larger projects as they improve code quality, enh
 We implemented a suite of tests, organized into three main files: `test_api.py`, `test_model.py`, and `test_train.py`. These tests are automated through GitHub workflows and executed within GitHub Actions to ensure continuous integration and consistent code quality.
 
 - **`test_api.py`**: Tests the API to make sure all endpoints respond correctly.
-- **`test_model.py`**: Ensures our models are predicting the correct format 
+- **`test_model.py`**: Ensures our models are predicting the correct format
 - **`test_train.py`**: Confirms that our model is training as expected.
 
 These automated tests help us catch issues early, keeping our application reliable as we continuously update it.
@@ -380,7 +380,10 @@ To reproduce an experiment, we simply looked up the parameters in Weights & Bias
 >
 > Answer:
 
---- question 14 fill here ---
+We tracked as many metrics as we could think of (excluding augmentations), since they give insight to why different versions of models differ from eachother. We logged batch size, color jitter parameters (brightness, contrast, hue and saturation), dropout on (before fully connected layer), epochs, gamma (learning rate scheduler), step size (learning rate scheduler), learning rate and model architecture (our model was based on resnet18, so this parameter would be informative if we had tried other base architectures). When we have these parameters, we can see when a good model performs well, and try to tweak the parameters that we think could enhance the perfomance of that model. This also allowed us to make a "parallel coordinates" plot, that would provide insight to parameters with respect to other parameters. This is the last plot in our workspace dashboard.
+
+In our image, you can see our workspace along with 7 runs (one ongoing). Each run would log artifacts to the wandb registry, which allowed us to reuse old trained models. Then we had a train and validation line plot, that would show train- and validation accuracy through epochs. This could provide insight into model overfitting. Additionally we had two line plots of train- and validation loss, that could show when the loss reached a plateau.
+![wandb](figures/wandb.jpg)
 
 ### Question 15
 
@@ -498,7 +501,7 @@ We use N1-standard-8 instances paired with a 1x NVIDIA T4 GPU for machine learni
 We first tried building an image which could run our training script on the compute engine in a virtual machine. This, however,
 did not work out for us as we couldn´t get the image to build succesfully which also meant that even though we could set up a trigger
 it was practically useless. We did however manage to set up a connection between our local terminal and our virtual machine on the
-compute engine and then clone our repository to the virtual machine. This proved to be fruitful as it allowed us then run code, and 
+compute engine and then clone our repository to the virtual machine. This proved to be fruitful as it allowed us then run code, and
 subsequently train our model on the virtual machine.
 
 ## Deployment
