@@ -8,6 +8,7 @@ from torchvision import transforms
 
 BUCKET_NAME = "mlops_bucket100"
 CACHE_DIR = "data_cache"  # Directory to cache images locally
+PROJECT_NAME = "level-oxygen-447714-d3"
 
 
 class PokeDataset(Dataset):
@@ -40,7 +41,7 @@ class PokeDataset(Dataset):
     def _initialize_client(self):
         """Initialize GCS client."""
         if not hasattr(self, "_client"):
-            self._client = storage.Client()  # Lazy initialization
+            self._client = storage.Client(project=PROJECT_NAME)  # Lazy initialization
         return self._client
 
     def _cache_dataset(self):

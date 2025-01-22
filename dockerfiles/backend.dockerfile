@@ -8,10 +8,10 @@ RUN mkdir /app
 
 WORKDIR /app
 
-COPY app/requirements_backend.txt /app/requirements_backend.txt
-COPY app/backend.py /app/backend.py
-COPY app/imagenet-simple-labels.json /app/imagenet-simple-labels.json
-COPY app/src/data.py /app/src/data.py
+COPY requirements_backend.txt /app/requirements_backend.txt
+COPY src/p100/backend.py /app/backend.py
+COPY utils/imagenet-simple-labels.json /app/imagenet-simple-labels.json
+COPY src/p100/data.py /app/data.py
 
 RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements_backend.txt
 

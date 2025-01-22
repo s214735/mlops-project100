@@ -1,33 +1,18 @@
-import json
-
-# Ignore warnings
 import warnings
 
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from data3 import PokeDataset
-from google.cloud import secretmanager
 from torch.utils.data import DataLoader
 from torchvision import models, transforms
 
 import wandb
+from p100.data3 import PokeDataset
+from p100.utils import get_wandb_api_key
 
 warnings.filterwarnings("ignore")
 
 BUCKET_NAME = "mlops_bucket100"
-
-
-# Function to get W&B API key from Google Secret Manager
-def get_wandb_api_key() -> str:
-    client = secretmanager.SecretManagerServiceClient()
-    secret_name = "wandb-api-key"
-    project_id = "level-oxygen-447714-d3"  # Replace with your GCP project ID
-    secret_path = f"projects/{project_id}/secrets/{secret_name}/versions/latest"
-    response = client.access_secret_version(name=secret_path)
-    secret_payload = response.payload.data.decode("UTF-8")
-    secret_dict = json.loads(secret_payload)
-    return secret_dict.get("wandb-api-key")
 
 
 # Define the ResNet model class

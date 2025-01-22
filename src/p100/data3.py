@@ -6,6 +6,7 @@ from torch.utils.data import DataLoader, Dataset
 from torchvision import transforms
 
 BUCKET_NAME = "mlops_bucket100"
+PROJECT_NAME = "level-oxygen-447714-d3"
 
 
 class PokeDataset(Dataset):
@@ -39,7 +40,7 @@ class PokeDataset(Dataset):
     def _get_client_and_bucket(self):
         """Initialize the GCS client and bucket lazily."""
         if self.client is None or self.bucket is None:
-            self.client = storage.Client()
+            self.client = storage.Client(project=PROJECT_NAME)
             self.bucket = self.client.bucket(self.bucket_name)
 
     def _load_dataset(self):

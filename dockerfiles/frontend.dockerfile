@@ -8,8 +8,8 @@ RUN mkdir /app
 
 WORKDIR /app
 
-COPY app/requirements_frontend.txt /app/requirements_frontend.txt
-COPY app/frontend.py /app/frontend.py
+COPY requirements_frontend.txt /app/requirements_frontend.txt
+COPY src/p100/app.py /app/frontend.py
 
 RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements_frontend.txt
 

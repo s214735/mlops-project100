@@ -1,5 +1,5 @@
-docker build -t frontend:latest -f app/frontend.dockerfile .
-docker build -t backend:latest -f app/backend.dockerfile .
+docker build -t frontend:latest -f dockerfiles/frontend.dockerfile .
+docker build -t backend:latest -f dockerfiles/backend.dockerfile .
 
 docker run --rm -p 8080:8080 -e "PORT=8080" backend
 docker run --rm -p 8081:8081 -e "PORT=8081" frontend
