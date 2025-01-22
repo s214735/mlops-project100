@@ -1,14 +1,10 @@
 import json
-
-# Ignore warnings
 import warnings
 
 import hydra
 import pytorch_lightning as pl
 import torch
-from data2 import PokeDataset
 from google.cloud import secretmanager
-from model import ResNetModel
 from omegaconf import DictConfig
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import WandbLogger
@@ -16,6 +12,8 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 
 import wandb
+from p100.data2 import PokeDataset
+from p100.model import ResNetModel
 
 warnings.filterwarnings("ignore")
 

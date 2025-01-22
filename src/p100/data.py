@@ -1,17 +1,10 @@
-from torch.utils.data import Dataset, DataLoader
-from PIL import Image
-from torchvision import transforms
-import io
-import numpy as np
-from google.cloud import storage
-
 import os
-from torch.utils.data import Dataset
-from PIL import Image
-from torchvision import transforms
-import io
+
 import numpy as np
 from google.cloud import storage
+from PIL import Image
+from torch.utils.data import DataLoader, Dataset
+from torchvision import transforms
 
 BUCKET_NAME = "mlops_bucket100"
 CACHE_DIR = "data_cache"  # Directory to cache images locally
@@ -20,7 +13,9 @@ CACHE_DIR = "data_cache"  # Directory to cache images locally
 class PokeDataset(Dataset):
     """Custom dataset to load data from a Google Cloud Storage bucket."""
 
-    def __init__(self, bucket_name: str, processed_data_path: str = "data/processed", mode: str = "train", transform=None):
+    def __init__(
+        self, bucket_name: str, processed_data_path: str = "data/processed", mode: str = "train", transform=None
+    ):
         """
         :param bucket_name: Name of the GCS bucket.
         :param processed_data_path: Path to the processed data within the bucket.
@@ -44,7 +39,7 @@ class PokeDataset(Dataset):
 
     def _initialize_client(self):
         """Initialize GCS client."""
-        if not hasattr(self, '_client'):
+        if not hasattr(self, "_client"):
             self._client = storage.Client()  # Lazy initialization
         return self._client
 
@@ -57,11 +52,11 @@ class PokeDataset(Dataset):
         blobs = bucket.list_blobs(prefix=prefix)
 
         for blob in blobs:
-            if blob.name.endswith('/'):
+            if blob.name.endswith("/"):
                 continue
 
             # Parse the class name from the file path
-            parts = blob.name.split('/')
+            parts = blob.name.split("/")
             class_name = parts[-2]
 
             # Assign a class index if it's new
@@ -90,14 +85,13 @@ class PokeDataset(Dataset):
         class_name = self.class_names[idx]
 
         # Open the image
-        image = Image.open(image_path).convert('RGB')
+        image = Image.open(image_path).convert("RGB")
 
         # Apply transformations
         if self.transform:
             image = self.transform(image)
 
         return image, target, class_name
-
 
 
 if __name__ == "__main__":
@@ -116,24 +110,24 @@ if __name__ == "__main__":
     test_shape = test_dataset[0][0].shape
 
     # Print dataset info
-    print(f"-----Train dataset-----")
+    print("-----Train dataset-----")
     print(f"Number of images: {len(train_dataset)}")
     print(f"Image shape: {train_dataset[0][0].shape}")
     print(f"Number of classes: {len(np.unique(train_dataset.targets))}")
     print(f"Min label: {min(train_dataset.targets)}. Max label: {max(train_dataset.targets)}")
     print("\n")
-    print(f"-----Test dataset-----")
+    print("-----Test dataset-----")
     print(f"Number of images: {len(test_dataset)}")
     print(f"Image shape: {test_dataset[0][0].shape}")
     print(f"Number of classes: {len(np.unique(test_dataset.targets))}")
     print(f"Min label: {min(test_dataset.targets)}. Max label: {max(test_dataset.targets)}")
     print("\n")
-    print(f"-----Val dataset-----")
+    print("-----Val dataset-----")
     print(f"Number of images: {len(val_dataset)}")
     print(f"Image shape: {val_dataset[0][0].shape}")
     print(f"Number of classes: {len(np.unique(val_dataset.targets))}")
     print(f"Min label: {min(val_dataset.targets)}. Max label: {max(val_dataset.targets)}")
-    
+
     for data, target, class_name in dataloader:
         print(data.shape, target, class_name)
         break

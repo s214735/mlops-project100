@@ -1,9 +1,4 @@
-import os
-import sys
-
 import torch
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src/")))
 from p100.model import ResNetModel
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")

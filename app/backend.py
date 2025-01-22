@@ -9,7 +9,7 @@ from fastapi import FastAPI, File, HTTPException, UploadFile
 from PIL import Image
 from torchvision import models, transforms
 
-from data import PokeDataset
+from app.data import PokeDataset
 
 BUCKET_NAME = "mlops_bucket100"
 PREFIX = "data/processed/"
@@ -32,7 +32,7 @@ async def lifespan(app: FastAPI):
         ],
     )
 
-    async with await anyio.open_file("imagenet-simple-labels.json") as f:
+    async with await anyio.open_file("app/imagenet-simple-labels.json") as f:
         file_content = await f.read()
         imagenet_classes = json.loads(file_content)
 

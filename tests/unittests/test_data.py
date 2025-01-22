@@ -1,17 +1,15 @@
-import os
-import sys
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src/")))
 import numpy as np
-from p100.data import PokeDataset
+from p100.data2 import PokeDataset
 from torch.utils.data import DataLoader, Dataset
+
+BUCKET_NAME = "mlops_bucket100"
 
 
 def test_my_dataset():
     """Test the MyDataset class."""
-    dataset_train = PokeDataset(mode="train")
-    dataset_val = PokeDataset(mode="val")
-    dataset_test = PokeDataset(mode="test")
+    dataset_train = PokeDataset(BUCKET_NAME, mode="train")
+    dataset_val = PokeDataset(BUCKET_NAME, mode="val")
+    dataset_test = PokeDataset(BUCKET_NAME, mode="test")
 
     train_dataloader = DataLoader(dataset_train, batch_size=1)
     val_dataloader = DataLoader(dataset_val, batch_size=1)

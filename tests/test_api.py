@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 
-from app import app
+from app.backend import app
 
 client = TestClient(app)
 
@@ -8,4 +8,4 @@ client = TestClient(app)
 def test_read_root():
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json() == {"message": "Welcome to the Pokédex API!"}
+    assert response.json() == {"message": "Hello from the backend!"}

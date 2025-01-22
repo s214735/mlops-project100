@@ -184,3 +184,6 @@ lightning_logs/
 
 # Wandb
 wandb/
+
+# google cloud
+google-cloud-sdk/
