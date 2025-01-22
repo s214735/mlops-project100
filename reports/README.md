@@ -643,11 +643,11 @@ Generally we have tried to use all of the GCP services provided to us in the cou
 > *All members contributed to code by...*
 > *We have used ChatGPT to help debug our code. Additionally, we used GitHub Copilot to help write some of our code.*
 > Answer:
+- Student s214731 has been in charge of setting up the GCP, experimenting with virtual machines, and how to implement automatic building of Docker images.
+- Student s214733 has been in charge of writing the unit tests, and creating the continuous integration that uses GitHub actions. Furthermore, the student has been helping with setting up the API.
+- Student s214735 has been in charge of creating our model as well as setting up the API backend/frontend. Furthermore, the student has worked on deployment of the model in GCP, and created pre-commits in the version control setup. 
+- Student s214739 has been in charge of data loading and processing, and has also been helping a lot with setting up the cloud (especially the GCP Bucket). Furthermore, the student has spent time on the model training.
+- Student s214742 has been in charge of setting up the profiling and logging, creating the WANDB project and has also worked on the continuous integration. The student has spent time on config files and data loading as well. 
+- All members contributed to code by working on all parts of the project. Every team member has been involved to some degree in all parts of the project, and knows how the different operations work.
+- We have used ChatGPT to help debug and/or write some parts of our code.
 
-- Student s214731 
-- Student s214733
-- Student s214735
-- Student s214739
-- Student s214742
-- All members
-- We have used ChatGPT 
