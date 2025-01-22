@@ -613,6 +613,11 @@ The starting point of the diagram, which outlines our model training and deploym
 
 ![my_image2](figures/mlopsWorkflowImage.png)
 
+<div style="text-align: center;">
+  <img src="figures/mlopsWorkflowImage.png" alt="Production Diagram">
+</div>
+
+
 
 ### Question 30
 
