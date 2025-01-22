@@ -511,7 +511,7 @@ We use N1-standard-8 instances paired with a 1x NVIDIA T4 GPU for machine learni
 >
 > Answer:
 
---- question 23 fill here ---
+We managed to write an API for our model using FastAPI. The kind of API we used is a Restful API, meaning requests cannot depend on previous information fed to the API, but must be self contained. The backend of the API was implemented in the backend.py file, and connected to the model such that when a user supplies an image, the predict endpoint connected to the model uses that image as input and predicts a class. We also made it return some statements to show that it is running, to return dataset information and the statistics of the different stages of the model. We also created a front end for our API, using Streamlit, however this will be further addressed in Question 28.
 
 ### Question 24
 
