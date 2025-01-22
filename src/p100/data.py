@@ -1,77 +1,109 @@
-from pathlib import Path
 import os
-#import typer
-from torch.utils.data import Dataset, DataLoader
-from PIL import Image
-from torchvision import transforms
-import matplotlib.pyplot as plt
-import torch
-import typer
-from collections import Counter
 
 import numpy as np
+from google.cloud import storage
+from PIL import Image
+from torch.utils.data import DataLoader, Dataset
+from torchvision import transforms
+
+BUCKET_NAME = "mlops_bucket100"
+CACHE_DIR = "data_cache"  # Directory to cache images locally
+PROJECT_NAME = "level-oxygen-447714-d3"
+
 
 class PokeDataset(Dataset):
-    """My custom dataset."""
+    """Custom dataset to load data from a Google Cloud Storage bucket."""
 
-    def __init__(self, processed_data_path: Path = '/gcs/mlops_bucket100/data/processed', mode: str = "train", transform = transforms.ToTensor()) -> None:
-        # Define the path to the raw data
-
+    def __init__(
+        self, bucket_name: str, processed_data_path: str = "data/processed", mode: str = "train", transform=None
+    ):
+        """
+        :param bucket_name: Name of the GCS bucket.
+        :param processed_data_path: Path to the processed data within the bucket.
+        :param mode: Dataset mode (e.g., 'train', 'test').
+        :param transform: Transformations to apply to the images.
+        """
+        self.bucket_name = bucket_name
         self.data_path = processed_data_path
-        # Define lists to store the data and targets
-        self.data = []
-        self.targets = []
-
-        self.class_names = []  # To store class names for each sample
-        self.transform = transform  # Transformation function (e.g., normalization, augmentation)
-        # Define the mode (train, test, etc.)
-
         self.mode = mode
-        # Define the path to the split data
-        self.split_dir = os.path.join(self.data_path, self.mode)
+        self.transform = transform or transforms.ToTensor()
 
-        # Traverse the folder structure
-        for index, class_name in enumerate(os.listdir(self.split_dir)):
-            class_path = os.path.join(self.split_dir, class_name)
+        self.data = []  # Stores local file paths
+        self.targets = []  # Stores class indices
+        self.class_names = []  # Stores class names
 
-            if os.path.isdir(class_path):  # Check if it is a directory (class folder)
-                for img_name in os.listdir(class_path):  # Iterate through images in the class folder
-                    img_path = os.path.join(class_path, img_name)  # Get the image path
-                    self.data.append(img_path)  # Add image path to data list
-                    self.targets.append(index)  # Add class index to targets list
-                    self.class_names.append(class_name)  # Add class name to class_names list
+        # Use a dictionary to track class indices
+        self.class_to_index = {}
+
+        # Cache dataset locally
+        self._cache_dataset()
+
+    def _initialize_client(self):
+        """Initialize GCS client."""
+        if not hasattr(self, "_client"):
+            self._client = storage.Client(project=PROJECT_NAME)  # Lazy initialization
+        return self._client
+
+    def _cache_dataset(self):
+        """Download and cache dataset locally."""
+        os.makedirs(CACHE_DIR, exist_ok=True)
+        client = self._initialize_client()
+        bucket = client.bucket(self.bucket_name)
+        prefix = f"{self.data_path}/{self.mode}/"
+        blobs = bucket.list_blobs(prefix=prefix)
+
+        for blob in blobs:
+            if blob.name.endswith("/"):
+                continue
+
+            # Parse the class name from the file path
+            parts = blob.name.split("/")
+            class_name = parts[-2]
+
+            # Assign a class index if it's new
+            if class_name not in self.class_to_index:
+                self.class_to_index[class_name] = len(self.class_to_index)
+
+            # Define local file path
+            local_path = os.path.join(CACHE_DIR, os.path.basename(blob.name))
+            if not os.path.exists(local_path):
+                blob.download_to_filename(local_path)  # Download if not cached
+
+            # Append to dataset lists
+            self.data.append(local_path)  # Use local path
+            self.targets.append(self.class_to_index[class_name])
+            self.class_names.append(class_name)
 
     def __len__(self) -> int:
         """Return the length of the dataset."""
         return len(self.data)
 
     def __getitem__(self, idx):
-        """Return the data and target at the given index."""
-        img_path = self.data[idx]
+        """Fetch the image, target, and class name by index."""
+        image_path = self.data[idx]
         target = self.targets[idx]
         class_name = self.class_names[idx]
-        image = Image.open(img_path).convert('RGB')
 
+        try:
+            # Open the image
+            image = Image.open(image_path).convert("RGB")
+        except (IOError, Image.UnidentifiedImageError):
+            print(f"Skipping corrupted image: {image_path}")
+            return self.__getitem__((idx + 1) % len(self))  # Load the next image instead
+
+        # Apply transformations
         if self.transform:
             image = self.transform(image)
 
         return image, target, class_name
 
-    def preprocess(self, output_folder: Path) -> None:
-        """Preprocess the raw data and save it to the output folder."""
-        if not os.path.exists(output_folder):
-            os.makedirs(output_folder)
-        # You can implement specific preprocessing logic here, such as saving processed data
-        print(f"Preprocessing done. Processed data saved to {output_folder}")
-
 
 if __name__ == "__main__":
-    dataset = PokeDataset(transform=transforms.ToTensor())
-    dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
+    train_dataset = PokeDataset(BUCKET_NAME, mode="train", transform=transforms.ToTensor())
+    test_dataset = PokeDataset(BUCKET_NAME, mode="test", transform=transforms.ToTensor())
+    val_dataset = PokeDataset(BUCKET_NAME, mode="val", transform=transforms.ToTensor())
 
-    train_dataset = PokeDataset("data/processed", mode="train", transform=transforms.ToTensor())
-    test_dataset = PokeDataset("data/processed", mode="test", transform=transforms.ToTensor())
-    val_dataset = PokeDataset("data/processed", mode="val", transform=transforms.ToTensor())
+    dataloader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 
     # Compute statistics
     train_count = len(train_dataset)
@@ -82,25 +114,24 @@ if __name__ == "__main__":
     test_shape = test_dataset[0][0].shape
 
     # Print dataset info
-    print(f"-----Train dataset-----")
+    print("-----Train dataset-----")
     print(f"Number of images: {len(train_dataset)}")
     print(f"Image shape: {train_dataset[0][0].shape}")
     print(f"Number of classes: {len(np.unique(train_dataset.targets))}")
     print(f"Min label: {min(train_dataset.targets)}. Max label: {max(train_dataset.targets)}")
     print("\n")
-    print(f"-----Test dataset-----")
+    print("-----Test dataset-----")
     print(f"Number of images: {len(test_dataset)}")
     print(f"Image shape: {test_dataset[0][0].shape}")
     print(f"Number of classes: {len(np.unique(test_dataset.targets))}")
     print(f"Min label: {min(test_dataset.targets)}. Max label: {max(test_dataset.targets)}")
     print("\n")
-    print(f"-----Val dataset-----")
+    print("-----Val dataset-----")
     print(f"Number of images: {len(val_dataset)}")
     print(f"Image shape: {val_dataset[0][0].shape}")
     print(f"Number of classes: {len(np.unique(val_dataset.targets))}")
     print(f"Min label: {min(val_dataset.targets)}. Max label: {max(val_dataset.targets)}")
-    
+
     for data, target, class_name in dataloader:
         print(data.shape, target, class_name)
         break
-    

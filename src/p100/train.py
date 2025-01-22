@@ -1,18 +1,22 @@
-from pathlib import Path
+import warnings
 
 import hydra
 import pytorch_lightning as pl
 import torch
 from omegaconf import DictConfig
-from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
+from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import WandbLogger
 from torch.utils.data import DataLoader
 from torchvision import transforms
 
 import wandb
+from p100.data4 import PokeDataset
+from p100.model import ResNetModel
+from p100.utils import get_wandb_api_key
 
-from src.p100.data import PokeDataset
-from src.p100.model import ResNetModel
+warnings.filterwarnings("ignore")
+
+BUCKET_NAME = "mlops_bucket100"
 
 
 @hydra.main(config_path="../../configs", config_name="config.yaml", version_base=None)
@@ -23,7 +27,7 @@ def train(cfg: DictConfig):
     Args:
         cfg (DictConfig): Configuration loaded from Hydra.
     """
-    my_key= cfg.env.WANDB_API_KEY
+    my_key = get_wandb_api_key()
     wandb.login(key=my_key)
     # Initialize wandb
     wandb.finish()
@@ -35,7 +39,7 @@ def train(cfg: DictConfig):
             "lr": cfg.train.lr,
             "batch_size": cfg.train.batch_size,
             "epochs": cfg.train.epochs,
-            "model": "ResNet18",
+            "model": "ResNet50",
         }
     )
 
@@ -60,9 +64,7 @@ def train(cfg: DictConfig):
         ]
     )
 
-    train_dataset = PokeDataset(
-        processed_data_path=Path(cfg.data.processed_path), mode="test", transform=transform_train
-    )
+    train_dataset = PokeDataset(BUCKET_NAME, mode="test", transform=transform_train)
     train_loader = DataLoader(
         train_dataset,
         batch_size=cfg.train.batch_size,
@@ -71,8 +73,7 @@ def train(cfg: DictConfig):
         persistent_workers=True,
     )
 
-    val_dataset = PokeDataset(processed_data_path=Path(cfg.data.processed_path), mode="val", transform=transforms_test)
-
+    val_dataset = PokeDataset(BUCKET_NAME, mode="val", transform=transforms_test)
     val_loader = DataLoader(
         val_dataset,
         batch_size=cfg.train.batch_size,
@@ -85,10 +86,10 @@ def train(cfg: DictConfig):
     model = ResNetModel(num_classes=cfg.model.num_classes, lr=cfg.train.lr)
 
     checkpoint_callback = ModelCheckpoint(
-        dirpath="./models", monitor="val_loss", mode="min", filename="m{cfg.train.epochs:02d}-{val_loss:.2f}"
+        dirpath="./models", monitor="val_loss", mode="min", filename="m{val_loss:.2f}"
     )
 
-    early_stopping_callback = EarlyStopping(monitor="val_loss", patience=5, verbose=True, mode="min")
+    # early_stopping_callback = EarlyStopping(monitor="val_loss", patience=5, verbose=True, mode="min")
 
     # Initialize PyTorch Lightning Trainer
     trainer = pl.Trainer(
@@ -97,7 +98,7 @@ def train(cfg: DictConfig):
         devices=cfg.train.devices,
         log_every_n_steps=cfg.train.log_every_n_steps,
         logger=wandb_logger,
-        callbacks=[checkpoint_callback, early_stopping_callback],
+        callbacks=[checkpoint_callback],  # , early_stopping_callback],
     )
 
     # Train the model

@@ -4,14 +4,14 @@ data:
 
 train:
   batch_size: 32
-  num_workers: 4
+  num_workers: 8
   lr: 0.0001
-  epochs: 1
+  epochs: 10
   devices: 1  # Set to -1 for all available GPUs, or a specific number of GPUs
   log_every_n_steps: 10
 
 env:
-  WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}
+  WANDB_API_KEY: ${ secrets.WANDB_API_KEY }
 
 evaluate:
   batch_size: 64

@@ -184,3 +184,9 @@ lightning_logs/
 
 # Wandb
 wandb/
+
+# google cloud
+google-cloud-sdk/
+
+# Ruff
+.ruff_cache/

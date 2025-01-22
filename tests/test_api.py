@@ -1,6 +1,5 @@
 from fastapi.testclient import TestClient
-
-from app import app
+from p100.backend import app
 
 client = TestClient(app)
 
@@ -8,4 +7,4 @@ client = TestClient(app)
 def test_read_root():
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json() == {"message": "Welcome to the MNIST model inference API!"}
+    assert response.json() == {"message": "Hello from the backend!"}

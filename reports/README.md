@@ -48,48 +48,48 @@ will check the repositories and the code to verify your answers.
 
 ### Week 1
 
-* [ ] Create a git repository (M5)
-* [ ] Make sure that all team members have write access to the GitHub repository (M5)
-* [ ] Create a dedicated environment for you project to keep track of your packages (M2)
-* [ ] Create the initial file structure using cookiecutter with an appropriate template (M6)
-* [ ] Fill out the `data.py` file such that it downloads whatever data you need and preprocesses it (if necessary) (M6)
-* [ ] Add a model to `model.py` and a training procedure to `train.py` and get that running (M6)
-* [ ] Remember to fill out the `requirements.txt` and `requirements_dev.txt` file with whatever dependencies that you
+* [x] Create a git repository (M5)
+* [x] Make sure that all team members have write access to the GitHub repository (M5)
+* [x] Create a dedicated environment for you project to keep track of your packages (M2)
+* [x] Create the initial file structure using cookiecutter with an appropriate template (M6)
+* [x] Fill out the `data.py` file such that it downloads whatever data you need and preprocesses it (if necessary) (M6)
+* [x] Add a model to `model.py` and a training procedure to `train.py` and get that running (M6)
+* [x] Remember to fill out the `requirements.txt` and `requirements_dev.txt` file with whatever dependencies that you
     are using (M2+M6)
-* [ ] Remember to comply with good coding practices (`pep8`) while doing the project (M7)
-* [ ] Do a bit of code typing and remember to document essential parts of your code (M7)
-* [ ] Setup version control for your data or part of your data (M8)
-* [ ] Add command line interfaces and project commands to your code where it makes sense (M9)
-* [ ] Construct one or multiple docker files for your code (M10)
-* [ ] Build the docker files locally and make sure they work as intended (M10)
-* [ ] Write one or multiple configurations files for your experiments (M11)
-* [ ] Used Hydra to load the configurations and manage your hyperparameters (M11)
-* [ ] Use profiling to optimize your code (M12)
-* [ ] Use logging to log important events in your code (M14)
-* [ ] Use Weights & Biases to log training progress and other important metrics/artifacts in your code (M14)
-* [ ] Consider running a hyperparameter optimization sweep (M14)
-* [ ] Use PyTorch-lightning (if applicable) to reduce the amount of boilerplate in your code (M15)
+* [x] Remember to comply with good coding practices (`pep8`) while doing the project (M7)
+* [(x)] Do a bit of code typing and remember to document essential parts of your code (M7)
+* [x] Setup version control for your data or part of your data (M8)
+* [x] Add command line interfaces and project commands to your code where it makes sense (M9)
+* [x] Construct one or multiple docker files for your code (M10)
+* [x] Build the docker files locally and make sure they work as intended (M10)
+* [x] Write one or multiple configurations files for your experiments (M11)
+* [x] Used Hydra to load the configurations and manage your hyperparameters (M11)
+* [x] Use profiling to optimize your code (M12)
+* [x] Use logging to log important events in your code (M14)
+* [x] Use Weights & Biases to log training progress and other important metrics/artifacts in your code (M14)
+* [x] Consider running a hyperparameter optimization sweep (M14)
+* [(x)] Use PyTorch-lightning (if applicable) to reduce the amount of boilerplate in your code (M15)
 
 ### Week 2
 
-* [ ] Write unit tests related to the data part of your code (M16)
-* [ ] Write unit tests related to model construction and or model training (M16)
+* [x] Write unit tests related to the data part of your code (M16)
+* [x] Write unit tests related to model construction and or model training (M16)
 * [ ] Calculate the code coverage (M16)
-* [ ] Get some continuous integration running on the GitHub repository (M17)
-* [ ] Add caching and multi-os/python/pytorch testing to your continuous integration (M17)
-* [ ] Add a linting step to your continuous integration (M17)
-* [ ] Add pre-commit hooks to your version control setup (M18)
+* [x] Get some continuous integration running on the GitHub repository (M17)
+* [x] Add caching and multi-os/python/pytorch testing to your continuous integration (M17)
+* [(x)] Add a linting step to your continuous integration (M17)
+* [x] Add pre-commit hooks to your version control setup (M18)
 * [ ] Add a continues workflow that triggers when data changes (M19)
-* [ ] Add a continues workflow that triggers when changes to the model registry is made (M19)
-* [ ] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21)
+* [x] Add a continues workflow that triggers when changes to the model registry is made (M19)
+* [x] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21)
 * [ ] Create a trigger workflow for automatically building your docker images (M21)
-* [ ] Get your model training in GCP using either the Engine or Vertex AI (M21)
-* [ ] Create a FastAPI application that can do inference using your model (M22)
-* [ ] Deploy your model in GCP using either Functions or Run as the backend (M23)
-* [ ] Write API tests for your application and setup continues integration for these (M24)
-* [ ] Load test your application (M24)
-* [ ] Create a more specialized ML-deployment API using either ONNX or BentoML, or both (M25)
-* [ ] Create a frontend for your API (M26)
+* [x] Get your model training in GCP using either the Engine or Vertex AI (M21)
+* [x] Create a FastAPI application that can do inference using your model (M22)
+* [x] Deploy your model in GCP using either Functions or Run as the backend (M23)
+* [(x)] Write API tests for your application and setup continues integration for these (M24)
+* [(x) ] Load test your application (M24)
+* [x] Create a more specialized ML-deployment API using either ONNX or BentoML, or both (M25)
+* [x] Create a frontend for your API (M26)
 
 ### Week 3
 
@@ -98,9 +98,9 @@ will check the repositories and the code to verify your answers.
 * [ ] Instrument your API with a couple of system metrics (M28)
 * [ ] Setup cloud monitoring of your instrumented application (M28)
 * [ ] Create one or more alert systems in GCP to alert you if your app is not behaving correctly (M28)
-* [ ] If applicable, optimize the performance of your data loading using distributed data loading (M29)
-* [ ] If applicable, optimize the performance of your training pipeline by using distributed training (M30)
-* [ ] Play around with quantization, compilation and pruning for you trained models to increase inference speed (M31)
+* [x] If applicable, optimize the performance of your data loading using distributed data loading (M29)
+* [x] If applicable, optimize the performance of your training pipeline by using distributed training (M30)
+* [x] Play around with quantization, compilation and pruning for you trained models to increase inference speed (M31)
 
 ### Extra
 
@@ -167,18 +167,16 @@ Using pandas and umap allowed us to efficiently process and analyze our data, pr
 >
 > Answer:
 
-In our project, we managed our dependencies using two key files: `requirements.txt` and `requirements_dev.txt`. The `requirements.txt` file contains all the essential libraries needed to run the project, ensuring that any core functionality works seamlessly across different setups. On the other hand, `requirements_dev.txt` includes additional packages that are necessary for development purposes, such as testing and debugging tools.
+We managed our dependencies using two key files: requirements.txt and requirements_dev.txt. The requirements.txt file contains all the essential libraries needed to run the project, ensuring that any core functionality works seamlessly across different setups. requirements_dev.txt includes additional packages that are necessary for development purposes, such as testing and debugging tools.
+In order to create an exact copy of our environment, these steps must be followed:
+	1. Clone the project repository from our version control system to their local machine.
+	2. Ensure that Python is installed on their system.
+	3. Create a virtual environment (venv) to isolate and manage project-specific dependencies. This can be done by running python -m venv env in the project's root directory.
+	4. Activate the virtual environment using source env/bin/activate on Unix or macOS, or env\Scripts\activate on Windows.
+	5. Run pip install -r requirements.txt to install all the required libraries listed in the requirements.txt file.
+	6. Optionally, if they are involved in development, they should also run pip install -r requirements_dev.txt to install the additional development dependencies.
+By following these steps, a new team member can quickly set up the project environment, ensuring they have all the necessary dependencies to start working on the project.
 
-For a new team member to set up an exact copy of our environment, they would need to follow these steps:
-
-1. Clone the project repository from our version control system to their local machine.
-2. Ensure that Python is installed on their system.
-3. Create a virtual environment (venv) to isolate and manage project-specific dependencies. This can be done by running `python -m venv env` in the project's root directory.
-4. Activate the virtual environment using `source env/bin/activate` on Unix or macOS, or `env\Scripts\activate` on Windows.
-5. Run `pip install -r requirements.txt` to install all the required libraries listed in the `requirements.txt` file.
-6. Optionally, if they are involved in development, they should also run `pip install -r requirements_dev.txt` to install the additional development dependencies.
-
-By following these steps, a new team member can quickly set up the project environment, ensuring they have all the necessary dependencies to start working on the project immediately.
 
 
 ### Question 5
@@ -195,17 +193,13 @@ By following these steps, a new team member can quickly set up the project envir
 >
 > Answer:
 
-We initialized our project using the cookiecutter template and adapted it to fit our specific needs. The primary directories we filled out and utilized are:
-
-- **`config` folder**: This directory holds all configuration files that manage settings and parameters used across different parts of our project, ensuring consistency and ease of adjustments.
+We initialized our project using the cookiecutter template. The primary directories we utilized are:
+- **`config` folder**: This directory holds configuration files that manage settings and parameters used across different parts of our project, ensuring consistency and ease of adjustments.
 - **`data` folder**: Used for storing raw and processed data sets. This organization helps in managing the data lifecycle within our project.
-- **`dockerfiles` folder**: Contains Dockerfiles which are crucial for creating Docker containers that ensure our environment is consistent across all development and production systems.
 - **`model` folder**: This is where we store model definitions and training scripts, centralizing all machine learning algorithms and models.
 - **`src` folder**: The source code for our application is kept here, including all the primary Python scripts and modules.
 - **`tests` folder**: Dedicated to housing test cases and scripts, which are vital for ensuring the robustness and reliability of our code through continuous integration practices.
-
 Additionally, we maintained a structured approach to version control using Git, which included setting up `.gitignore` files to exclude unnecessary files from being tracked and `workflows` for automating tasks such as testing, building, and deploying using GitHub Actions.
-
 By carefully organizing these folders and incorporating essential development practices, we created a project structure that is both scalable and easy to navigate for any new team members or stakeholders.
 
 ### Question 6
@@ -243,16 +237,14 @@ These practices are crucial in larger projects as they improve code quality, enh
 > *application but also ... .*
 >
 > Answer:
-
-In our project, we implemented a suite of tests, organized into four main files: `test_api.py`, `test_data.py`, `test_model.py`, and `test_train.py`. These tests are automated through GitHub workflows and executed within GitHub Actions to ensure continuous integration and consistent code quality.
+we implemented a suite of tests, organized into four main files: `test_api.py`, `test_data.py`, `test_model.py`, and `test_train.py`. These tests are automated through GitHub workflows and executed within GitHub Actions to ensure continuous integration and consistent code quality.
 
 - **`test_api.py`**: Tests the API to make sure all endpoints respond correctly.
 - **`test_data.py`**: Checks that data loads and processes correctly, preserving format and accuracy.
 - **`test_model.py`**: Ensures our models are predicting the correct format 
-- **`test_train.py`**: Confirms that our dataloader is correctly loading data and that our model is training as expected.
+- **`test_train.py`**: Confirms that our model is training as expected.
 
 These automated tests help us catch issues early, keeping our application reliable as we continuously update it.
-
 ### Question 8
 
 > **What is the total code coverage (in percentage) of your code? If your code had a code coverage of 100% (or close**
@@ -404,7 +396,10 @@ To reproduce an experiment, we simply looked up the parameters in Weights & Bias
 >
 > Answer:
 
---- question 15 fill here ---
+Docker was used to containerize different applications in the project, as we created separate Docker images for key stages e.g. data preprocessing, training, and testing. Furthermore, we also created a Dockerfile for containerizing the script for running our API. Generally, that allowed us to capture all dependencies, libraries and configurations required in each stage, and put it into different self-contained environments that can be run anywhere. 
+For example, to run the training Docker image, we used the following command:`docker run --name experiment train:latest`
+
+Using Docker significantly reduced the setup time and made the project reproducible for foreign users as well.
 
 ### Question 16
 
@@ -455,6 +450,8 @@ Generally we have tried to use all of the GCP services provided to us in the cou
 >
 > Answer:
 
+We primarily used the Compute engine from GCP, using VM’s to train our model, since we had some trouble fitting our model on our own computers, we wanted to use the GCP to do so as fast as possible. This resulted in us “git cloning” our github repository to the VM, after which training can be done. 
+We use N1-standard-8 instances paired with a 1x NVIDIA T4 GPU for machine learning and AI workloads. This configuration provides 8 vCPUs, 30 GB of memory, and the T4 GPU, which is optimized for deep learning, inference, and high-performance computing tasks. The setup ensures efficient processing for computationally intensive workloads like training models while balancing cost and performance.
 
 
 ### Question 19
@@ -464,7 +461,7 @@ Generally we have tried to use all of the GCP services provided to us in the cou
 >
 > Answer:
 
---- question 19 fill here ---
+![my_image](figures/bucket.png)
 
 ### Question 20
 
@@ -579,7 +576,7 @@ Generally we have tried to use all of the GCP services provided to us in the cou
 >
 > Answer:
 
---- question 27 fill here ---
+We ended up spending XXX credits during the project, only on a single account. The credits were spent on data storage and running virtual machines. Especially the last part spent most of the credits, but not anything special compared to how many we had available. Working in the cloud was super useful, when it was actually set up correctly. Setting it up was quite a pain, and took a lot of hours and help, but when we actually got it up and running it helped with a lot of previous problems we had encountered. Generally, it is something that we will definitely take with us and use again, of course, especially now that we are hopefully faster in setting up the service. 
 
 ### Question 28
 
@@ -595,7 +592,7 @@ Generally we have tried to use all of the GCP services provided to us in the cou
 >
 > Answer:
 
---- question 28 fill here ---
+We implemented a frontend for our API as well, using the streamlit framework. This was done because we found it interesting to work with front end develpoment and setting up a nice interface for the users of the program. The implementation was relatively straightforward as well, meaning it didn't take much time from the rest of the project compared to how much nicer it made the project seem to a foreign user. 
 
 ### Question 29
 
@@ -626,7 +623,10 @@ Generally we have tried to use all of the GCP services provided to us in the cou
 >
 > Answer:
 
---- question 30 fill here ---
+The biggest challenges in the project were to set up the GCP and implementing continuous integration/workflow (especially model wise with connecting to WANDB). 
+Working with GCP was quite challenging due to multiple reasons. First off, making it run a docker container requires the building of the corresponding image, which takes a long time to build and therefore makes debugging tedious. Furthermore a lot of things felt very buggy due to adding features in the consol, and on the website, and  we had a lot of problems with service accounts accessibility.
+For the continuous integration/workflow, it was difficult to see how the .yaml files should be written exactly, and to get them to work overall. To add to this problem, we also had to make sure the surrounding architecture of both GitHub and WANDB was able to support the .yaml file layout, making it even more complicated. It meant a lot of trial and error, and the help from the course TA's, but in the end we finally got it working, and set up the correct way. 
+Some exercises (which we worked through with our project in mind to implement everything correctly) also took more reworking (and altering of the given code) than anticipated, either because the actual website or service they regarded had changed since the exercises were created or because some provided code might miss a few key things.
 
 ### Question 31
 
@@ -643,5 +643,11 @@ Generally we have tried to use all of the GCP services provided to us in the cou
 > *All members contributed to code by...*
 > *We have used ChatGPT to help debug our code. Additionally, we used GitHub Copilot to help write some of our code.*
 > Answer:
+- Student s214731 has been in charge of setting up the GCP, experimenting with virtual machines, and how to implement automatic building of Docker images.
+- Student s214733 has been in charge of writing the unit tests, and creating the continuous integration that uses GitHub actions. Furthermore, the student has been helping with setting up the API.
+- Student s214735 has been in charge of creating our model as well as setting up the API backend/frontend. Furthermore, the student has worked on deployment of the model in GCP, and created pre-commits in the version control setup. 
+- Student s214739 has been in charge of data loading and processing, and has also been helping a lot with setting up the cloud (especially the GCP Bucket). Furthermore, the student has spent time on the model training.
+- Student s214742 has been in charge of setting up the profiling and logging, creating the WANDB project and has also worked on the continuous integration. The student has spent time on config files and data loading as well. 
+- All members contributed to code by working on all parts of the project. Every team member has been involved to some degree in all parts of the project, and knows how the different operations work.
+- We have used ChatGPT to help debug and/or write some parts of our code.
 
---- question 31 fill here ---
