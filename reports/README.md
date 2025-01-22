@@ -167,7 +167,7 @@ Using pandas and umap allowed us to efficiently process and analyze our data, pr
 >
 > Answer:
 
-In our project, we managed our dependencies using two key files: `requirements.txt` and `requirements_dev.txt`. The `requirements.txt` file contains all the essential libraries needed to run the project, ensuring that any core functionality works seamlessly across different setups. On the other hand, `requirements_dev.txt` includes additional packages that are necessary for development purposes, such as testing and debugging tools.
+We managed our dependencies using two key files: `requirements.txt` and `requirements_dev.txt`. The `requirements.txt` file contains all the essential libraries needed to run the project, ensuring that any core functionality works seamlessly across different setups. `requirements_dev.txt` includes additional packages that are necessary for development purposes, such as testing and debugging tools.
 
 For a new team member to set up an exact copy of our environment, they would need to follow these steps:
 
@@ -178,7 +178,7 @@ For a new team member to set up an exact copy of our environment, they would nee
 5. Run `pip install -r requirements.txt` to install all the required libraries listed in the `requirements.txt` file.
 6. Optionally, if they are involved in development, they should also run `pip install -r requirements_dev.txt` to install the additional development dependencies.
 
-By following these steps, a new team member can quickly set up the project environment, ensuring they have all the necessary dependencies to start working on the project immediately.
+By following these steps, a new team member can quickly set up the project environment, ensuring they have all the necessary dependencies to start working on the project.
 
 
 ### Question 5
@@ -195,17 +195,13 @@ By following these steps, a new team member can quickly set up the project envir
 >
 > Answer:
 
-We initialized our project using the cookiecutter template and adapted it to fit our specific needs. The primary directories we filled out and utilized are:
-
-- **`config` folder**: This directory holds all configuration files that manage settings and parameters used across different parts of our project, ensuring consistency and ease of adjustments.
+We initialized our project using the cookiecutter template. The primary directories we utilized are:
+- **`config` folder**: This directory holds configuration files that manage settings and parameters used across different parts of our project, ensuring consistency and ease of adjustments.
 - **`data` folder**: Used for storing raw and processed data sets. This organization helps in managing the data lifecycle within our project.
-- **`dockerfiles` folder**: Contains Dockerfiles which are crucial for creating Docker containers that ensure our environment is consistent across all development and production systems.
 - **`model` folder**: This is where we store model definitions and training scripts, centralizing all machine learning algorithms and models.
 - **`src` folder**: The source code for our application is kept here, including all the primary Python scripts and modules.
 - **`tests` folder**: Dedicated to housing test cases and scripts, which are vital for ensuring the robustness and reliability of our code through continuous integration practices.
-
 Additionally, we maintained a structured approach to version control using Git, which included setting up `.gitignore` files to exclude unnecessary files from being tracked and `workflows` for automating tasks such as testing, building, and deploying using GitHub Actions.
-
 By carefully organizing these folders and incorporating essential development practices, we created a project structure that is both scalable and easy to navigate for any new team members or stakeholders.
 
 ### Question 6
@@ -244,15 +240,14 @@ These practices are crucial in larger projects as they improve code quality, enh
 >
 > Answer:
 
-In our project, we implemented a suite of tests, organized into four main files: `test_api.py`, `test_data.py`, `test_model.py`, and `test_train.py`. These tests are automated through GitHub workflows and executed within GitHub Actions to ensure continuous integration and consistent code quality.
+we implemented a suite of tests, organized into four main files: `test_api.py`, `test_data.py`, `test_model.py`, and `test_train.py`. These tests are automated through GitHub workflows and executed within GitHub Actions to ensure continuous integration and consistent code quality.
 
 - **`test_api.py`**: Tests the API to make sure all endpoints respond correctly.
 - **`test_data.py`**: Checks that data loads and processes correctly, preserving format and accuracy.
 - **`test_model.py`**: Ensures our models are predicting the correct format 
-- **`test_train.py`**: Confirms that our dataloader is correctly loading data and that our model is training as expected.
+- **`test_train.py`**: Confirms the dataloader is working and that our model is training as expected.
 
 These automated tests help us catch issues early, keeping our application reliable as we continuously update it.
-
 ### Question 8
 
 > **What is the total code coverage (in percentage) of your code? If your code had a code coverage of 100% (or close**
