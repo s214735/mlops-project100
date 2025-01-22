@@ -110,7 +110,7 @@ def train(cfg: DictConfig):
 
     # Initialize PyTorch Lightning Trainer
     trainer = pl.Trainer(
-        max_epochs=params["train_epochs"],
+        max_epochs=params["epochs"],
         accelerator="gpu" if torch.cuda.is_available() else "cpu",
         devices=cfg.train.devices,
         log_every_n_steps=cfg.train.log_every_n_steps,
