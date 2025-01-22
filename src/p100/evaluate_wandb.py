@@ -1,3 +1,4 @@
+import os
 import hydra
 import torch
 from omegaconf import DictConfig
@@ -6,8 +7,8 @@ from torchvision import transforms
 import wandb
 import warnings
 
-from p100.data import PokeDataset
-from p100.model import ResNetModel
+from data import PokeDataset
+from model import ResNetModel
 from p100.utils import get_wandb_api_key
 
 warnings.filterwarnings("ignore")
@@ -24,8 +25,14 @@ def get_latest_model_path(project_path: str, alias: str) -> str:
     api = wandb.Api()
     model_artifact = api.artifact(f"{project_path}/{alias}")
     downloaded_path = model_artifact.download()
-    print(f"Model downloaded to: {downloaded_path}")
-    return downloaded_path
+    print(f"Model artifact downloaded to: {downloaded_path}")
+
+    # Locate the specific model file in the artifact directory
+    for file_name in os.listdir(downloaded_path):
+        if file_name.endswith((".pth", ".ckpt")):  # Adjust extensions as needed
+            return os.path.join(downloaded_path, file_name)
+    
+    raise FileNotFoundError("No model file found in the artifact directory.")
 
 def load_model(model: torch.nn.Module, model_path: str) -> torch.nn.Module:
     """Load model weights from a file."""
@@ -39,12 +46,11 @@ def evaluate(model_checkpoint: str, batch_size: int, device=DEVICE) -> None:
     print("Starting evaluation...")
 
     # Initialize the model
-    model = ResNetModel(num_classes=18, lr=1).to(device)
+    model = ResNetModel(num_classes=1000, lr=1).to(device)
 
     # Load the model weights
     model = load_model(model, model_checkpoint)
     model.eval()
-
 
     # Prepare the dataset and dataloader
     test_set = PokeDataset(mode="test", transform=transforms.ToTensor())
