@@ -9,12 +9,16 @@ RUN mkdir -p /app/p100
 
 WORKDIR /app
 
-COPY requirements_backend.txt /app/requirements_backend.txt
+COPY requirements.txt /app/requirements.txt
 COPY src/p100/backend.py /app/backend.py
-COPY utils/imagenet-simple-labels.json /app/imagenet-simple-labels.json
-COPY src/p100/data.py /app/p100/data.py
+COPY utils/pokemon-labels.json /app/pokemon-labels.json
 
-RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements_backend.txt
+COPY src/p100/data.py /app/p100/data.py
+COPY src/p100/evaluate.py /app/p100/evaluate.py
+COPY src/p100/model.py /app/p100/model.py
+COPY src/p100/utils.py /app/p100/utils.py
+
+RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt
 
 EXPOSE 8080
 

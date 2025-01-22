@@ -7,18 +7,19 @@ import numpy as np
 import torch
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from PIL import Image
-from torchvision import models, transforms
+from torchvision import transforms
 
 from p100.data import PokeDataset
-from p100.model import ResNetModel
 from p100.evaluate import get_latest_model_path, load_model
+from p100.model import ResNetModel
 
 BUCKET_NAME = "mlops_bucket100"
 PREFIX = "data/processed/"
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-PROJECT_PATH = "p100-org/wandb-registry-Pokemon"  
-MODEL_ALIAS = "Model:latest"  
+PROJECT_PATH = "p100-org/wandb-registry-Pokemon"
+MODEL_ALIAS = "Model:latest"
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -29,7 +30,7 @@ async def lifespan(app: FastAPI):
     model_checkpoint = get_latest_model_path(PROJECT_PATH, MODEL_ALIAS)
 
     # Load the model weights
-    model = load_model(model, model_checkpoint) 
+    model = load_model(model, model_checkpoint)
     # model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V2)
     model.eval()
 

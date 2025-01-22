@@ -1,14 +1,15 @@
 import os
+import warnings
+
 import hydra
 import torch
 from omegaconf import DictConfig
 from torch.utils.data import DataLoader
 from torchvision import transforms
-import wandb
-import warnings
 
-from data import PokeDataset
-from model import ResNetModel
+import wandb
+from p100.data import PokeDataset
+from p100.model import ResNetModel
 from p100.utils import get_wandb_api_key
 
 warnings.filterwarnings("ignore")
@@ -18,9 +19,10 @@ PROJECT_PATH = "p100-org/wandb-registry-Pokemon"  # Specify your W&B project pat
 MODEL_ALIAS = "Model:latest"  # Use the alias for the latest model version
 BUCKET_NAME = "mlops_bucket100"
 
+
 def get_file_with_lowest_val_loss(artifact_path: str) -> str:
     """Find the model file with the lowest val_loss based on the filename."""
-    lowest_loss = float('inf')
+    lowest_loss = float("inf")
     best_model_path = None
 
     for file_name in os.listdir(artifact_path):
@@ -33,12 +35,13 @@ def get_file_with_lowest_val_loss(artifact_path: str) -> str:
                     best_model_path = os.path.join(artifact_path, file_name)
             except ValueError:
                 continue  # Skip files that don't match the expected format
-    
+
     if best_model_path is None:
         raise FileNotFoundError("No valid model file with val_loss found.")
-    
+
     print(f"Selected model: {best_model_path} with val_loss: {lowest_loss}")
     return best_model_path
+
 
 def get_latest_model_path(project_path: str, alias: str) -> str:
     """Retrieve the path to the latest model from W&B."""
@@ -53,12 +56,14 @@ def get_latest_model_path(project_path: str, alias: str) -> str:
     # Locate the file with the lowest val_loss
     return get_file_with_lowest_val_loss(downloaded_path)
 
+
 def load_model(model: torch.nn.Module, model_path: str) -> torch.nn.Module:
     """Load model weights from a file."""
     print(f"Loading model from: {model_path}")
     checkpoint = torch.load(model_path, map_location=DEVICE)
-    model.load_state_dict(checkpoint['state_dict'])
+    model.load_state_dict(checkpoint["state_dict"])
     return model
+
 
 def evaluate(model_checkpoint: str, batch_size: int, log_every: int = 5, device=DEVICE) -> None:
     """Evaluate a trained model on the test dataset."""
@@ -96,6 +101,7 @@ def main(cfg: DictConfig) -> None:
     model_checkpoint = get_latest_model_path(PROJECT_PATH, MODEL_ALIAS)
     batch_size = cfg.evaluate.batch_size
     evaluate(model_checkpoint, batch_size)
+
 
 if __name__ == "__main__":
     main()
