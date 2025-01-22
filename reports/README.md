@@ -626,7 +626,10 @@ Generally we have tried to use all of the GCP services provided to us in the cou
 >
 > Answer:
 
---- question 30 fill here ---
+The biggest challenges in the project were to set up the GCP and implementing continuous integration/workflow (especially model wise with connecting to WANDB). 
+INSERT GCP challenges here
+For the continuous integration/workflow, it was difficult to see how the .yaml files should be written exactly, and to get them to work overall. To add to this problem, we also had to make sure the surrounding architecture of both GitHub and WANDB was able to support the .yaml file layout, making it even more complicated. It meant a lot of trial and error, and the help from the course TA's, but in the end we finally got it working, and set up the correct way. 
+Some exercises (which we worked through with our project in mind to implement everything correctly) also took more reworking (and altering of the given code) than anticipated, either because the actual website or service they regarded had changed since the exercises were created or because some provided code might miss a few key things.
 
 ### Question 31
 
