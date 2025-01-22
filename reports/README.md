@@ -77,7 +77,7 @@ will check the repositories and the code to verify your answers.
 * [ ] Calculate the code coverage (M16)
 * [x] Get some continuous integration running on the GitHub repository (M17)
 * [x] Add caching and multi-os/python/pytorch testing to your continuous integration (M17)
-* [(x)] Add a linting step to your continuous integration (M17)
+* [x] Add a linting step to your continuous integration (M17)
 * [x] Add pre-commit hooks to your version control setup (M18)
 * [ ] Add a continues workflow that triggers when data changes (M19)
 * [x] Add a continues workflow that triggers when changes to the model registry is made (M19)
@@ -147,7 +147,7 @@ In our project, we used two third-party frameworks, pandas and UMAP, which were 
 
 Additionally, we integrated umap for visualizing the vector space of our model. umap helped in reducing the dimensionality of our data, allowing us to visually inspect how different Pokémon characteristics clustered together. This visualization aided in assessing the effectiveness of our data modeling approach.
 
-Using pandas and umap allowed us to efficiently process and analyze our data, providing clear insights into the model. 
+Using pandas and umap allowed us to efficiently process and analyze our data, providing clear insights into the model.
 
 ## Coding environment
 
@@ -241,7 +241,7 @@ we implemented a suite of tests, organized into four main files: `test_api.py`, 
 
 - **`test_api.py`**: Tests the API to make sure all endpoints respond correctly.
 - **`test_data.py`**: Checks that data loads and processes correctly, preserving format and accuracy.
-- **`test_model.py`**: Ensures our models are predicting the correct format 
+- **`test_model.py`**: Ensures our models are predicting the correct format
 - **`test_train.py`**: Confirms that our model is training as expected.
 
 These automated tests help us catch issues early, keeping our application reliable as we continuously update it.
@@ -396,7 +396,7 @@ To reproduce an experiment, we simply looked up the parameters in Weights & Bias
 >
 > Answer:
 
-Docker was used to containerize different applications in the project, as we created separate Docker images for key stages e.g. data preprocessing, training, and testing. Furthermore, we also created a Dockerfile for containerizing the script for running our API. Generally, that allowed us to capture all dependencies, libraries and configurations required in each stage, and put it into different self-contained environments that can be run anywhere. 
+Docker was used to containerize different applications in the project, as we created separate Docker images for key stages e.g. data preprocessing, training, and testing. Furthermore, we also created a Dockerfile for containerizing the script for running our API. Generally, that allowed us to capture all dependencies, libraries and configurations required in each stage, and put it into different self-contained environments that can be run anywhere.
 For example, to run the training Docker image, we used the following command:`docker run --name experiment train:latest`
 
 Using Docker significantly reduced the setup time and made the project reproducible for foreign users as well.
@@ -450,7 +450,7 @@ Generally we have tried to use all of the GCP services provided to us in the cou
 >
 > Answer:
 
-We primarily used the Compute engine from GCP, using VM’s to train our model, since we had some trouble fitting our model on our own computers, we wanted to use the GCP to do so as fast as possible. This resulted in us “git cloning” our github repository to the VM, after which training can be done. 
+We primarily used the Compute engine from GCP, using VM’s to train our model, since we had some trouble fitting our model on our own computers, we wanted to use the GCP to do so as fast as possible. This resulted in us "git cloning" our github repository to the VM, after which training can be done.
 We use N1-standard-8 instances paired with a 1x NVIDIA T4 GPU for machine learning and AI workloads. This configuration provides 8 vCPUs, 30 GB of memory, and the T4 GPU, which is optimized for deep learning, inference, and high-performance computing tasks. The setup ensures efficient processing for computationally intensive workloads like training models while balancing cost and performance.
 
 
@@ -576,7 +576,7 @@ We use N1-standard-8 instances paired with a 1x NVIDIA T4 GPU for machine learni
 >
 > Answer:
 
-We ended up spending XXX credits during the project, only on a single account. The credits were spent on data storage and running virtual machines. Especially the last part spent most of the credits, but not anything special compared to how many we had available. Working in the cloud was super useful, when it was actually set up correctly. Setting it up was quite a pain, and took a lot of hours and help, but when we actually got it up and running it helped with a lot of previous problems we had encountered. Generally, it is something that we will definitely take with us and use again, of course, especially now that we are hopefully faster in setting up the service. 
+We ended up spending XXX credits during the project, only on a single account. The credits were spent on data storage and running virtual machines. Especially the last part spent most of the credits, but not anything special compared to how many we had available. Working in the cloud was super useful, when it was actually set up correctly. Setting it up was quite a pain, and took a lot of hours and help, but when we actually got it up and running it helped with a lot of previous problems we had encountered. Generally, it is something that we will definitely take with us and use again, of course, especially now that we are hopefully faster in setting up the service.
 
 ### Question 28
 
@@ -592,7 +592,7 @@ We ended up spending XXX credits during the project, only on a single account. T
 >
 > Answer:
 
-We implemented a frontend for our API as well, using the streamlit framework. This was done because we found it interesting to work with front end develpoment and setting up a nice interface for the users of the program. The implementation was relatively straightforward as well, meaning it didn't take much time from the rest of the project compared to how much nicer it made the project seem to a foreign user. 
+We implemented a frontend for our API as well, using the streamlit framework. This was done because we found it interesting to work with front end develpoment and setting up a nice interface for the users of the program. The implementation was relatively straightforward as well, meaning it didn't take much time from the rest of the project compared to how much nicer it made the project seem to a foreign user.
 
 ### Question 29
 
@@ -623,9 +623,9 @@ We implemented a frontend for our API as well, using the streamlit framework. Th
 >
 > Answer:
 
-The biggest challenges in the project were to set up the GCP and implementing continuous integration/workflow (especially model wise with connecting to WANDB). 
+The biggest challenges in the project were to set up the GCP and implementing continuous integration/workflow (especially model wise with connecting to WANDB).
 Working with GCP was quite challenging due to multiple reasons. First off, making it run a docker container requires the building of the corresponding image, which takes a long time to build and therefore makes debugging tedious. Furthermore a lot of things felt very buggy due to adding features in the consol, and on the website, and  we had a lot of problems with service accounts accessibility.
-For the continuous integration/workflow, it was difficult to see how the .yaml files should be written exactly, and to get them to work overall. To add to this problem, we also had to make sure the surrounding architecture of both GitHub and WANDB was able to support the .yaml file layout, making it even more complicated. It meant a lot of trial and error, and the help from the course TA's, but in the end we finally got it working, and set up the correct way. 
+For the continuous integration/workflow, it was difficult to see how the .yaml files should be written exactly, and to get them to work overall. To add to this problem, we also had to make sure the surrounding architecture of both GitHub and WANDB was able to support the .yaml file layout, making it even more complicated. It meant a lot of trial and error, and the help from the course TA's, but in the end we finally got it working, and set up the correct way.
 Some exercises (which we worked through with our project in mind to implement everything correctly) also took more reworking (and altering of the given code) than anticipated, either because the actual website or service they regarded had changed since the exercises were created or because some provided code might miss a few key things.
 
 ### Question 31
@@ -645,9 +645,8 @@ Some exercises (which we worked through with our project in mind to implement ev
 > Answer:
 - Student s214731 has been in charge of setting up the GCP, experimenting with virtual machines, and how to implement automatic building of Docker images.
 - Student s214733 has been in charge of writing the unit tests, and creating the continuous integration that uses GitHub actions. Furthermore, the student has been helping with setting up the API.
-- Student s214735 has been in charge of creating our model as well as setting up the API backend/frontend. Furthermore, the student has worked on deployment of the model in GCP, and created pre-commits in the version control setup. 
+- Student s214735 has been in charge of creating our model as well as setting up the API backend/frontend. Furthermore, the student has worked on deployment of the model in GCP, and created pre-commits in the version control setup.
 - Student s214739 has been in charge of data loading and processing, and has also been helping a lot with setting up the cloud (especially the GCP Bucket). Furthermore, the student has spent time on the model training.
-- Student s214742 has been in charge of setting up the profiling and logging, creating the WANDB project and has also worked on the continuous integration. The student has spent time on config files and data loading as well. 
+- Student s214742 has been in charge of setting up the profiling and logging, creating the WANDB project and has also worked on the continuous integration. The student has spent time on config files and data loading as well.
 - All members contributed to code by working on all parts of the project. Every team member has been involved to some degree in all parts of the project, and knows how the different operations work.
 - We have used ChatGPT to help debug and/or write some parts of our code.
-
