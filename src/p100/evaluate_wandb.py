@@ -60,7 +60,7 @@ def load_model(model: torch.nn.Module, model_path: str) -> torch.nn.Module:
     model.load_state_dict(checkpoint['state_dict'])
     return model
 
-def evaluate(model_checkpoint: str, batch_size: int, device=DEVICE) -> None:
+def evaluate(model_checkpoint: str, batch_size: int, log_every: int = 5, device=DEVICE) -> None:
     """Evaluate a trained model on the test dataset."""
     # Initialize the model
     model = ResNetModel(num_classes=18, lr=1).to(device)
@@ -77,13 +77,14 @@ def evaluate(model_checkpoint: str, batch_size: int, device=DEVICE) -> None:
     print("Testing the model...")
     correct, total = 0, 0
     with torch.no_grad():
-        for images, targets, _ in test_dataloader:
+        for batch_idx, (images, targets, _) in enumerate(test_dataloader):
             images, targets = images.to(device), targets.to(device)
             outputs = model(images)
             predictions = outputs.argmax(dim=1)
             correct += (predictions == targets).sum().item()
             total += targets.size(0)
-            print(f"Average test accuracy: {correct / total:.2%}")
+            if (batch_idx + 1) % log_every == 0:
+                print(f"Batch {batch_idx + 1}/{len(test_dataloader)}, Average test accuracy: {correct / total:.2%}")
 
     accuracy = correct / total
     print(f"Test accuracy: {accuracy:.2%}")
