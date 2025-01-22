@@ -237,13 +237,12 @@ These practices are crucial in larger projects as they improve code quality, enh
 > *application but also ... .*
 >
 > Answer:
-
 we implemented a suite of tests, organized into four main files: `test_api.py`, `test_data.py`, `test_model.py`, and `test_train.py`. These tests are automated through GitHub workflows and executed within GitHub Actions to ensure continuous integration and consistent code quality.
 
 - **`test_api.py`**: Tests the API to make sure all endpoints respond correctly.
 - **`test_data.py`**: Checks that data loads and processes correctly, preserving format and accuracy.
 - **`test_model.py`**: Ensures our models are predicting the correct format 
-- **`test_train.py`**: Confirms the dataloader is working and that our model is training as expected.
+- **`test_train.py`**: Confirms that our model is training as expected.
 
 These automated tests help us catch issues early, keeping our application reliable as we continuously update it.
 ### Question 8
