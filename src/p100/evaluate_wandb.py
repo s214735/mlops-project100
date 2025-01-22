@@ -1,6 +1,6 @@
 import os
-import torch
 import hydra
+import torch
 from omegaconf import DictConfig
 from torch.utils.data import DataLoader
 from torchvision import transforms
@@ -16,6 +16,7 @@ warnings.filterwarnings("ignore")
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
 PROJECT_PATH = "p100-org/wandb-registry-Pokemon"  # Specify your W&B project path
 MODEL_ALIAS = "Model:latest"  # Use the alias for the latest model version
+BUCKET_NAME = "mlops_bucket100"
 
 def get_file_with_lowest_val_loss(artifact_path: str) -> str:
     """Find the model file with the lowest val_loss based on the filename."""
@@ -31,7 +32,7 @@ def get_file_with_lowest_val_loss(artifact_path: str) -> str:
                     lowest_loss = val_loss
                     best_model_path = os.path.join(artifact_path, file_name)
             except ValueError:
-                continue  # Skip files that don't match the format
+                continue  # Skip files that don't match the expected format
     
     if best_model_path is None:
         raise FileNotFoundError("No valid model file with val_loss found.")
@@ -61,19 +62,19 @@ def load_model(model: torch.nn.Module, model_path: str) -> torch.nn.Module:
 
 def evaluate(model_checkpoint: str, batch_size: int, device=DEVICE) -> None:
     """Evaluate a trained model on the test dataset."""
-    print("Starting evaluation...")
-
     # Initialize the model
-    model = ResNetModel(num_classes=1000, lr=1).to(device)
+    model = ResNetModel(num_classes=18, lr=1).to(device)
 
     # Load the model weights
     model = load_model(model, model_checkpoint)
     model.eval()
 
     # Prepare the dataset and dataloader
-    test_set = PokeDataset(mode="test", transform=transforms.ToTensor())
+    print("Loading test dataset...")
+    test_set = PokeDataset(bucket_name=BUCKET_NAME, mode="test", transform=transforms.ToTensor())
     test_dataloader = DataLoader(test_set, batch_size=batch_size)
 
+    print("Testing the model...")
     correct, total = 0, 0
     with torch.no_grad():
         for images, targets, _ in test_dataloader:
@@ -82,6 +83,7 @@ def evaluate(model_checkpoint: str, batch_size: int, device=DEVICE) -> None:
             predictions = outputs.argmax(dim=1)
             correct += (predictions == targets).sum().item()
             total += targets.size(0)
+            print(f"Average test accuracy: {correct / total:.2%}")
 
     accuracy = correct / total
     print(f"Test accuracy: {accuracy:.2%}")
