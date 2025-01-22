@@ -483,7 +483,7 @@ We use N1-standard-8 instances paired with a 1x NVIDIA T4 GPU for machine learni
 >
 > Answer:
 
---- question 21 fill here ---
+![artefact](figures/cloud_build.png)
 
 ### Question 22
 
