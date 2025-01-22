@@ -17,5 +17,6 @@ COPY configs /configs
 
 RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt
 RUN pip install . --no-deps --no-cache-dir --verbose
-
+RUN pip install -e .
+    
 ENTRYPOINT ["python", "-u", "src/p100/train.py"]

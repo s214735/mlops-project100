@@ -6,8 +6,8 @@ steps:
     - '-c'
     - |
       apk add --no-cache gettext
-      envsubst < config.yaml > config.yaml.tmp
-      mv config.yaml.tmp config.yaml
+      envsubst < configs/config_gpu.yaml > config_gpu.yaml.tmp
+      mv config_gpu.yaml.tmp config_gpu.yaml
   secretEnv: ['WANDB_API_KEY']
 
 - name: 'alpine'
@@ -17,7 +17,7 @@ steps:
   args:
     - '-c'
     - |
-    cat config.yaml
+      cat config_gpu.yaml
 
 - name: 'gcr.io/cloud-builders/gcloud'
   id: 'Train on vertex AI'
@@ -34,8 +34,8 @@ steps:
     '${_VERTEX_TRAIN_CONFIG}',
   ]
 substitutions:
-  _VERTEX_TRAIN_CONFIG: 'config.yaml'
+  _VERTEX_TRAIN_CONFIG: 'configs/config.yaml'
 availableSecrets:
   secretManager:
-  - versionName: projects/level-oxygen-447714-d3/secrets/WANDB_API_KEY/versions/latest
+  - versionName: projects/80404694747/secrets/WAND_API_KEY/versions/latest
     env: 'WANDB_API_KEY'
