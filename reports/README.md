@@ -404,7 +404,10 @@ To reproduce an experiment, we simply looked up the parameters in Weights & Bias
 >
 > Answer:
 
---- question 15 fill here ---
+Docker was used to containerize different applications in the project, as we created separate Docker images for key stages e.g. data preprocessing, training, and testing. Furthermore, we also created a Dockerfile for containerizing the script for running our API. Generally, that allowed us to capture all dependencies, libraries and configurations required in each stage, and put it into different self-contained environments that can be run anywhere. 
+For example, to run the training Docker image, we used the following command:
+
+Using Docker significantly reduced the setup time and made the project reproducible for foreign users as well.
 
 ### Question 16
 
