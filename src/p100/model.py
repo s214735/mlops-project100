@@ -13,7 +13,7 @@ class ResNetModel(LightningModule):
     def __init__(self, 
                  num_classes: int = 18, 
                  lr: float = 0.001, 
-                 dropout_rate: float = 0.5,
+                 dropout: float = 0.5,
                  gamma: float = 0.1, 
                  step_size: float = 5) -> None:
         super().__init__()
@@ -28,7 +28,7 @@ class ResNetModel(LightningModule):
         self.backbone.fc = nn.Identity()  # Remove the default classification head
 
         # Add a dropout layer before the custom classifier
-        self.dropout = nn.Dropout(p=dropout_rate)
+        self.dropout = nn.Dropout(p=dropout)
         self.fc = nn.Linear(in_features, num_classes)  # Custom classifier
 
         # Loss function
