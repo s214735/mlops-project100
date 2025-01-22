@@ -10,7 +10,7 @@ from torchvision.models import resnet18
 class ResNetModel(LightningModule):
     """A Lightning Module using ResNet-50 as the backbone."""
 
-    def __init__(self, num_classes: int = 1000, lr: float = 0.001) -> None:
+    def __init__(self, num_classes: int = 18, lr: float = 0.001) -> None:
         super().__init__()
 
         # Load a pretrained ResNet-50 model
@@ -67,7 +67,7 @@ class ResNetModel(LightningModule):
 
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
-        lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
+        lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
         return [optimizer], [lr_scheduler]
 
 

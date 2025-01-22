@@ -18,4 +18,4 @@ evaluate:
   model_checkpoint: "models/testmodel.pth"
 
 model:
-  num_classes: 1000
+  num_classes: 18
