@@ -595,7 +595,7 @@ Generally we have tried to use all of the GCP services provided to us in the cou
 >
 > Answer:
 
---- question 28 fill here ---
+We implemented a frontend for our API as well, using the streamlit framework. This was done because we found it interesting to work with front end develpoment and setting up a nice interface for the users of the program. The implementation was relatively straightforward as well, meaning it didn't take much time from the rest of the project compared to how much nicer it made the project seem to a foreign user. 
 
 ### Question 29
 
