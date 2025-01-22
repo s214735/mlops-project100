@@ -1,12 +1,13 @@
 import io
 
+import pandas as pd
 from google.cloud import storage
 from PIL import Image
 from torch.utils.data import DataLoader, Dataset
 from torchvision import transforms
-import pandas as pd
 
 BUCKET_NAME = "mlops_bucket100"
+PROJECT_NAME = "level-oxygen-447714-d3"
 
 
 class PokeDataset(Dataset):
@@ -40,13 +41,13 @@ class PokeDataset(Dataset):
     def _get_client_and_bucket(self):
         """Initialize the GCS client and bucket lazily."""
         if self.client is None or self.bucket is None:
-            self.client = storage.Client()
+            self.client = storage.Client(project=PROJECT_NAME)
             self.bucket = self.client.bucket(self.bucket_name)
 
     def _load_dataset(self):
         """Load the dataset structure from the GCS bucket."""
         # Use a temporary client to load file paths
-        temp_client = storage.Client()
+        temp_client = storage.Client(project=PROJECT_NAME)
         temp_bucket = temp_client.bucket(self.bucket_name)
 
         prefix = f"{self.data_path}/{self.mode}/"
@@ -79,7 +80,6 @@ class PokeDataset(Dataset):
                 self.targets.append(class_to_index[class_name])
                 self.class_names.append(class_name)
                 print("Added", class_to_index[class_name], class_name)
-
 
     def __len__(self) -> int:
         """Return the length of the dataset."""
