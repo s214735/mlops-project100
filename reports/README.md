@@ -579,7 +579,7 @@ Generally we have tried to use all of the GCP services provided to us in the cou
 >
 > Answer:
 
---- question 27 fill here ---
+We ended up spending XXX credits during the project, only on a single account. The credits were spent on data storage and running virtual machines. Especially the last part spent most of the credits, but not anything special compared to how many we had available. Working in the cloud was super useful, when it was actually set up correctly. Setting it up was quite a pain, and took a lot of hours and help, but when we actually got it up and running it helped with a lot of previous problems we had encountered. Generally, it is something that we will definitely take with us and use again, of course, especially now that we are hopefully faster in setting up the service. 
 
 ### Question 28
 
