@@ -86,8 +86,8 @@ will check the repositories and the code to verify your answers.
 * [x] Get your model training in GCP using either the Engine or Vertex AI (M21)
 * [x] Create a FastAPI application that can do inference using your model (M22)
 * [x] Deploy your model in GCP using either Functions or Run as the backend (M23)
-* [(x)] Write API tests for your application and setup continues integration for these (M24)
-* [(x) ] Load test your application (M24)
+* [x] Write API tests for your application and setup continues integration for these (M24)
+* [x] Load test your application (M24)
 * [x] Create a more specialized ML-deployment API using either ONNX or BentoML, or both (M25)
 * [x] Create a frontend for your API (M26)
 
@@ -143,11 +143,11 @@ s214735, s214742, s214739, s214733, s214731
 >
 > Answer:
 
-In our project, we used two third-party frameworks, pandas and UMAP, which were essential for our tasks. We employed pandas to load and manage Pokémon metadata from a Kaggle dataset. This framework provided data operations like sorting and filtering, which were necessary for preparing our data.
+In our project, we used two third-party frameworks, Pandas and UMAP, which were essential for our tasks. We employed pandas to load and manage Pokémon metadata from a Kaggle dataset. This framework provided data operations like sorting and filtering, which were necessary for preparing our data.
 
-Additionally, we integrated umap for visualizing the vector space of our model. umap helped in reducing the dimensionality of our data, allowing us to visually inspect how different Pokémon characteristics clustered together. This visualization aided in assessing the effectiveness of our data modeling approach.
+Additionally, we integrated umap for visualizing the vector space of our model. Umap helped in reducing the dimensionality of our data, allowing us to visually inspect how different Pokémon characteristics clustered together. This visualization aided in assessing the effectiveness of our data modeling approach.
 
-Using pandas and umap allowed us to efficiently process and analyze our data, providing clear insights into the model.
+Using Pandas and UMAP allowed us to efficiently process and analyze our data, providing clear insights into the model.
 
 ## Coding environment
 
@@ -237,11 +237,10 @@ These practices are crucial in larger projects as they improve code quality, enh
 > *application but also ... .*
 >
 > Answer:
-we implemented a suite of tests, organized into four main files: `test_api.py`, `test_data.py`, `test_model.py`, and `test_train.py`. These tests are automated through GitHub workflows and executed within GitHub Actions to ensure continuous integration and consistent code quality.
+We implemented a suite of tests, organized into three main files: `test_api.py`, `test_model.py`, and `test_train.py`. These tests are automated through GitHub workflows and executed within GitHub Actions to ensure continuous integration and consistent code quality.
 
 - **`test_api.py`**: Tests the API to make sure all endpoints respond correctly.
-- **`test_data.py`**: Checks that data loads and processes correctly, preserving format and accuracy.
-- **`test_model.py`**: Ensures our models are predicting the correct format
+- **`test_model.py`**: Ensures our models are predicting the correct format 
 - **`test_train.py`**: Confirms that our model is training as expected.
 
 These automated tests help us catch issues early, keeping our application reliable as we continuously update it.
@@ -313,7 +312,7 @@ Version control for data would have been beneficial in cases where datasets are 
 
 In our project, we set up workflows to ensure our code and models worked correctly. These workflows checked that our data was in the correct format, verified that our model could initialize properly, and ensured that prediction speeds did not slow down over time.
 
-We also created a testing matrix in our workflows to test across multiple operating systems and Python versions. Specifically, we tested on the following:
+We also created a testing matrix in our workflows to test across multiple operating systems and a single Python version. Specifically, we tested on the following:
 
 - Operating systems: `ubuntu-latest`, `windows-latest`, `macos-latest`
 - Python version: `3.11`
@@ -463,6 +462,8 @@ We use N1-standard-8 instances paired with a 1x NVIDIA T4 GPU for machine learni
 
 ![my_image](figures/bucket.png)
 
+![bucket2](figures/bucket2.png)
+
 ### Question 20
 
 > **Upload 1-2 images of your GCP artifact registry, such that we can see the different docker images that you have**
@@ -470,7 +471,7 @@ We use N1-standard-8 instances paired with a 1x NVIDIA T4 GPU for machine learni
 >
 > Answer:
 
---- question 20 fill here ---
+![artefact](figures/artefact.png)
 
 ### Question 21
 
@@ -494,7 +495,11 @@ We use N1-standard-8 instances paired with a 1x NVIDIA T4 GPU for machine learni
 >
 > Answer:
 
---- question 22 fill here ---
+We first tried building an image which could run our training script on the compute engine in a virtual machine. This, however,
+did not work out for us as we couldn´t get the image to build succesfully which also meant that even though we could set up a trigger
+it was practically useless. We did however manage to set up a connection between our local terminal and our virtual machine on the
+compute engine and then clone our repository to the virtual machine. This proved to be fruitful as it allowed us then run code, and 
+subsequently train our model on the virtual machine.
 
 ## Deployment
 
@@ -559,7 +564,9 @@ We implemented both unit testing and load testing to check the API's functionali
 >
 > Answer:
 
---- question 26 fill here ---
+We didn’t manage to implement monitoring for our deployed model, but adding it would definitely improve our application in the long run. Monitoring, especially using telemetry, would help us keep track of important metrics like how many requests the app gets, how long each request takes, and how often errors occur.
+For example, knowing the number of requests can help us understand how much it costs to run the app. Tracking latency (how long it takes to handle a request) would show us if users are experiencing delays. If we notice any weird patterns—like slower response times or sudden spikes in errors—we could fix them before they become big problems.
+If we had implemented monitoring, we could’ve used Prometheus to expose metrics via a /metrics endpoint. It’s great for tracking things like the number of API calls or how long each call takes. Long-term, setting up alerts (like an email notification when something goes wrong) would help us stay on top of issues automatically.
 
 ## Overall discussion of project
 
