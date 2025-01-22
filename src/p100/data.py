@@ -79,7 +79,7 @@ class PokeDataset(Dataset):
                 self.data.append(blob.name)  # Full GCS path
                 self.targets.append(class_to_index[class_name])
                 self.class_names.append(class_name)
-                print("Added", class_to_index[class_name], class_name)
+                # print("Added", class_to_index[class_name], class_name)
 
     def __len__(self) -> int:
         """Return the length of the dataset."""
