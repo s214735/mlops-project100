@@ -463,6 +463,8 @@ We use N1-standard-8 instances paired with a 1x NVIDIA T4 GPU for machine learni
 
 ![my_image](figures/bucket.png)
 
+![bucket2](figures/bucket2.png)
+
 ### Question 20
 
 > **Upload 1-2 images of your GCP artifact registry, such that we can see the different docker images that you have**
@@ -470,7 +472,7 @@ We use N1-standard-8 instances paired with a 1x NVIDIA T4 GPU for machine learni
 >
 > Answer:
 
---- question 20 fill here ---
+![artefact](figures/artefact.png)
 
 ### Question 21
 
