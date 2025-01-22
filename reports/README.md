@@ -167,18 +167,16 @@ Using pandas and umap allowed us to efficiently process and analyze our data, pr
 >
 > Answer:
 
-We managed our dependencies using two key files: `requirements.txt` and `requirements_dev.txt`. The `requirements.txt` file contains all the essential libraries needed to run the project, ensuring that any core functionality works seamlessly across different setups. `requirements_dev.txt` includes additional packages that are necessary for development purposes, such as testing and debugging tools.
-
-For a new team member to set up an exact copy of our environment, they would need to follow these steps:
-
-1. Clone the project repository from our version control system to their local machine.
-2. Ensure that Python is installed on their system.
-3. Create a virtual environment (venv) to isolate and manage project-specific dependencies. This can be done by running `python -m venv env` in the project's root directory.
-4. Activate the virtual environment using `source env/bin/activate` on Unix or macOS, or `env\Scripts\activate` on Windows.
-5. Run `pip install -r requirements.txt` to install all the required libraries listed in the `requirements.txt` file.
-6. Optionally, if they are involved in development, they should also run `pip install -r requirements_dev.txt` to install the additional development dependencies.
-
+We managed our dependencies using two key files: requirements.txt and requirements_dev.txt. The requirements.txt file contains all the essential libraries needed to run the project, ensuring that any core functionality works seamlessly across different setups. requirements_dev.txt includes additional packages that are necessary for development purposes, such as testing and debugging tools.
+In order to create an exact copy of our environment, these steps must be followed:
+	1. Clone the project repository from our version control system to their local machine.
+	2. Ensure that Python is installed on their system.
+	3. Create a virtual environment (venv) to isolate and manage project-specific dependencies. This can be done by running python -m venv env in the project's root directory.
+	4. Activate the virtual environment using source env/bin/activate on Unix or macOS, or env\Scripts\activate on Windows.
+	5. Run pip install -r requirements.txt to install all the required libraries listed in the requirements.txt file.
+	6. Optionally, if they are involved in development, they should also run pip install -r requirements_dev.txt to install the additional development dependencies.
 By following these steps, a new team member can quickly set up the project environment, ensuring they have all the necessary dependencies to start working on the project.
+
 
 
 ### Question 5
