@@ -595,7 +595,7 @@ Generally we have tried to use all of the GCP services provided to us in the cou
 >
 > Answer:
 
---- question 28 fill here ---
+We implemented a frontend for our API as well, using the streamlit framework. This was done because we found it interesting to work with front end develpoment and setting up a nice interface for the users of the program. The implementation was relatively straightforward as well, meaning it didn't take much time from the rest of the project compared to how much nicer it made the project seem to a foreign user. 
 
 ### Question 29
 
@@ -627,7 +627,7 @@ Generally we have tried to use all of the GCP services provided to us in the cou
 > Answer:
 
 The biggest challenges in the project were to set up the GCP and implementing continuous integration/workflow (especially model wise with connecting to WANDB). 
-INSERT GCP challenges here
+Working with GCP was quite challenging due to multiple reasons. First off, making it run a docker container requires the building of the corresponding image, which takes a long time to build and therefore makes debugging tedious. Furthermore a lot of things felt very buggy due to adding features in the consol, and on the website, and  we had a lot of problems with service accounts accessibility.
 For the continuous integration/workflow, it was difficult to see how the .yaml files should be written exactly, and to get them to work overall. To add to this problem, we also had to make sure the surrounding architecture of both GitHub and WANDB was able to support the .yaml file layout, making it even more complicated. It meant a lot of trial and error, and the help from the course TA's, but in the end we finally got it working, and set up the correct way. 
 Some exercises (which we worked through with our project in mind to implement everything correctly) also took more reworking (and altering of the given code) than anticipated, either because the actual website or service they regarded had changed since the exercises were created or because some provided code might miss a few key things.
 
