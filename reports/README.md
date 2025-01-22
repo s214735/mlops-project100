@@ -461,7 +461,7 @@ We use N1-standard-8 instances paired with a 1x NVIDIA T4 GPU for machine learni
 >
 > Answer:
 
---- question 19 fill here ---
+![my_image](figures/bucket.png)
 
 ### Question 20
 
