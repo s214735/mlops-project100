@@ -611,11 +611,7 @@ We implemented a frontend for our API as well, using the streamlit framework. Th
 
 The starting point of the diagram, which outlines our model training and deployment setup, is our local setup from which each of us has access to our github via VSCode. From our local setup we can then access GCP´s buckets where we can upload our data consisting of our pokemon dataset. Via our local setup we can also access our virtual machine on the GCP´s compute engine, where it can then run our code and access the bucket where we have uploaded our data to and train a model on a GPU. The continues results of this training is then logged on our Weights and Biases account where we as the developer can monitor it. We can then optimize and export our model using Onnx and then visualise it using Netron and use this information in Github. After achieving the desired results through training, the model is then deployed to Github where our backend is running and through the frontend the user then has access to the model and can use it to option predictions. Using Github actions we can trigger several workflow files which can perform actions such as logging our training information on Weights and Biases and also perform actions such as unit testing.
 
-![my_image2](figures/mlopsWorkflowImage.png)
-
-<div style="text-align: center;">
-  <img src="figures/mlopsWorkflowImage.png" alt="Production Diagram">
-</div>
+![image2](figures/mlopsWorkflowImage.png){ style="display: block; margin-left: auto; margin-right: auto;" }
 
 
 
