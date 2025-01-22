@@ -644,4 +644,10 @@ Generally we have tried to use all of the GCP services provided to us in the cou
 > *We have used ChatGPT to help debug our code. Additionally, we used GitHub Copilot to help write some of our code.*
 > Answer:
 
---- question 31 fill here ---
+- Student s214731 
+- Student s214733
+- Student s214735
+- Student s214739
+- Student s214742
+- All members
+- We have used ChatGPT 
