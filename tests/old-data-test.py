@@ -1,5 +1,5 @@
 import numpy as np
-from p100.data2 import PokeDataset
+from p100.data import PokeDataset
 from torch.utils.data import DataLoader, Dataset
 
 BUCKET_NAME = "mlops_bucket100"

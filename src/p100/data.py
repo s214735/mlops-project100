@@ -1,13 +1,12 @@
-import os
+import io
 
-import numpy as np
+import pandas as pd
 from google.cloud import storage
 from PIL import Image
 from torch.utils.data import DataLoader, Dataset
 from torchvision import transforms
 
 BUCKET_NAME = "mlops_bucket100"
-CACHE_DIR = "data_cache"  # Directory to cache images locally
 PROJECT_NAME = "level-oxygen-447714-d3"
 
 
@@ -28,68 +27,80 @@ class PokeDataset(Dataset):
         self.mode = mode
         self.transform = transform or transforms.ToTensor()
 
-        self.data = []  # Stores local file paths
+        self.data = []  # Stores image paths in the bucket
         self.targets = []  # Stores class indices
         self.class_names = []  # Stores class names
 
-        # Use a dictionary to track class indices
-        self.class_to_index = {}
+        # Client and bucket will be initialized lazily in each worker
+        self.client = None
+        self.bucket = None
 
-        # Cache dataset locally
-        self._cache_dataset()
+        # Load dataset file paths and targets
+        self._load_dataset()
 
-    def _initialize_client(self):
-        """Initialize GCS client."""
-        if not hasattr(self, "_client"):
-            self._client = storage.Client(project=PROJECT_NAME)  # Lazy initialization
-        return self._client
+    def _get_client_and_bucket(self):
+        """Initialize the GCS client and bucket lazily."""
+        if self.client is None or self.bucket is None:
+            self.client = storage.Client(project=PROJECT_NAME)
+            self.bucket = self.client.bucket(self.bucket_name)
 
-    def _cache_dataset(self):
-        """Download and cache dataset locally."""
-        os.makedirs(CACHE_DIR, exist_ok=True)
-        client = self._initialize_client()
-        bucket = client.bucket(self.bucket_name)
+    def _load_dataset(self):
+        """Load the dataset structure from the GCS bucket."""
+        # Use a temporary client to load file paths
+        temp_client = storage.Client(project=PROJECT_NAME)
+        temp_bucket = temp_client.bucket(self.bucket_name)
+
         prefix = f"{self.data_path}/{self.mode}/"
-        blobs = bucket.list_blobs(prefix=prefix)
+        blobs = temp_bucket.list_blobs(prefix=prefix)
 
+        types_path = f"{self.data_path}/pokemon_types.csv"
+        types_blob = temp_bucket.blob(types_path)  # Correct way to get the specific blob
+
+        type_bytes = types_blob.download_as_bytes()  # Now this works
+        types_data = pd.read_csv(io.BytesIO(type_bytes), delimiter=";")
+        # Use a dictionary to track class indices
+        class_to_index = {}
         for blob in blobs:
+            # Skip directories (GCS directories are implied by paths ending in '/')
             if blob.name.endswith("/"):
                 continue
 
             # Parse the class name from the file path
             parts = blob.name.split("/")
-            class_name = parts[-2]
+            pokemon_name = parts[-2].lower()  # Assume class name is the second-to-last folder
+            if pokemon_name in types_data["Name"].values:
+                class_name = types_data[types_data["Name"] == pokemon_name]["Type1"].values
+                class_name = class_name[0]
+                # Assign a class index if it's new
+                if class_name not in class_to_index:
+                    class_to_index[class_name] = len(class_to_index)
 
-            # Assign a class index if it's new
-            if class_name not in self.class_to_index:
-                self.class_to_index[class_name] = len(self.class_to_index)
-
-            # Define local file path
-            local_path = os.path.join(CACHE_DIR, os.path.basename(blob.name))
-            if not os.path.exists(local_path):
-                blob.download_to_filename(local_path)  # Download if not cached
-
-            # Append to dataset lists
-            self.data.append(local_path)  # Use local path
-            self.targets.append(self.class_to_index[class_name])
-            self.class_names.append(class_name)
+                # Append to dataset lists
+                self.data.append(blob.name)  # Full GCS path
+                self.targets.append(class_to_index[class_name])
+                self.class_names.append(class_name)
+                print("Added", class_to_index[class_name], class_name)
 
     def __len__(self) -> int:
         """Return the length of the dataset."""
         return len(self.data)
 
     def __getitem__(self, idx):
-        """Fetch the image, target, and class name by index."""
-        image_path = self.data[idx]
+        """Fetch the image and target by index."""
+        # Initialize the client and bucket for this worker if necessary
+        self._get_client_and_bucket()
+
+        # Get the blob name and target
+        blob_name = self.data[idx]
         target = self.targets[idx]
         class_name = self.class_names[idx]
 
-        try:
-            # Open the image
-            image = Image.open(image_path).convert("RGB")
-        except (IOError, Image.UnidentifiedImageError):
-            print(f"Skipping corrupted image: {image_path}")
-            return self.__getitem__((idx + 1) % len(self))  # Load the next image instead
+        # Fetch the image blob from GCS
+        blob = self.bucket.blob(blob_name)
+        image_bytes = blob.download_as_bytes()
+
+        # Open the image
+        image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
 
         # Apply transformations
         if self.transform:
@@ -97,41 +108,24 @@ class PokeDataset(Dataset):
 
         return image, target, class_name
 
+    def __getstate__(self):
+        """Exclude unpicklable attributes from the state."""
+        state = self.__dict__.copy()
+        state["client"] = None
+        state["bucket"] = None
+        return state
+
+    def __setstate__(self, state):
+        """Restore the state and reset unpicklable attributes."""
+        self.__dict__.update(state)
+        self.client = None
+        self.bucket = None
+
 
 if __name__ == "__main__":
     train_dataset = PokeDataset(BUCKET_NAME, mode="train", transform=transforms.ToTensor())
-    test_dataset = PokeDataset(BUCKET_NAME, mode="test", transform=transforms.ToTensor())
-    val_dataset = PokeDataset(BUCKET_NAME, mode="val", transform=transforms.ToTensor())
+    dataloader = DataLoader(train_dataset, batch_size=1, shuffle=True, num_workers=1)
 
-    dataloader = DataLoader(train_dataset, batch_size=32, shuffle=True)
-
-    # Compute statistics
-    train_count = len(train_dataset)
-    train_shape = train_dataset[0][0].shape
-    val_count = len(val_dataset)
-    val_shape = val_dataset[0][0].shape
-    test_count = len(test_dataset)
-    test_shape = test_dataset[0][0].shape
-
-    # Print dataset info
-    print("-----Train dataset-----")
-    print(f"Number of images: {len(train_dataset)}")
-    print(f"Image shape: {train_dataset[0][0].shape}")
-    print(f"Number of classes: {len(np.unique(train_dataset.targets))}")
-    print(f"Min label: {min(train_dataset.targets)}. Max label: {max(train_dataset.targets)}")
-    print("\n")
-    print("-----Test dataset-----")
-    print(f"Number of images: {len(test_dataset)}")
-    print(f"Image shape: {test_dataset[0][0].shape}")
-    print(f"Number of classes: {len(np.unique(test_dataset.targets))}")
-    print(f"Min label: {min(test_dataset.targets)}. Max label: {max(test_dataset.targets)}")
-    print("\n")
-    print("-----Val dataset-----")
-    print(f"Number of images: {len(val_dataset)}")
-    print(f"Image shape: {val_dataset[0][0].shape}")
-    print(f"Number of classes: {len(np.unique(val_dataset.targets))}")
-    print(f"Min label: {min(val_dataset.targets)}. Max label: {max(val_dataset.targets)}")
-
-    for data, target, class_name in dataloader:
-        print(data.shape, target, class_name)
-        break
+    # Example loop
+    for batch_idx, (images, targets, class_names) in enumerate(dataloader):
+        print(targets, class_names)

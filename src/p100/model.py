@@ -4,7 +4,7 @@ from omegaconf import DictConfig
 from pytorch_lightning import LightningModule
 from torch import nn
 from torchmetrics.classification import Accuracy
-from torchvision.models import resnet50
+from torchvision.models import resnet18
 
 
 class ResNetModel(LightningModule):
@@ -14,7 +14,7 @@ class ResNetModel(LightningModule):
         super().__init__()
 
         # Load a pretrained ResNet-50 model
-        self.backbone = resnet50(weights="ResNet50_Weights.DEFAULT")
+        self.backbone = resnet18(weights="ResNet18_Weights.DEFAULT")
 
         # Get the number of features in the original fc layer
         in_features = self.backbone.fc.in_features
