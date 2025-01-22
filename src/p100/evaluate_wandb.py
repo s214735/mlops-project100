@@ -54,9 +54,11 @@ def evaluate(model_checkpoint: str, batch_size: int, device=DEVICE) -> None:
     model.eval()
 
     # Prepare the dataset and dataloader
+    print("Loading test dataset...")
     test_set = PokeDataset(bucket_name=BUCKET_NAME, mode="test", transform=transforms.ToTensor())
     test_dataloader = DataLoader(test_set, batch_size=batch_size)
 
+    print("Testing the model...")
     correct, total = 0, 0
     with torch.no_grad():
         for images, targets, _ in test_dataloader:
@@ -65,6 +67,7 @@ def evaluate(model_checkpoint: str, batch_size: int, device=DEVICE) -> None:
             predictions = outputs.argmax(dim=1)
             correct += (predictions == targets).sum().item()
             total += targets.size(0)
+            print(f"Batch accuracy: {(predictions == targets).sum().item() / targets.size(0):.2%}")
 
     accuracy = correct / total
     print(f"Test accuracy: {accuracy:.2%}")
