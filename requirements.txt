@@ -22,3 +22,6 @@ onnx
 onnxruntime
 onnxscript
 bentoml
+google-cloud
+google-cloud-storage
+google-cloud-secret-manager
