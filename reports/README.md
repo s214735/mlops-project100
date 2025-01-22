@@ -243,7 +243,7 @@ We implemented a suite of tests, organized into three main files: `test_api.py`,
 - **`test_model.py`**: Ensures our models are predicting the correct format 
 - **`test_train.py`**: Confirms that our model is training as expected.
 
-These automated tests help us catch issues early, keeping our application reliable as we continuously update it. Originally we also had a `test_data.py`, which checked the data loads and processes. However, trouble with google authentication for the bucket made us remove this.
+These automated tests help us catch issues early, keeping our application reliable as we continuously update it.
 ### Question 8
 
 > **What is the total code coverage (in percentage) of your code? If your code had a code coverage of 100% (or close**
