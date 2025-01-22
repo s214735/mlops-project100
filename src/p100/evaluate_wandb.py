@@ -46,7 +46,7 @@ def evaluate(model_checkpoint: str, batch_size: int, device=DEVICE) -> None:
     print("Starting evaluation...")
 
     # Initialize the model
-    model = ResNetModel(num_classes=1000, lr=1).to(device)
+    model = ResNetModel(num_classes=18, lr=1).to(device)
 
     # Load the model weights
     model = load_model(model, model_checkpoint)
