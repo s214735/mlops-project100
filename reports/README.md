@@ -453,6 +453,8 @@ Generally we have tried to use all of the GCP services provided to us in the cou
 >
 > Answer:
 
+We primarily used the Compute engine from GCP, using VM’s to train our model, since we had some trouble fitting our model on our own computers, we wanted to use the GCP to do so as fast as possible. This resulted in us “git cloning” our github repository to the VM, after which training can be done. 
+We use N1-standard-8 instances paired with a 1x NVIDIA T4 GPU for machine learning and AI workloads. This configuration provides 8 vCPUs, 30 GB of memory, and the T4 GPU, which is optimized for deep learning, inference, and high-performance computing tasks. The setup ensures efficient processing for computationally intensive workloads like training models while balancing cost and performance.
 
 
 ### Question 19
