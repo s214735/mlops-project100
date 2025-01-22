@@ -26,3 +26,4 @@ google-cloud
 google-cloud-run
 google-cloud-storage
 google-cloud-secret-manager
+transformers
