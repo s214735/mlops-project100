@@ -10,7 +10,7 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 
 import wandb
-from p100.data4 import PokeDataset
+from p100.data import PokeDataset
 from p100.model import ResNetModel
 from p100.utils import get_wandb_api_key
 
