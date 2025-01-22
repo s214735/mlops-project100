@@ -10,6 +10,8 @@ train:
   epochs: 10
   devices: 1  # Set to -1 for all available GPUs, or a specific number of GPUs
   log_every_n_steps: 10
+  gamma: 0.1
+  step_size: 5
 
 env:
   WANDB_API_KEY: ${ secrets.WANDB_API_KEY }
@@ -18,5 +20,3 @@ evaluate:
   batch_size: 64
   model_checkpoint: "models/testmodel.pth"
 
-model:
-  num_classes: 18

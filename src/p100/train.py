@@ -18,7 +18,6 @@ warnings.filterwarnings("ignore")
 
 BUCKET_NAME = "mlops_bucket100"
 
-
 @hydra.main(config_path="../../configs", config_name="config.yaml", version_base=None)
 def train(cfg: DictConfig):
     """
@@ -34,13 +33,26 @@ def train(cfg: DictConfig):
     wandb_logger = WandbLogger(
         project="pokemon_classifier",
     )
-    wandb_logger.experiment.config.update(
+    
+    params = {
+        "lr": cfg.train.lr,
+        "batch_size": cfg.train.batch_size,
+        "epochs": cfg.train.epochs,
+        "model": "ResNet18",
+        "color_jitter":
         {
-            "lr": cfg.train.lr,
-            "batch_size": cfg.train.batch_size,
-            "epochs": cfg.train.epochs,
-            "model": "ResNet50",
-        }
+            "brightness": 0.1,
+            "contrast": 0.2,
+            "saturation": 0.2,
+            "hue": 0.1
+        },
+        "dropout": cfg.train.dropout,
+        "gamma": cfg.train.gamma,
+        "step_size": cfg.train.step_size,
+    }
+
+    wandb_logger.experiment.config.update(
+        params
     )
 
     # Initialize dataset and dataloaders
@@ -49,7 +61,10 @@ def train(cfg: DictConfig):
             transforms.Resize((128, 128)),
             transforms.RandomHorizontalFlip(),
             transforms.RandomRotation(20),
-            transforms.ColorJitter(brightness=0.1, contrast=0.2, saturation=0.2, hue=0.1),
+            transforms.ColorJitter(params["color_jitter"]["brightness"],
+                                    params["color_jitter"]["contrast"],
+                                    params["color_jitter"]["saturation"],
+                                    params["color_jitter"]["hue"]),
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ]
@@ -66,7 +81,7 @@ def train(cfg: DictConfig):
     train_dataset = PokeDataset(BUCKET_NAME, mode="test", transform=transform_train)
     train_loader = DataLoader(
         train_dataset,
-        batch_size=cfg.train.batch_size,
+        batch_size=params["batch_size"],
         shuffle=True,
         num_workers=cfg.train.num_workers,
         persistent_workers=True,
@@ -75,14 +90,17 @@ def train(cfg: DictConfig):
     val_dataset = PokeDataset(BUCKET_NAME, mode="val", transform=transforms_test)
     val_loader = DataLoader(
         val_dataset,
-        batch_size=cfg.train.batch_size,
+        batch_size=params["batch_size"],
         shuffle=False,
         num_workers=cfg.train.num_workers,
         persistent_workers=True,
     )
 
     # Initialize model
-    model = ResNetModel(num_classes=cfg.model.num_classes, lr=cfg.train.lr, dropout_rate=cfg.train.dropout)
+    model = ResNetModel(lr=params["lr"], dropout=params["dropout"],
+                        gamma=params["gamma"], 
+                        step_size=params["step_size"]
+                        )
 
     checkpoint_callback = ModelCheckpoint(
         dirpath="./models", monitor="val_loss", mode="min", filename="m{val_loss:.2f}"
@@ -92,7 +110,7 @@ def train(cfg: DictConfig):
 
     # Initialize PyTorch Lightning Trainer
     trainer = pl.Trainer(
-        max_epochs=cfg.train.epochs,
+        max_epochs=params["train_epochs"],
         accelerator="gpu" if torch.cuda.is_available() else "cpu",
         devices=cfg.train.devices,
         log_every_n_steps=cfg.train.log_every_n_steps,

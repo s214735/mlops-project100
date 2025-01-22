@@ -10,7 +10,12 @@ from torchvision.models import resnet18
 class ResNetModel(LightningModule):
     """A Lightning Module using ResNet-50 as the backbone."""
 
-    def __init__(self, num_classes: int = 18, lr: float = 0.001, dropout_rate: float = 0.5) -> None:
+    def __init__(self, 
+                 num_classes: int = 18, 
+                 lr: float = 0.001, 
+                 dropout_rate: float = 0.5,
+                 gamma: float = 0.1, 
+                 step_size: float = 5) -> None:
         super().__init__()
 
         # Load a pretrained ResNet-18 model
@@ -30,8 +35,11 @@ class ResNetModel(LightningModule):
         self.criterion = nn.CrossEntropyLoss()
 
         # Hyperparameters
-        self.save_hyperparameters({"num_classes": num_classes, "lr": lr, "dropout_rate": dropout_rate})
         self.lr = lr
+
+        # Learning rate scheduler
+        self.gamma = gamma
+        self.step_size = step_size
 
         # Metrics
         self.train_accuracy = Accuracy(task="multiclass", num_classes=num_classes)
@@ -69,7 +77,7 @@ class ResNetModel(LightningModule):
 
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
-        lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
+        lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=self.step_size, gamma=self.gamma)
         return [optimizer], [lr_scheduler]
 
 
