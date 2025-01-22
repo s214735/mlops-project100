@@ -3,7 +3,7 @@ data:
   processed_path: "data/processed"
 
 train:
-  batch_size: 64
+  batch_size: 32
   num_workers: 8
   lr: 0.0001
   epochs: 10
