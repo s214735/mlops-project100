@@ -82,7 +82,7 @@ def train(cfg: DictConfig):
     )
 
     # Initialize model
-    model = ResNetModel(num_classes=cfg.model.num_classes, lr=cfg.train.lr)
+    model = ResNetModel(num_classes=cfg.model.num_classes, lr=cfg.train.lr, dropout_rate=cfg.train.dropout)
 
     checkpoint_callback = ModelCheckpoint(
         dirpath="./models", monitor="val_loss", mode="min", filename="m{val_loss:.2f}"

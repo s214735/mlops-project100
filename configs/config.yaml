@@ -6,6 +6,7 @@ train:
   batch_size: 16
   num_workers: 8
   lr: 0.0001
+  dropout: 0.5
   epochs: 10
   devices: 1  # Set to -1 for all available GPUs, or a specific number of GPUs
   log_every_n_steps: 10
