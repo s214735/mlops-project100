@@ -562,7 +562,9 @@ We implemented both unit testing and load testing to check the API's functionali
 >
 > Answer:
 
---- question 26 fill here ---
+We didn’t manage to implement monitoring for our deployed model, but adding it would definitely improve our application in the long run. Monitoring, especially using telemetry, would help us keep track of important metrics like how many requests the app gets, how long each request takes, and how often errors occur.
+For example, knowing the number of requests can help us understand how much it costs to run the app. Tracking latency (how long it takes to handle a request) would show us if users are experiencing delays. If we notice any weird patterns—like slower response times or sudden spikes in errors—we could fix them before they become big problems.
+If we had implemented monitoring, we could’ve used Prometheus to expose metrics via a /metrics endpoint. It’s great for tracking things like the number of API calls or how long each call takes. Long-term, setting up alerts (like an email notification when something goes wrong) would help us stay on top of issues automatically.
 
 ## Overall discussion of project
 
