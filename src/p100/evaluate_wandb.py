@@ -16,6 +16,7 @@ warnings.filterwarnings("ignore")
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
 PROJECT_PATH = "p100-org/wandb-registry-Pokemon"  # Specify your W&B project path
 MODEL_ALIAS = "Model:latest"  # Use the alias for the latest model version
+BUCKET_NAME = "mlops_bucket100"
 
 def get_latest_model_path(project_path: str, alias: str) -> str:
     """Retrieve the path to the latest model from W&B."""
@@ -53,7 +54,7 @@ def evaluate(model_checkpoint: str, batch_size: int, device=DEVICE) -> None:
     model.eval()
 
     # Prepare the dataset and dataloader
-    test_set = PokeDataset(mode="test", transform=transforms.ToTensor())
+    test_set = PokeDataset(bucket_name=BUCKET_NAME, mode="test", transform=transforms.ToTensor())
     test_dataloader = DataLoader(test_set, batch_size=batch_size)
 
     correct, total = 0, 0
