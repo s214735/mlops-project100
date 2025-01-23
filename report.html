@@ -1,0 +1,527 @@
+<p>Operations</p>
+<p>This is the report template for the exam. Please only remove the text formatted as with three dashes in front and behind
+like:</p>
+<p><code>--- question 1 fill here ---</code></p>
+<p>Where you instead should add your answers. Any other changes may have unwanted consequences when your report is
+auto-generated at the end of the course. For questions where you are asked to include images, start by adding the image
+to the <code>figures</code> subfolder (please only use <code>.png</code>, <code>.jpg</code> or <code>.jpeg</code>) and then add the following code in your answer:</p>
+<p><code>markdown
+![my_image](figures/&lt;image&gt;.&lt;extension&gt;)</code></p>
+<p>In addition to this markdown file, we also provide the <code>report.py</code> script that provides two utility functions:</p>
+<p>Running:</p>
+<p><code>bash
+python report.py html</code></p>
+<p>Will generate a <code>.html</code> page of your report. After the deadline for answering this template, we will auto-scrape
+everything in this <code>reports</code> folder and then use this utility to generate a <code>.html</code> page that will be your serve
+as your final hand-in.</p>
+<p>Running</p>
+<p><code>bash
+python report.py check</code></p>
+<p>Will check your answers in this template against the constraints listed for each question e.g. is your answer too
+short, too long, or have you included an image when asked. For both functions to work you mustn't rename anything.
+The script has two dependencies that can be installed with</p>
+<p><code>bash
+pip install typer markdown</code></p>
+<h2>Overall project checklist</h2>
+<p>The checklist is <em>exhaustive</em> which means that it includes everything that you could do on the project included in the
+curriculum in this course. Therefore, we do not expect at all that you have checked all boxes at the end of the project.
+The parenthesis at the end indicates what module the bullet point is related to. Please be honest in your answers, we
+will check the repositories and the code to verify your answers.</p>
+<h3>Week 1</h3>
+<ul>
+<li>[x] Create a git repository (M5)</li>
+<li>[x] Make sure that all team members have write access to the GitHub repository (M5)</li>
+<li>[x] Create a dedicated environment for you project to keep track of your packages (M2)</li>
+<li>[x] Create the initial file structure using cookiecutter with an appropriate template (M6)</li>
+<li>[x] Fill out the <code>data.py</code> file such that it downloads whatever data you need and preprocesses it (if necessary) (M6)</li>
+<li>[x] Add a model to <code>model.py</code> and a training procedure to <code>train.py</code> and get that running (M6)</li>
+<li>[x] Remember to fill out the <code>requirements.txt</code> and <code>requirements_dev.txt</code> file with whatever dependencies that you
+    are using (M2+M6)</li>
+<li>[x] Remember to comply with good coding practices (<code>pep8</code>) while doing the project (M7)</li>
+<li>[(x)] Do a bit of code typing and remember to document essential parts of your code (M7)</li>
+<li>[x] Setup version control for your data or part of your data (M8)</li>
+<li>[x] Add command line interfaces and project commands to your code where it makes sense (M9)</li>
+<li>[x] Construct one or multiple docker files for your code (M10)</li>
+<li>[x] Build the docker files locally and make sure they work as intended (M10)</li>
+<li>[x] Write one or multiple configurations files for your experiments (M11)</li>
+<li>[x] Used Hydra to load the configurations and manage your hyperparameters (M11)</li>
+<li>[x] Use profiling to optimize your code (M12)</li>
+<li>[x] Use logging to log important events in your code (M14)</li>
+<li>[x] Use Weights &amp; Biases to log training progress and other important metrics/artifacts in your code (M14)</li>
+<li>[x] Consider running a hyperparameter optimization sweep (M14)</li>
+<li>[(x)] Use PyTorch-lightning (if applicable) to reduce the amount of boilerplate in your code (M15)</li>
+</ul>
+<h3>Week 2</h3>
+<ul>
+<li>[x] Write unit tests related to the data part of your code (M16)</li>
+<li>[x] Write unit tests related to model construction and or model training (M16)</li>
+<li>[ ] Calculate the code coverage (M16)</li>
+<li>[x] Get some continuous integration running on the GitHub repository (M17)</li>
+<li>[x] Add caching and multi-os/python/pytorch testing to your continuous integration (M17)</li>
+<li>[x] Add a linting step to your continuous integration (M17)</li>
+<li>[x] Add pre-commit hooks to your version control setup (M18)</li>
+<li>[ ] Add a continues workflow that triggers when data changes (M19)</li>
+<li>[x] Add a continues workflow that triggers when changes to the model registry is made (M19)</li>
+<li>[x] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21)</li>
+<li>[ ] Create a trigger workflow for automatically building your docker images (M21)</li>
+<li>[x] Get your model training in GCP using either the Engine or Vertex AI (M21)</li>
+<li>[x] Create a FastAPI application that can do inference using your model (M22)</li>
+<li>[x] Deploy your model in GCP using either Functions or Run as the backend (M23)</li>
+<li>[x] Write API tests for your application and setup continues integration for these (M24)</li>
+<li>[x] Load test your application (M24)</li>
+<li>[x] Create a more specialized ML-deployment API using either ONNX or BentoML, or both (M25)</li>
+<li>[x] Create a frontend for your API (M26)</li>
+</ul>
+<h3>Week 3</h3>
+<ul>
+<li>[ ] Check how robust your model is towards data drifting (M27)</li>
+<li>[ ] Deploy to the cloud a drift detection API (M27)</li>
+<li>[ ] Instrument your API with a couple of system metrics (M28)</li>
+<li>[ ] Setup cloud monitoring of your instrumented application (M28)</li>
+<li>[ ] Create one or more alert systems in GCP to alert you if your app is not behaving correctly (M28)</li>
+<li>[x] If applicable, optimize the performance of your data loading using distributed data loading (M29)</li>
+<li>[x] If applicable, optimize the performance of your training pipeline by using distributed training (M30)</li>
+<li>[x] Play around with quantization, compilation and pruning for you trained models to increase inference speed (M31)</li>
+</ul>
+<h3>Extra</h3>
+<ul>
+<li>[ ] Write some documentation for your application (M32)</li>
+<li>[ ] Publish the documentation to GitHub Pages (M32)</li>
+<li>[ ] Revisit your initial project description. Did the project turn out as you wanted?</li>
+<li>[ ] Create an architectural diagram over your MLOps pipeline</li>
+<li>[ ] Make sure all group members have an understanding about all parts of the project</li>
+<li>[ ] Uploaded all your code to GitHub</li>
+</ul>
+<h2>Group information</h2>
+<h3>Question 1</h3>
+<blockquote>
+<p><strong>Enter the group number you signed up on <learn.inside.dtu.dk></strong></p>
+<p>Answer:</p>
+</blockquote>
+<p>100</p>
+<h3>Question 2</h3>
+<blockquote>
+<p><strong>Enter the study number for each member in the group</strong></p>
+<p>Example:</p>
+<p><em>sXXXXXX, sXXXXXX, sXXXXXX</em></p>
+<p>Answer:</p>
+</blockquote>
+<p>s214735, s214742, s214739, s214733, s214731</p>
+<h3>Question 3</h3>
+<blockquote>
+<p><strong>A requirement to the project is that you include a third-party package not covered in the course. What framework</strong>
+<strong>did you choose to work with and did it help you complete the project?</strong></p>
+<p>Recommended answer length: 100-200 words.</p>
+<p>Example:
+<em>We used the third-party framework ... in our project. We used functionality ... and functionality ... from the</em>
+<em>package to do ... and ... in our project</em>.</p>
+<p>Answer:</p>
+</blockquote>
+<p>In our project, we used two third-party frameworks, Pandas and UMAP, which were essential for our tasks. We employed pandas to load and manage Pokémon metadata from a Kaggle dataset. This framework provided data operations like sorting and filtering, which were necessary for preparing our data.</p>
+<p>Additionally, we integrated umap for visualizing the vector space of our model. Umap helped in reducing the dimensionality of our data, allowing us to visually inspect how different Pokémon characteristics clustered together. This visualization aided in assessing the effectiveness of our data modeling approach.</p>
+<p>Using Pandas and UMAP allowed us to efficiently process and analyze our data, providing clear insights into the model.</p>
+<h2>Coding environment</h2>
+<blockquote>
+<p>In the following section we are interested in learning more about you local development environment. This includes
+how you managed dependencies, the structure of your code and how you managed code quality.</p>
+</blockquote>
+<h3>Question 4</h3>
+<blockquote>
+<p><strong>Explain how you managed dependencies in your project? Explain the process a new team member would have to go</strong>
+<strong>through to get an exact copy of your environment.</strong></p>
+<p>Recommended answer length: 100-200 words</p>
+<p>Example:
+<em>We used ... for managing our dependencies. The list of dependencies was auto-generated using ... . To get a</em>
+<em>complete copy of our development environment, one would have to run the following commands</em></p>
+<p>Answer:</p>
+</blockquote>
+<p>We managed our dependencies using two key files: requirements.txt and requirements_dev.txt. The requirements.txt file contains all the essential libraries needed to run the project, ensuring that any core functionality works seamlessly across different setups. requirements_dev.txt includes additional packages that are necessary for development purposes, such as testing and debugging tools.
+In order to create an exact copy of our environment, these steps must be followed:
+    1. Clone the project repository from our version control system to their local machine.
+    2. Ensure that Python is installed on their system.
+    3. Create a virtual environment (venv) to isolate and manage project-specific dependencies. This can be done by running python -m venv env in the project's root directory.
+    4. Activate the virtual environment using source env/bin/activate on Unix or macOS, or env\Scripts\activate on Windows.
+    5. Run pip install -r requirements.txt to install all the required libraries listed in the requirements.txt file.
+    6. Optionally, if they are involved in development, they should also run pip install -r requirements_dev.txt to install the additional development dependencies.
+By following these steps, a new team member can quickly set up the project environment, ensuring they have all the necessary dependencies to start working on the project.</p>
+<h3>Question 5</h3>
+<blockquote>
+<p><strong>We expect that you initialized your project using the cookiecutter template. Explain the overall structure of your</strong>
+<strong>code. What did you fill out? Did you deviate from the template in some way?</strong></p>
+<p>Recommended answer length: 100-200 words</p>
+<p>Example:
+<em>From the cookiecutter template we have filled out the ... , ... and ... folder. We have removed the ... folder</em>
+<em>because we did not use any ... in our project. We have added an ... folder that contains ... for running our</em>
+<em>experiments.</em></p>
+<p>Answer:</p>
+</blockquote>
+<p>We initialized our project using the cookiecutter template. The primary directories we utilized are:
+- <strong><code>config</code> folder</strong>: This directory holds configuration files that manage settings and parameters used across different parts of our project, ensuring consistency and ease of adjustments.
+- <strong><code>data</code> folder</strong>: Used for storing raw and processed data sets. This organization helps in managing the data lifecycle within our project.
+- <strong><code>src</code> folder</strong>: The source code for our application is kept here, including all the primary Python scripts and modules.
+- <strong><code>tests</code> folder</strong>: Dedicated to housing test cases and scripts, which are vital for ensuring the robustness and reliability of our code through continuous integration practices.
+Additionally, we maintained a structured approach to version control using Git, which included setting up <code>.gitignore</code> files to exclude unnecessary files from being tracked and <code>workflows</code> for automating tasks such as testing, building, and deploying using GitHub Actions.
+By carefully organizing these folders and incorporating essential development practices, we created a project structure that is both scalable and easy to navigate for any new team members or stakeholders.</p>
+<h3>Question 6</h3>
+<blockquote>
+<p><strong>Did you implement any rules for code quality and format? What about typing and documentation? Additionally,</strong>
+<strong>explain with your own words why these concepts matters in larger projects.</strong></p>
+<p>Recommended answer length: 100-200 words.</p>
+<p>Example:
+<em>We used ... for linting and ... for formatting. We also used ... for typing and ... for documentation. These</em>
+<em>concepts are important in larger projects because ... . For example, typing ...</em></p>
+<p>Answer:</p>
+</blockquote>
+<p>In our project, we used <code>ruff</code> to lint our code before commits, ensuring it was error-free and maintained a consistent style. We documented each function with docstrings that explained its purpose, inputs, and outputs, and we included comments to clarify complex code sections.</p>
+<p>We also employed type annotations throughout our code to specify expected input and output types, helping to prevent type-related errors and making the code clearer for other developers.</p>
+<p>These practices are crucial in larger projects as they improve code quality, enhance readability, and simplify maintenance. They also facilitate collaboration among developers by making the codebase easier to understand and navigate, which is vital as projects grow and evolve.</p>
+<h2>Version control</h2>
+<blockquote>
+<p>In the following section we are interested in how version control was used in your project during development to
+corporate and increase the quality of your code.</p>
+</blockquote>
+<h3>Question 7</h3>
+<blockquote>
+<p><strong>How many tests did you implement and what are they testing in your code?</strong></p>
+<p>Recommended answer length: 50-100 words.</p>
+<p>Example:
+<em>In total we have implemented X tests. Primarily we are testing ... and ... as these the most critical parts of our</em>
+<em>application but also ... .</em></p>
+<p>Answer:</p>
+</blockquote>
+<p>We implemented three tests: <code>test_api.py</code>, <code>test_model.py</code>, and <code>test_train.py</code>. These tests are automated through GitHub workflows and executed within GitHub Actions to ensure continuous integration and consistent code quality. We also had a <code>test_data.py</code>, which we sadly ran into some issues with regarding the gcloud bucket authentication.</p>
+<ul>
+<li><strong><code>test_api.py</code></strong>: Tests the API to make sure all endpoints respond correctly.</li>
+<li><strong><code>test_model.py</code></strong>: Ensures our models are predicting the correct format</li>
+<li><strong><code>test_train.py</code></strong>: Confirms that our model is training as expected.</li>
+</ul>
+<p>These automated tests help us catch issues early, keeping our application reliable as we continuously update it.</p>
+<h3>Question 8</h3>
+<blockquote>
+<p><strong>What is the total code coverage (in percentage) of your code? If your code had a code coverage of 100% (or close</strong>
+<strong>to), would you still trust it to be error free? Explain you reasoning.</strong></p>
+<p>Recommended answer length: 100-200 words.</p>
+<p>Example:
+<em>The total code coverage of code is X%, which includes all our source code. We are far from 100% coverage of our **
+</em>code and even if we were then...*</p>
+<p>Answer:</p>
+</blockquote>
+<p>In our project, we currently have a code coverage of approximately 60-70%. Achieving 100% code coverage is often viewed as ideal, but it's important to recognize that even this level does not guarantee an error-free application. Code coverage only measures the extent of code executed during tests, not the effectiveness or comprehensiveness of the testing itself. While a high code coverage can give a false sense of security, especially if not all use cases and edge cases are tested, we did not think achieving 100% coverage was worth the time. Instead, we focused on covering 60-70% of the code, prioritizing the most crucial aspects to detect bugs and errors early when making changes to the code and model. This approach allowed us to efficiently balance resource allocation with the need for effective error detection in key areas of our application.</p>
+<h3>Question 9</h3>
+<blockquote>
+<p><strong>Did you workflow include using branches and pull requests? If yes, explain how. If not, explain how branches and</strong>
+<strong>pull request can help improve version control.</strong></p>
+<p>Recommended answer length: 100-200 words.</p>
+<p>Example:
+<em>We made use of both branches and PRs in our project. In our group, each member had an branch that they worked on in</em>
+<em>addition to the main branch. To merge code we ...</em></p>
+<p>Answer:</p>
+</blockquote>
+<p>In our project, we used Git for version control, which was a new experience for many of us. We organized our work by creating specific branches for different features, allowing team members to work independently or in small groups on separate parts of the project. This approach helped keep the main code stable as we developed new features.</p>
+<p>For merging these features into the main code, we used pull requests. This process allowed everyone on the team to review and discuss the changes before they were added to the main branch, ensuring the code was both high-quality and compatible with existing features.</p>
+<p>Sometimes, we made urgent fixes directly on the main branch when immediate changes were needed that affected the whole project. Overall, using branches and pull requests made it easier to manage our project and keep our code reliable.</p>
+<h3>Question 10</h3>
+<blockquote>
+<p><strong>Did you use DVC for managing data in your project? If yes, then how did it improve your project to have version</strong>
+<strong>control of your data. If no, explain a case where it would be beneficial to have version control of your data.</strong></p>
+<p>Recommended answer length: 100-200 words.</p>
+<p>Example:
+<em>We did make use of DVC in the following way: ... . In the end it helped us in ... for controlling ... part of our</em>
+<em>pipeline</em></p>
+<p>Answer:</p>
+</blockquote>
+<p>In our project, we didn’t use DVC for data management due to issues with Google’s policies for integrating it with Google Drive. Instead, we used Google Cloud for storing our data and accessing their GPUs for training. For version control, we relied on Git, but only for managing our code, not our data.</p>
+<p>Version control for data would have been beneficial in cases where datasets are updated or modified frequently. For example, if new data is added or existing data is cleaned, a version control system would allow us to track changes, revert to previous versions, and ensure reproducibility. While Git helped us manage our code effectively, having a similar system for data would have made managing updates and collaborations more efficient and organized.</p>
+<h3>Question 11</h3>
+<blockquote>
+<p><strong>Discuss you continuous integration setup. What kind of continuous integration are you running (unittesting,</strong>
+<strong>linting, etc.)? Do you test multiple operating systems, Python  version etc. Do you make use of caching? Feel free</strong>
+<strong>to insert a link to one of your GitHub actions workflow.</strong></p>
+<p>Recommended answer length: 200-300 words.</p>
+<p>Example:
+<em>We have organized our continuous integration into 3 separate files: one for doing ..., one for running ... testing</em>
+<em>and one for running ... . In particular for our ..., we used ... .An example of a triggered workflow can be seen</em>
+<em>here: <weblink></em></p>
+<p>Answer:</p>
+</blockquote>
+<p>In our project, we set up workflows to ensure our code and models worked correctly. These workflows checked that our data was in the correct format, verified that our model could initialize properly, and ensured that prediction speeds did not slow down over time.</p>
+<p>We also created a testing matrix in our workflows to test across multiple operating systems and a single Python version. Specifically, we tested on the following:</p>
+<ul>
+<li>Operating systems: <code>ubuntu-latest</code>, <code>windows-latest</code>, <code>macos-latest</code></li>
+<li>Python version: <code>3.11</code>, (<code>3.12</code> removed later)</li>
+</ul>
+<p>To optimize workflow runtimes, we implemented caching for dependencies. This allowed GitHub to reuse previously installed requirements and only install new ones when necessary, significantly speeding up our runs and avoid installing the same dependencies multiple times.</p>
+<p>Additionally, we tried to create a model testing stage that would be triggered by Weights &amp; Biases (wandb) when adding a model to the registry. This stage was meant to validate new models before integrating them. However, we encountered many issues with this setup and spent a lot of time trying to fix it. In the end, we decided to remove it because we couldn’t get it to work as intended.</p>
+<p>Overall, these workflows helped us identify issues early, maintain stable performance across platforms, and improve efficiency with caching, ensuring our project development was smooth and reliable.</p>
+<h2>Running code and tracking experiments</h2>
+<blockquote>
+<p>In the following section we are interested in learning more about the experimental setup for running your code and
+especially the reproducibility of your experiments.</p>
+</blockquote>
+<h3>Question 12</h3>
+<blockquote>
+<p><strong>How did you configure experiments? Did you make use of config files? Explain with coding examples of how you would</strong>
+<strong>run a experiment.</strong></p>
+<p>Recommended answer length: 50-100 words.</p>
+<p>Example:
+<em>We used a simple argparser, that worked in the following way: Python  my_script.py --lr 1e-3 --batch_size 25</em></p>
+<p>Answer:</p>
+</blockquote>
+<p>We used config files and Hydra to manage and run our experiments. Hydra made it simple to change settings without altering the main code. For example, to run an experiment with a specific batch size, we used the following command:</p>
+<p><code>python src/p100/train.py train.batch_size=64</code></p>
+<p>This allowed us to quickly test different configurations by changing parameters directly in the command line, making our experiments more flexible and organized.</p>
+<h3>Question 13</h3>
+<blockquote>
+<p><strong>Reproducibility of experiments are important. Related to the last question, how did you secure that no information</strong>
+<strong>is lost when running experiments and that your experiments are reproducible?</strong></p>
+<p>Recommended answer length: 100-200 words.</p>
+<p>Example:
+<em>We made use of config files. Whenever an experiment is run the following happens: ... . To reproduce an experiment</em>
+<em>one would have to do ...</em></p>
+<p>Answer:</p>
+</blockquote>
+<p>We ensured the reproducibility of our experiments by using Weights &amp; Biases to log as many training parameters as possible. This included hyperparameters, model architecture details, training progress, and results. By logging these parameters, we could easily review the settings and outcomes of any experiment, making it straightforward to reproduce the training process when needed.</p>
+<p>In addition to wandb, we used configuration files to define default settings for our experiments. These config files contained all the key parameters, such as learning rates, batch sizes, and data paths, ensuring that experiments could be run with consistent baseline settings. Any modifications to these defaults were logged in wandb, so changes were fully traceable.</p>
+<p>To reproduce an experiment, we simply looked up the parameters in Weights &amp; Biases and used the same parameters to run the experiment again. By logging the perfomance we could also compare the results of the new experiment with the original one, ensuring that the results were consistent.</p>
+<h3>Question 14</h3>
+<blockquote>
+<p><strong>Upload 1 to 3 screenshots that show the experiments that you have done in W&amp;B (or another experiment tracking</strong>
+<strong>service of your choice). This may include loss graphs, logged images, hyperparameter sweeps etc. You can take</strong>
+<strong>inspiration from <a href="figures/wandb.png">this figure</a>. Explain what metrics you are tracking and why they are</strong>
+<strong>important.</strong></p>
+<p>Recommended answer length: 200-300 words + 1 to 3 screenshots.</p>
+<p>Example:
+<em>As seen in the first image when have tracked ... and ... which both inform us about ... in our experiments.</em>
+<em>As seen in the second image we are also tracking ... and ...</em></p>
+<p>Answer:</p>
+</blockquote>
+<p>We tracked as many metrics as we could think of (excluding augmentations), since they give insight to why different versions of models differ from eachother. We logged batch size, color jitter parameters (brightness, contrast, hue and saturation), dropout (before fully connected layer), epochs, gamma (learning rate scheduler), step size (learning rate scheduler), learning rate and model architecture (our model was based on resnet18, so this parameter would be informative if we had tried other base architectures). When we have these parameters, we can see when a good model performs well, and try to tweak the parameters that we think could enhance the perfomance of that model. This also allowed us to make a "parallel coordinates" plot, that would provide insight to parameters with respect to other parameters. This is the last plot in our workspace dashboard.</p>
+<p>In our image, you can see our workspace along with 7 runs (one ongoing). Each run would log artifacts to the wandb registry, which allowed us to reuse old trained models. Then we had a train and validation line plot, that would show train- and validation accuracy through epochs. This could provide insight into model overfitting. Additionally we had two line plots of train- and validation loss, that could show when the loss reached a plateau.
+<img alt="wandb" src="figures/wandb.jpg" /></p>
+<h3>Question 15</h3>
+<blockquote>
+<p><strong>Docker is an important tool for creating containerized applications. Explain how you used docker in your</strong>
+<strong>experiments/project? Include how you would run your docker images and include a link to one of your docker files.</strong></p>
+<p>Recommended answer length: 100-200 words.</p>
+<p>Example:
+<em>For our project we developed several images: one for training, inference and deployment. For example to run the</em>
+<em>training docker image: <code>docker run trainer:latest lr=1e-3 batch_size=64</code>. Link to docker file: <weblink></em></p>
+<p>Answer:</p>
+</blockquote>
+<p>Docker was used to containerize different applications in the project, as we created separate Docker images for key stages e.g. data preprocessing, training, and testing. Furthermore, we also created a Dockerfile for containerizing the script for running our API. Generally, that allowed us to capture all dependencies, libraries and configurations required in each stage, and put it into different self-contained environments that can be run anywhere.
+For example, to run the training Docker image, we used the following command:<code>docker run --name experiment train:latest</code></p>
+<p>Using Docker significantly reduced the setup time and made the project reproducible for foreign users as well.</p>
+<h3>Question 16</h3>
+<blockquote>
+<p><strong>When running into bugs while trying to run your experiments, how did you perform debugging? Additionally, did you</strong>
+<strong>try to profile your code or do you think it is already perfect?</strong></p>
+<p>Recommended answer length: 100-200 words.</p>
+<p>Example:
+<em>Debugging method was dependent on group member. Some just used ... and others used ... . We did a single profiling</em>
+<em>run of our main code at some point that showed ...</em></p>
+<p>Answer:</p>
+</blockquote>
+<p>We primarily used the Visual Studio Code (VSC) debugger to troubleshoot issues in our code. While the debugger was useful for identifying errors in the local codebase, we often found it less helpful when dealing with bugs related to server connections. Many of the challenges we faced involved integrating different services and ensuring communication between servers, which required a different approach to debugging.</p>
+<p>For server-related issues, we relied heavily on logging and inspecting error messages to understand what was going wrong. This approach helped us identify the root cause of many problems and find solutions more effectively.</p>
+<p>We did not perform extensive profiling of our code, as our focus was on functionality rather than optimization at this stage. However, we acknowledge that profiling could help us improve the performance of our code in future iterations.</p>
+<h2>Working in the cloud</h2>
+<blockquote>
+<p>In the following section we would like to know more about your experience when developing in the cloud.</p>
+</blockquote>
+<h3>Question 17</h3>
+<blockquote>
+<p><strong>List all the GCP services that you made use of in your project and shortly explain what each service does?</strong></p>
+<p>Recommended answer length: 50-200 words.</p>
+<p>Example:
+<em>We used the following two services: Engine and Bucket. Engine is used for... and Bucket is used for...</em></p>
+<p>Answer:</p>
+</blockquote>
+<p>Generally we have tried to use all of the GCP services provided to us in the course material. In the end we used the virtual machines, which allows us the create instances that would induce the ability to train on remote GPUs. We also used the cloud build services, particularly setting a trigger so that it runs a cloudbuild workflow each time code is pushed to main. Another great service we used was the cloud storage, specifically the buckets which allows us to store data remotely.</p>
+<h3>Question 18</h3>
+<blockquote>
+<p><strong>The backbone of GCP is the Compute engine. Explained how you made use of this service and what type of VMs</strong>
+<strong>you used?</strong></p>
+<p>Recommended answer length: 100-200 words.</p>
+<p>Example:
+<em>We used the compute engine to run our ... . We used instances with the following hardware: ... and we started the</em>
+<em>using a custom container: ...</em></p>
+<p>Answer:</p>
+</blockquote>
+<p>We primarily used the Compute engine from GCP, using VM’s to train our model, since we had some trouble fitting our model on our own computers, we wanted to use the GCP to do so as fast as possible. This resulted in us "git cloning" our github repository to the VM, after which training can be done.
+We use N1-standard-8 instances paired with a 1x NVIDIA T4 GPU for machine learning and AI workloads. This configuration provides 8 vCPUs, 30 GB of memory, and the T4 GPU, which is optimized for deep learning, inference, and high-performance computing tasks. The setup ensures efficient processing for computationally intensive workloads like training models while balancing cost and performance.</p>
+<h3>Question 19</h3>
+<blockquote>
+<p><strong>Insert 1-2 images of your GCP bucket, such that we can see what data you have stored in it.</strong>
+<strong>You can take inspiration from <a href="figures/bucket.png">this figure</a>.</strong></p>
+<p>Answer:</p>
+</blockquote>
+<p><img alt="my_image" src="figures/bucket.png" /></p>
+<p><img alt="bucket2" src="figures/bucket2.png" /></p>
+<h3>Question 20</h3>
+<blockquote>
+<p><strong>Upload 1-2 images of your GCP artifact registry, such that we can see the different docker images that you have</strong>
+<strong>stored. You can take inspiration from <a href="figures/registry.png">this figure</a>.</strong></p>
+<p>Answer:</p>
+</blockquote>
+<p><img alt="artefact" src="figures/artefact.png" /></p>
+<h3>Question 21</h3>
+<blockquote>
+<p><strong>Upload 1-2 images of your GCP cloud build history, so we can see the history of the images that have been build in</strong>
+<strong>your project. You can take inspiration from <a href="figures/build.png">this figure</a>.</strong></p>
+<p>Answer:</p>
+</blockquote>
+<p><img alt="artefact" src="figures/cloud_build.png" /></p>
+<h3>Question 22</h3>
+<blockquote>
+<p><strong>Did you manage to train your model in the cloud using either the Engine or Vertex AI? If yes, explain how you did</strong>
+<strong>it. If not, describe why.</strong></p>
+<p>Recommended answer length: 100-200 words.</p>
+<p>Example:
+<em>We managed to train our model in the cloud using the Engine. We did this by ... . The reason we choose the Engine</em>
+<em>was because ...</em></p>
+<p>Answer:</p>
+</blockquote>
+<p>We first tried building an image which could run our training script on the compute engine in a virtual machine. This, however,
+did not work out for us as we couldn´t get the image to build succesfully which also meant that even though we could set up a trigger
+it was practically useless. We did however manage to set up a connection between our local terminal and our virtual machine on the
+compute engine and then clone our repository to the virtual machine. This proved to be fruitful as it allowed us then run code, and
+subsequently train our model on the virtual machine.</p>
+<h2>Deployment</h2>
+<h3>Question 23</h3>
+<blockquote>
+<p><strong>Did you manage to write an API for your model? If yes, explain how you did it and if you did anything special. If</strong>
+<strong>not, explain how you would do it.</strong></p>
+<p>Recommended answer length: 100-200 words.</p>
+<p>Example:
+<em>We did manage to write an API for our model. We used FastAPI to do this. We did this by ... . We also added ...</em>
+<em>to the API to make it more ...</em></p>
+<p>Answer:</p>
+</blockquote>
+<p>We managed to write an API for our model using FastAPI. The kind of API we used is a Restful API, meaning requests cannot depend on previous information fed to the API, but must be self contained. The backend of the API was implemented in the backend.py file, and connected to the model such that when a user supplies an image, the predict endpoint connected to the model uses that image as input and predicts a class. We also made it return some statements to show that it is running, to return dataset information and the statistics of the different stages of the model. We also created a front end for our API, using Streamlit, however this will be further addressed in Question 28.</p>
+<h3>Question 24</h3>
+<blockquote>
+<p><strong>Did you manage to deploy your API, either in locally or cloud? If not, describe why. If yes, describe how and</strong>
+<strong>preferably how you invoke your deployed service?</strong></p>
+<p>Recommended answer length: 100-200 words.</p>
+<p>Example:
+<em>For deployment we wrapped our model into application using ... . We first tried locally serving the model, which</em>
+<em>worked. Afterwards we deployed it in the cloud, using ... . To invoke the service an user would call</em>
+<em><code>curl -X POST -F "file=@file.json"&lt;weburl&gt;</code></em></p>
+<p>Answer:</p>
+</blockquote>
+<p>Yes, we deployed our API both locally and in the cloud. We did this using both streamlit and fastapi to have both a frontend and a backend. The backend was configured with url's for POST and GET requests, while the frontend added a nice layout. First we build a docker image of both the backend and frontend, and ran that locally. The docker images were built with <code>docker build -t backend:latest -f dockerfiles/backend.dockerfile .</code>. They were then tagged followed by a push to gcloud with <code>docker push &lt;image&gt;</code>. Lastly they were deployed with <code>gcloud run deploy backend &lt;kwargs&gt;</code>. We primarily used the frontend interface to interact with the API, but it could also be invoked by <code>curl -X POST -F "file=@path/to/file.jpg" localhost:8080/classify/</code> (when deployed locally).</p>
+<p>--- question 24 fill here ---</p>
+<h3>Question 25</h3>
+<blockquote>
+<p><strong>Did you perform any unit testing and load testing of your API? If yes, explain how you did it and what results for</strong>
+<strong>the load testing did you get. If not, explain how you would do it.</strong></p>
+<p>Recommended answer length: 100-200 words.</p>
+<p>Example:
+<em>For unit testing we used ... and for load testing we used ... . The results of the load testing showed that ...</em>
+<em>before the service crashed.</em></p>
+<p>Answer:</p>
+</blockquote>
+<p>We implemented both unit testing and load testing to check the API's functionality and performance. For unit testing, we used FastAPI's TestClient. A simple test script verifies that the root endpoint (/) responds with a 200 status code and returns the expected JSON message: {"message": "Hello from the backend!"}. This basic test ensures us that the endpoint is up to functionality. It could be extended to cover more comprehensive test cases, such as edge cases and error handling. For load testing, we utilized Locust to simulate multiple users accessing the API. We created tasks for both the root endpoint and a dynamic endpoint (/items/{item_id}), where random item IDs were used to simulate real-world API usage patterns. For example, we ran the load test with 1000 users spawning at a rate of 50 users per second for 1 minute. This helped evaluate the API's response times and throughput under moderate load. Results showed that the API could handle these requests without errors or crashes, but additional testing under higher loads or longer durations could provide deeper insights.</p>
+<h3>Question 26</h3>
+<blockquote>
+<p><strong>Did you manage to implement monitoring of your deployed model? If yes, explain how it works. If not, explain how</strong>
+<strong>monitoring would help the longevity of your application.</strong></p>
+<p>Recommended answer length: 100-200 words.</p>
+<p>Example:
+<em>We did not manage to implement monitoring. We would like to have monitoring implemented such that over time we could</em>
+<em>measure ... and ... that would inform us about this ... behaviour of our application.</em></p>
+<p>Answer:</p>
+</blockquote>
+<p>We didn’t manage to implement monitoring for our deployed model, but adding it would definitely improve our application in the long run. Monitoring, especially using telemetry, would help us keep track of important metrics like how many requests the app gets, how long each request takes, and how often errors occur.
+For example, knowing the number of requests can help us understand how much it costs to run the app. Tracking latency (how long it takes to handle a request) would show us if users are experiencing delays. If we notice any weird patterns—like slower response times or sudden spikes in errors—we could fix them before they become big problems.
+If we had implemented monitoring, we could’ve used Prometheus to expose metrics via a /metrics endpoint. It’s great for tracking things like the number of API calls or how long each call takes. Long-term, setting up alerts (like an email notification when something goes wrong) would help us stay on top of issues automatically.</p>
+<h2>Overall discussion of project</h2>
+<blockquote>
+<p>In the following section we would like you to think about the general structure of your project.</p>
+</blockquote>
+<h3>Question 27</h3>
+<blockquote>
+<p><strong>How many credits did you end up using during the project and what service was most expensive? In general what do</strong>
+<strong>you think about working in the cloud?</strong></p>
+<p>Recommended answer length: 100-200 words.</p>
+<p>Example:
+<em>Group member 1 used ..., Group member 2 used ..., in total ... credits was spend during development. The service</em>
+<em>costing the most was ... due to ... . Working in the cloud was ...</em></p>
+<p>Answer:</p>
+</blockquote>
+<p>We ended up spending 15.92 credits during the project, only on a single account. The credits were spent on data storage and running virtual machines. Especially the last part spent most of the credits, but not anything special compared to how many we had available. Working in the cloud was super useful, when it was actually set up correctly. Setting it up was quite a pain, and took a lot of hours and help, but when we actually got it up and running it helped with a lot of previous problems we had encountered. Generally, it is something that we will definitely take with us and use again, of course, especially now that we are hopefully faster in setting up the service.</p>
+<h3>Question 28</h3>
+<blockquote>
+<p><strong>Did you implement anything extra in your project that is not covered by other questions? Maybe you implemented</strong>
+<strong>a frontend for your API, use extra version control features, a drift detection service, a kubernetes cluster etc.</strong>
+<strong>If yes, explain what you did and why.</strong></p>
+<p>Recommended answer length: 0-200 words.</p>
+<p>Example:
+<em>We implemented a frontend for our API. We did this because we wanted to show the user ... . The frontend was</em>
+<em>implemented using ...</em></p>
+<p>Answer:</p>
+</blockquote>
+<p>We implemented a frontend for our API as well, using the streamlit framework. This was done because we found it interesting to work with front end develpoment and setting up a nice interface for the users of the program. The implementation was relatively straightforward as well, meaning it didn't take much time from the rest of the project compared to how much nicer it made the project seem to a foreign user.</p>
+<h3>Question 29</h3>
+<blockquote>
+<p><strong>Include a figure that describes the overall architecture of your system and what services that you make use of.</strong>
+<strong>You can take inspiration from <a href="figures/overview.png">this figure</a>. Additionally, in your own words, explain the</strong>
+<strong>overall steps in figure.</strong></p>
+<p>Recommended answer length: 200-400 words</p>
+<p>Example:</p>
+<p><em>The starting point of the diagram is our local setup, where we integrated ... and ... and ... into our code.</em>
+<em>Whenever we commit code and push to GitHub, it auto triggers ... and ... . From there the diagram shows ...</em></p>
+<p>Answer:</p>
+</blockquote>
+<p>The starting point of the diagram, which outlines our model training and deployment setup, is our local setup from which each of us has access to our github via VSCode. From our local setup we can then access GCP´s buckets where we can upload our data consisting of our pokemon dataset. Via our local setup we can also access our virtual machine on the GCP´s compute engine, where it can then run our code and access the bucket where we have uploaded our data to and train a model on a GPU. The continues results of this training is then logged on our Weights and Biases account where we as the developer can monitor it. We can then optimize and export our model using Onnx and then visualise it using Netron and use this information in Github. After achieving the desired results through training, the model is then deployed to Github where our backend is running and through the frontend the user then has access to the model and can use it to option predictions. Using Github actions we can trigger several workflow files which can perform actions such as logging our training information on Weights and Biases and also perform actions such as unit testing.</p>
+<p><img alt="image2" src="figures/mlopsWorkflowImage.png" /></p>
+<h3>Question 30</h3>
+<blockquote>
+<p><strong>Discuss the overall struggles of the project. Where did you spend most time and what did you do to overcome these</strong>
+<strong>challenges?</strong></p>
+<p>Recommended answer length: 200-400 words.</p>
+<p>Example:
+<em>The biggest challenges in the project was using ... tool to do ... . The reason for this was ...</em></p>
+<p>Answer:</p>
+</blockquote>
+<p>The biggest challenges in the project were to set up the GCP and implementing continuous integration/workflow (especially model wise with connecting to WANDB).
+Working with GCP was quite challenging due to multiple reasons. First off, making it run a docker container requires the building of the corresponding image, which takes a long time to build and therefore makes debugging tedious. Furthermore a lot of things felt very buggy due to adding features in the console, and on the website, and  we had a lot of problems with service accounts accessibility.
+For the continuous integration/workflow, it was difficult to see how the .yaml files should be written exactly, and to get them to work overall. To add to this problem, we also had to make sure the surrounding architecture of both GitHub and WANDB was able to support the .yaml file layout, making it even more complicated. It meant a lot of trial and error, and the help from the course TA's, but in the end we finally got it working, and set up the correct way.
+Some exercises (which we worked through with our project in mind to implement everything correctly) also took more reworking (and altering of the given code) than anticipated, either because the actual website or service they regarded had changed since the exercises were created or because some provided code might miss a few key things.</p>
+<h3>Question 31</h3>
+<blockquote>
+<p><strong>State the individual contributions of each team member. This is required information from DTU, because we need to</strong>
+<strong>make sure all members contributed actively to the project. Additionally, state if/how you have used generative AI</strong>
+<strong>tools in your project.</strong></p>
+<p>Recommended answer length: 50-300 words.</p>
+<p>Example:
+<em>Student sXXXXXX was in charge of developing of setting up the initial cookie cutter project and developing of the</em>
+<em>docker containers for training our applications.</em>
+<em>Student sXXXXXX was in charge of training our models in the cloud and deploying them afterwards.</em>
+<em>All members contributed to code by...</em>
+<em>We have used ChatGPT to help debug our code. Additionally, we used GitHub Copilot to help write some of our code.</em>
+Answer:</p>
+</blockquote>
+<ul>
+<li>
+<p>Student s214731 has been in charge of setting up the GCP, experimenting with virtual machines, and how to implement automatic building of Docker images.</p>
+</li>
+<li>
+<p>Student s214733 has been in charge of writing the unit tests, and creating the continuous integration that uses GitHub actions. Furthermore, the student has been helping with setting up the API.</p>
+</li>
+<li>
+<p>Student s214735 has been in charge of creating our model as well as setting up the API backend/frontend. Furthermore, the student has worked on deployment of the model in GCP, and created pre-commits in the version control setup.</p>
+</li>
+<li>
+<p>Student s214739 has been in charge of data loading and processing, and has also been helping a lot with setting up the cloud (especially the GCP Bucket). Furthermore, the student has spent time on the model training.</p>
+</li>
+<li>
+<p>Student s214742 has been in charge of setting up the profiling and logging, creating the WANDB project and has also worked on the continuous integration. The student has spent time on config files and data loading as well.</p>
+</li>
+<li>
+<p>All members contributed to code by working on all parts of the project. Every team member has been involved to some degree in all parts of the project, and knows how the different operations work.</p>
+</li>
+<li>
+<p>We have used ChatGPT to help debug and/or write some parts of our code.</p>
+</li>
+</ul>

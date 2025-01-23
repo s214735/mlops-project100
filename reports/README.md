@@ -196,7 +196,6 @@ By following these steps, a new team member can quickly set up the project envir
 We initialized our project using the cookiecutter template. The primary directories we utilized are:
 - **`config` folder**: This directory holds configuration files that manage settings and parameters used across different parts of our project, ensuring consistency and ease of adjustments.
 - **`data` folder**: Used for storing raw and processed data sets. This organization helps in managing the data lifecycle within our project.
-- **`model` folder**: This is where we store model definitions and training scripts, centralizing all machine learning algorithms and models.
 - **`src` folder**: The source code for our application is kept here, including all the primary Python scripts and modules.
 - **`tests` folder**: Dedicated to housing test cases and scripts, which are vital for ensuring the robustness and reliability of our code through continuous integration practices.
 Additionally, we maintained a structured approach to version control using Git, which included setting up `.gitignore` files to exclude unnecessary files from being tracked and `workflows` for automating tasks such as testing, building, and deploying using GitHub Actions.
@@ -237,7 +236,8 @@ These practices are crucial in larger projects as they improve code quality, enh
 > *application but also ... .*
 >
 > Answer:
-We implemented a suite of tests, organized into three main files: `test_api.py`, `test_model.py`, and `test_train.py`. These tests are automated through GitHub workflows and executed within GitHub Actions to ensure continuous integration and consistent code quality.
+
+We implemented three tests: `test_api.py`, `test_model.py`, and `test_train.py`. These tests are automated through GitHub workflows and executed within GitHub Actions to ensure continuous integration and consistent code quality. We also had a `test_data.py`, which we sadly ran into some issues with regarding the gcloud bucket authentication.
 
 - **`test_api.py`**: Tests the API to make sure all endpoints respond correctly.
 - **`test_model.py`**: Ensures our models are predicting the correct format
@@ -315,7 +315,7 @@ In our project, we set up workflows to ensure our code and models worked correct
 We also created a testing matrix in our workflows to test across multiple operating systems and a single Python version. Specifically, we tested on the following:
 
 - Operating systems: `ubuntu-latest`, `windows-latest`, `macos-latest`
-- Python version: `3.11`
+- Python version: `3.11`, (`3.12` removed later)
 
 To optimize workflow runtimes, we implemented caching for dependencies. This allowed GitHub to reuse previously installed requirements and only install new ones when necessary, significantly speeding up our runs and avoid installing the same dependencies multiple times.
 
@@ -380,7 +380,7 @@ To reproduce an experiment, we simply looked up the parameters in Weights & Bias
 >
 > Answer:
 
-We tracked as many metrics as we could think of (excluding augmentations), since they give insight to why different versions of models differ from eachother. We logged batch size, color jitter parameters (brightness, contrast, hue and saturation), dropout on (before fully connected layer), epochs, gamma (learning rate scheduler), step size (learning rate scheduler), learning rate and model architecture (our model was based on resnet18, so this parameter would be informative if we had tried other base architectures). When we have these parameters, we can see when a good model performs well, and try to tweak the parameters that we think could enhance the perfomance of that model. This also allowed us to make a "parallel coordinates" plot, that would provide insight to parameters with respect to other parameters. This is the last plot in our workspace dashboard.
+We tracked as many metrics as we could think of (excluding augmentations), since they give insight to why different versions of models differ from eachother. We logged batch size, color jitter parameters (brightness, contrast, hue and saturation), dropout (before fully connected layer), epochs, gamma (learning rate scheduler), step size (learning rate scheduler), learning rate and model architecture (our model was based on resnet18, so this parameter would be informative if we had tried other base architectures). When we have these parameters, we can see when a good model performs well, and try to tweak the parameters that we think could enhance the perfomance of that model. This also allowed us to make a "parallel coordinates" plot, that would provide insight to parameters with respect to other parameters. This is the last plot in our workspace dashboard.
 
 In our image, you can see our workspace along with 7 runs (one ongoing). Each run would log artifacts to the wandb registry, which allowed us to reuse old trained models. Then we had a train and validation line plot, that would show train- and validation accuracy through epochs. This could provide insight into model overfitting. Additionally we had two line plots of train- and validation loss, that could show when the loss reached a plateau.
 ![wandb](figures/wandb.jpg)
@@ -640,7 +640,7 @@ The starting point of the diagram, which outlines our model training and deploym
 > Answer:
 
 The biggest challenges in the project were to set up the GCP and implementing continuous integration/workflow (especially model wise with connecting to WANDB).
-Working with GCP was quite challenging due to multiple reasons. First off, making it run a docker container requires the building of the corresponding image, which takes a long time to build and therefore makes debugging tedious. Furthermore a lot of things felt very buggy due to adding features in the consol, and on the website, and  we had a lot of problems with service accounts accessibility.
+Working with GCP was quite challenging due to multiple reasons. First off, making it run a docker container requires the building of the corresponding image, which takes a long time to build and therefore makes debugging tedious. Furthermore a lot of things felt very buggy due to adding features in the console, and on the website, and  we had a lot of problems with service accounts accessibility.
 For the continuous integration/workflow, it was difficult to see how the .yaml files should be written exactly, and to get them to work overall. To add to this problem, we also had to make sure the surrounding architecture of both GitHub and WANDB was able to support the .yaml file layout, making it even more complicated. It meant a lot of trial and error, and the help from the course TA's, but in the end we finally got it working, and set up the correct way.
 Some exercises (which we worked through with our project in mind to implement everything correctly) also took more reworking (and altering of the given code) than anticipated, either because the actual website or service they regarded had changed since the exercises were created or because some provided code might miss a few key things.
 
@@ -659,10 +659,17 @@ Some exercises (which we worked through with our project in mind to implement ev
 > *All members contributed to code by...*
 > *We have used ChatGPT to help debug our code. Additionally, we used GitHub Copilot to help write some of our code.*
 > Answer:
+
 - Student s214731 has been in charge of setting up the GCP, experimenting with virtual machines, and how to implement automatic building of Docker images.
+
 - Student s214733 has been in charge of writing the unit tests, and creating the continuous integration that uses GitHub actions. Furthermore, the student has been helping with setting up the API.
+
 - Student s214735 has been in charge of creating our model as well as setting up the API backend/frontend. Furthermore, the student has worked on deployment of the model in GCP, and created pre-commits in the version control setup.
+
 - Student s214739 has been in charge of data loading and processing, and has also been helping a lot with setting up the cloud (especially the GCP Bucket). Furthermore, the student has spent time on the model training.
+
 - Student s214742 has been in charge of setting up the profiling and logging, creating the WANDB project and has also worked on the continuous integration. The student has spent time on config files and data loading as well.
+
 - All members contributed to code by working on all parts of the project. Every team member has been involved to some degree in all parts of the project, and knows how the different operations work.
+
 - We have used ChatGPT to help debug and/or write some parts of our code.
