@@ -60,11 +60,18 @@ def main():
     features = np.concatenate(features, axis=0)
     labels = np.concatenate(labels, axis=0)
 
+    # Use mapping to map the labels to the actual pokemon names
+    import json
+    with open('utils/pokemon-labels.json', 'r') as f:
+        label_mapping = json.load(f)
+
+    label_names = [label_mapping[str(label)] for label in labels]
+
     reducer = umap.UMAP()
     embedding = reducer.fit_transform(features)
 
     plt.figure(figsize=(12, 8))
-    scatter = plt.scatter(embedding[:, 0], embedding[:, 1], c=labels, cmap='Spectral', s=5)
+    scatter = plt.scatter(embedding[:, 0], embedding[:, 1], c=label_names, cmap='Spectral', s=5)
     plt.colorbar(scatter, ticks=range(int(labels.min()), int(labels.max()) + 1))
     plt.title('UMAP projection of the test dataset')
     plt.savefig('images/umap_projection.png')
