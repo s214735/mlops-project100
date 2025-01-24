@@ -1,12 +1,12 @@
 import wandb
-from utils import get_wandb_api_key
-from evaluate import get_latest_model_path, load_model
+from p100.utils import get_wandb_api_key
+from p100.evaluate import get_latest_model_path, load_model
 
 import numpy as np
 import torch
 
-from model import ResNetModel
-from data import PokeDataset
+from p100.model import ResNetModel
+from p100.data import PokeDataset
 from torchvision import transforms
 from torch.utils.data import DataLoader
 
