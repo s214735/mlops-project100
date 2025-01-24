@@ -67,7 +67,7 @@ def main():
     scatter = plt.scatter(embedding[:, 0], embedding[:, 1], c=labels, cmap='Spectral', s=5)
     plt.colorbar(scatter, ticks=range(int(labels.min()), int(labels.max()) + 1))
     plt.title('UMAP projection of the test dataset')
-    plt.savefig('mlops-project100-1/images/umap_projection.png')
+    plt.savefig('images/umap_projection.png')
 
 if __name__ == "__main__":
     main()
