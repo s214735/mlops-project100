@@ -27,3 +27,4 @@ google-cloud-run
 google-cloud-storage
 google-cloud-secret-manager
 transformers
+pip install umap-learn
