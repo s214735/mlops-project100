@@ -9,7 +9,7 @@ torch==2.5.1
 torchsummary==1.5.1
 torchvision>=0.20.1
 invoke==2.2.0
-pillow==11.0.0
+pillow==11.1.0
 scipy == 1.15.0
 pytorch_lightning>=2.5.0.post0
 wandb>=0.19.2
